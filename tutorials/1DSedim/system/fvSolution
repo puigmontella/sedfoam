@@ -17,7 +17,7 @@ FoamFile
 
 solvers
 {
-    p_rbgh
+    p_rgh
     {
         solver          GAMG;
         tolerance       1e-9;
@@ -32,24 +32,39 @@ solvers
         mergeLevels     1;
     }
 
-    p_rbghFinal
+    p_rghFinal
     {
-        $p_rbgh;
+        $p_rgh;
         tolerance       1e-9;
         relTol          0;
     }
-    "(alpha_a|Ua|Ub|pa_new_value|alphaPlastic)"
+    "(Alpha|U|pa_new_value|alphaPlastic)"
     {
         solver          PBiCG;
         preconditioner  DILU;
         tolerance       1e-9;
         relTol          0;
     }
-    "(alpha_aFinal|UaFinal|UbFinal|paFinal|alphaPlasticFinal)"
+    "(AlphaFinal|UFinal|paFinal|alphaPlasticFinal)"
     {
         solver          PBiCG;
         preconditioner  DILU;
         tolerance       1e-9;
+        relTol          0;
+    }
+
+   rho
+    {
+        solver          PCG;
+        preconditioner  DIC;
+        tolerance       1e-8;
+        relTol          0.000001;
+    }
+
+    rhoFinal
+    {
+        $rho;
+        tolerance       1e-8;
         relTol          0;
     }
 }
@@ -71,13 +86,13 @@ relaxationFactors
 {
     fields
     {
-        p_rbgh               1.;
-        p_rbghFinal          1;
+        //p_rgh               1.;
+        //p_rghFinal          1;
     }
     equations
     {
-        "Ua|Ub|k|omega"             1.;
-        "(Ua|Ub|k|omega)Final"      1;
+        "Alpha|U|k|omega"             1.;
+        "(Alpha|U|k|omega)Final"      1;
     }
 
 }

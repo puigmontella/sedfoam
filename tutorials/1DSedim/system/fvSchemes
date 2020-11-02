@@ -29,44 +29,40 @@ divSchemes
 {
     default         none;
 // alphaEqn
+div(phiAlpha,Alpha) Gauss limitedLinear01 1;
     div(phi,alpha)  Gauss upwind;//limitedLinear01 1;
     div(phir,alpha) Gauss upwind;//limitedLinear01 1;
+    div(phiWRel,WRel) Gauss linear;
     div(phiRel,RelMixPar) Gauss upwind;
+    div(phi,rho)  Gauss upwind;
+
 // UEqn
     div(phi,U)    Gauss limitedLinearV 1;
-    div(phia,Ua)    Gauss limitedLinearV 1;
-    div(phib,Ub)    Gauss limitedLinearV 1;
-    div(phiRa,Ua)   Gauss limitedLinear 1;
-    div(phiRb,Ub)   Gauss limitedLinear 1;
 // pEqn
     div(alpha,nu)   Gauss linear;
 // alphaPlastic
     div(phi,alphaPlastic)  Gauss limitedLinear01 1;
-    div(phia,alphaPlastic)  Gauss limitedLinear01 1;
 // pa
     div(phi,pa_new_value)  Gauss limitedLinear 1;
-    div(phia,pa_new_value)  Gauss limitedLinear 1;
-
+    
 //tau_Diffusion 
    div(tau_Diffusion)    Gauss  linear;
    div(tauTot)    Gauss  linear;
    div(tauTurb)    Gauss  linear;
-   
 }
 
 laplacianSchemes
 {
     default         none; 
 // UEqn
+    laplacian(nuEffa,U) Gauss linear corrected;
+    laplacian(nuEffb,U) Gauss linear corrected;
+    laplacian(nuFra,U)  Gauss linear corrected;
     laplacian(nuEffTotal,U) Gauss linear corrected;
     laplacian(nut,U) Gauss linear corrected;
-
-    laplacian(nuEffa,Ua) Gauss linear corrected;
-    laplacian(nuEffb,Ub) Gauss linear corrected;
-    laplacian(nuFra,Ua)  Gauss linear corrected;
-
+    laplacian(muEff,U) Gauss linear corrected;
 // pEqn
-    laplacian((rho*(1|A(U))),p_rbgh) Gauss linear corrected;
+    laplacian((rho*(1|A(U))),p_rgh) Gauss linear corrected;
 }
 
 interpolationSchemes
@@ -82,7 +78,7 @@ snGradSchemes
 fluxRequired
 {
     default         no;
-    p_rbgh               ;
+    p_rgh               ;
 }
 
 

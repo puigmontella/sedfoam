@@ -2,11 +2,11 @@
 cd ${0%/*} || exit 1    # run from this directory
 set -x
 
-wclean libso granularRheologyModels
-wclean libso phaseModel
-wclean libso ppModel
-wclean libso interfacialModels
-wclean libso kineticTheoryModels
+wclean libso granularRheologyModelsMix
+wclean libso phaseModelMix
+wclean libso ppModelMix
+wclean libso interfacialModelsMix
+wclean libso kineticTheoryModelsMix
 wclean
 
 # ----------------------------------------------------------------- end-of-file
