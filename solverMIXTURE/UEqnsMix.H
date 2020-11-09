@@ -68,6 +68,8 @@ fvVectorMatrix UEqn
       - fvm::laplacian(muEff, U, "laplacian(muEff,U)")
       - (fvc::grad(U) & fvc::grad(muEff))
       ==
+	   //fvc::reconstruct((- (fvc::snGrad(pff))
+	   //- (fvc::snGrad(pa)))*mesh.magSf())
       fvOptions(rho, U)
     );
 
