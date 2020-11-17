@@ -56,70 +56,31 @@ surfaceScalarField oneOverrho =
 
 
 fvVectorMatrix UEqn
-
     (
         fvm::ddt(rho, U)
-      + fvm::div(phi, U)
+      + fvm::div(rhoPhi, U)
       + fvc::div
-        (
-            Alpha*rho/rhoa*(1-Alpha*rho/rhoa)*(rhoa*rhob/rho)*WRel*WRel,
+        ( alpha*(1-alpha)*(rhoa*rhob/rho)*WRel*WRel,
             "div(phiWRel,WRel)"
         )
       - fvm::laplacian(muEff, U, "laplacian(muEff,U)")
       - (fvc::grad(U) & fvc::grad(muEff))
       ==
-	   //fvc::reconstruct((- (fvc::snGrad(pff))
-	   //- (fvc::snGrad(pa)))*mesh.magSf())
-      fvOptions(rho, U)
+	fvOptions(rho, U)
     );
-
-//(
-    //(
-        //fvm::ddt(U)
-      //+ fvm::div(phi, U, "div(phi,U)")
-      //- fvm::Sp(fvc::div(phi), U)
-    //)
-//// shear stress - turbulent contribution
-      //- fvm::laplacian(turbulenceb->nut(), U)
-      //- fvc::div(tauTurb, "div(tauTurb)")
-//// shear stress - fluid/solid contribution
-      //- fvm::laplacian(nuEffTotal, U, "laplacian(nuEffTotal,U)")
-      //- fvc::div(tauTot, "div(tauTot)")
-        ////  + ((lambdaU)*fvc::div(phi))*dimensioned<symmTensor>("I", dimless, symmTensor::I)
-    //==
-    //fvc::div(tau_Diffusion, "div(tau_Diffusion)")// additional momentum diffusion due to slip velocity between solid and fluid phase
-
-////    fvm::Sp(-beta/rhoa*K,Ua)        // implicit drag term
-////+ beta/rhoa*K*Ub                    // explicit drag transfered to p-equation
-    //// Hugo  -susa                    // term to add with tensor
-//// - gradPs              // shear induced pressure gradient moved to p-equation
-////  - gradPf                  // contact pressure gradient moved to p-equation
- //// - beta/rhoa*(liftCoeff - Cvm*rhob*DDtUb)  // lift and added mass forces
- //// +alpha/rhob*(liftCoeff + Cvm*rhob*DDtUa) // lift and added mass forces
-  ////    + fvOptions(Ua)
-  
-//);
 UEqn.relax();
 
  fvOptions.constrain(UEqn);
-//(pimple.correct())
    if (pimple.momentumPredictor())
-    {
-        solve
-        (
-            UEqn
+    {   solve
+        (UEqn
           ==
             fvc::reconstruct
-            (
-                            //   fvc::interpolate(rho)*(gravity & mesh.Sf())+
-                               (
+            ((
                   - ghf*fvc::snGrad(rho)
-                        
-
-                  - fvc::snGrad(p_rgh)
                    - (fvc::snGrad(pff))
-                   - (fvc::snGrad(pa)) 
-                  
+                   - (fvc::snGrad(pa))           
+                  - fvc::snGrad(p_rgh)     
                 )*mesh.magSf()
             )
         );

@@ -53,6 +53,9 @@ alphaPlastic.min(0.585);
 // exceeding the maximum volume fraction.
 pff = pp->pff(alpha, alphaPlastic, alphaMax, Fr_, eta0_, eta1_);
 
+
+//pff.max(0.0);
+//pff.min(600.585);
 //
 //
 //  Kinetic THEORY PART

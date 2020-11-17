@@ -31,7 +31,7 @@ License
     volScalarField rAU = 1.0/UEqn.A();
 
     //rUAf = fvc::interpolate(rUA);
-    surfaceScalarField rAUf = fvc::interpolate(rho*rAU);
+    surfaceScalarField rUAf = fvc::interpolate(rAU);
     
     
     surfaceScalarField oneOverrho =
@@ -42,6 +42,7 @@ License
             "interpolate(oneOverrho)"
         )
     );
+    
 
     // local Schmidt number
     //if (SUSlocal)
@@ -55,33 +56,42 @@ License
     //}
 
 
+//Info<<"alpha  "<<alpha<<endl;
+
+//Info<<"rho  "<<rho<<endl;
+
+//Info<<"pff  "<<pff<<endl;
+            
+//Info<<"pff contribution "<<-fvc::reconstruct
+            //((fvc::snGrad(pff))*rUAf*mesh.magSf())<<endl;
+
+//Info<<"p_rgh contribution "<<-fvc::reconstruct
+            //((fvc::snGrad(p_rgh))*rUAf*mesh.magSf())<<endl;
+
+
+//Info<<"gravitational contribution "<<-fvc::reconstruct
+            //((  ghf*fvc::snGrad(rho)
+                //)*rUAf*mesh.magSf())<<endl;
+
         volVectorField HbyA = U;
         HbyA = rAU*UEqn.H();
 
-
-        // Momentum fluxes computed on the faces for the particle phase phiDraga
+        // Momentum fluxes computed on the faces for the particle phase phiDrag
         // and the fluid phase phiDragb
         surfaceScalarField phiDrag =
-        (
-
-            //// grad(pa)
-          //- (fvc::snGrad(pa))*rAUf*mesh.magSf()
-            //// grad(Pf)
-             //- (fvc::snGrad(pff))*rAUf*mesh.magSf()
-
+        ( // grad(pa)
+          - (fvc::snGrad(pa))*rUAf*mesh.magSf()
+            // grad(Pf)
+             - (fvc::snGrad(pff))*rUAf*mesh.magSf()
             // gravity
                 -(
                    ghf*fvc::snGrad(rho)
                 )*rUAf*mesh.magSf()
-           //rAUf
-           //*(
-               //fvc::interpolate(rho)*(gravity & mesh.Sf())
-            //)
-        // + rUaAf*(gravity & mesh.Sf())
-        // mean pressure gradient
-        //  + rUAf*((gradPOSC/(tilt*rhob +(1.0-tilt)*rhoa)) & mesh.Sf())
+           // relative velocity contribution
+      -(fvc::interpolate(alpha*(1-alpha)*(rhoa-rhob)/rho*WRel) & mesh.Sf())
         );
 
+    
         // Fix for gravity on outlet boundary.
         forAll(p_rgh.boundaryField(), patchi)
     {
@@ -110,18 +120,18 @@ License
             phiDrag.boundaryFieldRef()[patchi] = 0.0;
         }
     }
-    
      surfaceScalarField phiRho = oneOverrho*phi;
 
+
+
+      
         surfaceScalarField phiU =
         (
-            fvc::interpolate(rho)
-       *((fvc::interpolate(HbyA) & mesh.Sf()) + rUAf*fvc::ddtCorr(U, phiRho))
+         (fvc::interpolate(HbyA) & mesh.Sf())
+      + fvc::interpolate(rho*rAU)*fvc::ddtCorr(U, phi)
+      
         );
-
-
-
-		phi = phiU;
+        
         surfaceScalarField phiHbyA = phiU + phiDrag;
 
 
@@ -130,34 +140,28 @@ License
         surfaceScalarField Dp
         (
             "(rho*(1|A(U)))",
-            rAUf
+            rUAf
         );
 
-        // Update the fixedFluxPressure BCs to ensure flux consistency
+        //// Update the fixedFluxPressure BCs to ensure flux consistency
         setSnGrad<fixedFluxPressureFvPatchScalarField>
         (
             p_rgh.boundaryFieldRef(),
             (
-                phiHbyA.boundaryField()
-   - (mesh.Sf().boundaryField() & U.boundaryField())               
-             )
-            /(mesh.magSf().boundaryField()*Dp.boundaryField())
+            phiHbyA.boundaryField()
+          - (mesh.Sf().boundaryField() & U.boundaryField())
+        )/(mesh.magSf().boundaryField()*rUAf.boundaryField())
         );
 
 
-    
-    
         while (pimple.correctNonOrthogonal())
         {
             fvScalarMatrix pEqn
             (
-                fvm::laplacian(Dp, p_rgh) ==  fvc::ddt(rho) +fvc::div(phiHbyA)
+                fvm::laplacian(Dp, p_rgh) ==  fvc::div(phiHbyA)
             );
 
             pEqn.setReference(pRefCell, getRefCellValue(p_rgh, pRefCell));
-
-
-            pEqn.solve();
 
             pEqn.solve(mesh.solver(p_rgh.select(pimple.finalInnerIter())));
 		
@@ -167,13 +171,13 @@ License
                 phi = (phiHbyA - pEqn.flux());
 
                // #include "continuityErrs.H"
-                //p_rgh.relax();
+                p_rgh.relax();
                 surfaceScalarField SfGradp = pEqn.flux()/Dp;
 
                 // Velocity correction step
-                U = HbyA + rAU*fvc::reconstruct(phiDrag/rAUf-SfGradp);
+                U = HbyA + rAU*fvc::reconstruct(phiDrag/rUAf-SfGradp);
                 U.correctBoundaryConditions();
-               // fvOptions.correct(U);
+                fvOptions.correct(U);
 			}
 		}
 		p = p_rgh + rho*gh;
@@ -187,14 +191,14 @@ License
 				pRefValue - getRefCellValue(p, pRefCell)
 			);
 			p_rgh = p - rho*gh;
-		   // p_rgh.correctBoundaryConditions();
+		    p_rgh.correctBoundaryConditions();
 		}
 
 	   // #include "UaUbLimiter.H" NOT needed
 		//phi = (fvc::interpolate(U) & mesh.Sf());
 		//U.correctBoundaryConditions();
-		#include "rhoEqn.H"
-		#include "compressibleContinuityErrs.H"
+		//#include "rhoEqn.H"
+	//	#include "compressibleContinuityErrs.H"
 
 		// Update mixture velocity
 		//U = alpha*Ua + beta*Ub;

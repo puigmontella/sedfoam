@@ -39,7 +39,8 @@ dimensionedScalar Ksmall
 
 //falta afegir divergència i ddt!
 //volVectorField w_i=4./3.*d_part*d_part*rhob*(rhoa-rho)/(nub*K*Re_p)*(gravity-fvc::div( U, schemeRel)*( U)-fvc::ddt( U));
-volVectorField w_i=4./3.*d_part*d_part*(rhoa-rho)/(rhob*nub*max(Drag_c,1e-8)*max(Re_p,1e-8))*(gravity-fvc::ddt(U)- fvc::div(phi, U)*(1/rho));
+volVectorField w_i=4./3.*d_part*d_part*(rhoa-rho)/(rhob*nub*max(Drag_c,1e-8)
+*max(Re_p,1e-8))*(gravity-fvc::ddt(U)- fvc::div(phi, U));
 
 
 ////turbulent diffusion contribution

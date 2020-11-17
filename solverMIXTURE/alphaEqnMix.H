@@ -44,35 +44,30 @@ surfaceScalarField phiAlpha
 		runTime.timeName(),
 		mesh
 	),
-	phi + (mesh.Sf() & fvc::interpolate(rho*alpha*((1-alpha)-alpha*(1-alpha)*(rhoa-rhob)/rho)*WRel))
+	phi + (mesh.Sf() & fvc::interpolate(((1-alpha)-alpha*(1-alpha)*(rhoa-rhob)/rho)*WRel))
 );
 
-//Info<< "phi"<< phic<< endl;
     for (int acorr=0; acorr<nAlphaCorr; acorr++)
     {
-		
-
     fvScalarMatrix AlphaEqn
     (
-          fvm::ddt(rho, Alpha)
-        + fvm::div(phiAlpha, Alpha)
+          fvm::ddt( alpha)
+        + fvm::div(phiAlpha, alpha)
         //- fvm::laplacian(mut, Alpha)
     );
-
     AlphaEqn.relax();
     AlphaEqn.solve();
 
     Info<< "Solid phase fraction = "
-        << Alpha.weightedAverage(mesh.V()).value()
-        << "  Min(Alpha) = " << min(Alpha).value()
-        << "  Max(Alpha) = " << max(Alpha).value()
+        << alpha.weightedAverage(mesh.V()).value()
+        << "  Min(Alpha) = " << min(alpha).value()
+        << "  Max(Alpha) = " << max(alpha).value()
         << endl;
 
-    Alpha.min(1.0);
-    Alpha.max(0.0);
+	alpha.min(alphaMax);
+	alpha.max(0);
+    rho == rhob*(scalar(1)-alpha)+alpha*rhoa;
 
-    rho == rhob/(scalar(1) + (rhob/rhoa - 1.0)*Alpha);
-    alpha == rho*Alpha/rhoa;
     
     
     

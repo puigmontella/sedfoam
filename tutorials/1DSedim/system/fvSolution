@@ -17,20 +17,15 @@ FoamFile
 
 solvers
 {
+
     p_rgh
     {
-        solver          GAMG;
-        tolerance       1e-9;
+        solver          PCG;
+        preconditioner  DIC;
+        tolerance       1e-07;
         relTol          0.0001;
-        smoother        DIC;
-        nPreSweeps      0;
-        nPostSweeps     2;
-        nFinestSweeps   2;
-        cacheAgglomeration true;
-        nCellsInCoarsestLevel 10;
-        agglomerator    faceAreaPair;
-        mergeLevels     1;
     }
+    
 
     p_rghFinal
     {
@@ -38,14 +33,14 @@ solvers
         tolerance       1e-9;
         relTol          0;
     }
-    "(Alpha|U|pa_new_value|alphaPlastic)"
+    "(alpha|U|pa_new_value|alphaPlastic)"
     {
         solver          PBiCG;
         preconditioner  DILU;
         tolerance       1e-9;
         relTol          0;
     }
-    "(AlphaFinal|UFinal|paFinal|alphaPlasticFinal)"
+    "(alphaFinal|UFinal|paFinal|alphaPlasticFinal)"
     {
         solver          PBiCG;
         preconditioner  DILU;
@@ -71,9 +66,7 @@ solvers
 
 PIMPLE
 {
-    momentumPredictor 0;
-    nOuterCorrectors  1;
-    nCorrectors     1;
+    nCorrectors     2;
     nNonOrthogonalCorrectors 0;
     correctAlpha    0;
     nAlphaCorr      1;
@@ -91,8 +84,8 @@ relaxationFactors
     }
     equations
     {
-        "Alpha|U|k|omega"             1.;
-        "(Alpha|U|k|omega)Final"      1;
+        "alpha|U|k|omega"             1.;
+        "(alpha|U|k|omega)Final"      1;
     }
 
 }

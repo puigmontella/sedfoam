@@ -433,12 +433,12 @@ volScalarField pa
 );
 
 
-Info<< "Reading field Alpha\n" << endl;
-volScalarField Alpha
+
+volScalarField alpha
 (
     IOobject
     (
-        "Alpha",
+        "alpha",
         runTime.timeName(),
         mesh,
         IOobject::MUST_READ,
@@ -446,6 +446,8 @@ volScalarField Alpha
     ),
     mesh
 );
+
+
 
 Info<< "Reading field U\n" << endl;
 volVectorField U
@@ -462,7 +464,6 @@ volVectorField U
 );
 
 
-
 volScalarField rho
 (
     IOobject
@@ -473,22 +474,8 @@ volScalarField rho
         IOobject::NO_READ,
         IOobject::AUTO_WRITE
     ),
-    rhob/(scalar(1) + (rhob/rhoa - 1.0)*Alpha)
+    rhob*(scalar(1)-alpha)+alpha*rhoa
 );
-
-volScalarField alpha
-(
-    IOobject
-    (
-        "alpha",
-        runTime.timeName(),
-        mesh,
-        IOobject::NO_READ,
-        IOobject::AUTO_WRITE
-    ),
-    rho*Alpha/rhoa
-);
-
 
 
 Info<< "Reading/calculating face flux field phi\n" << endl;
@@ -503,10 +490,25 @@ surfaceScalarField phi
         IOobject::READ_IF_PRESENT,
         IOobject::AUTO_WRITE
     ),
-    linearInterpolate(rho*U) & mesh.Sf()
+    linearInterpolate(U) & mesh.Sf()
 );
 
 
+
+// Mass flux
+surfaceScalarField rhoPhi
+(
+	IOobject
+	(
+		"rhoPhi",
+		runTime.timeName(),
+		mesh,
+		IOobject::NO_READ,
+		IOobject::NO_WRITE
+	),
+	fvc::interpolate(rho)*phi
+);
+    
 //creating alphaPlastic field
 Info<< "Reading field alphaPlastic\n" << endl;
 volScalarField alphaPlastic

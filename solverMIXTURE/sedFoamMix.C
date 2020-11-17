@@ -47,7 +47,7 @@ Description
  * \version 3.1
  * \date September 16, 2019
  *
- * Solver for a system of 2 phases with one phase dispersed
+ * Solver for a mixture system with one phase dispersed
  *
  */
 /*
@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
         #include "alphaCourantNo.H"
         #include "setDeltaT.H"
         #include "compressibleCourantNo.H"
-        #include "rhoEqn.H"
+       // #include "rhoEqn.H"
         runTime++;
         Info<< "Time = " << runTime.timeName() << nl << endl;
 
@@ -144,6 +144,8 @@ int main(int argc, char *argv[])
             //#include "liftDragCoeffs.H"
             #include "RelVelEqnMix.H"
 
+
+			#include "alphaEqnMix.H"
 //          Compute the Kinetic Theory parameters: nuEffa and lambdaUa from the
 //          solution of the Granular temperature equation
             #include "callKineticTheoryMix.H"
@@ -154,9 +156,10 @@ int main(int argc, char *argv[])
             #include "callFrictionStressMix.H"
 
 //          Create the momentum balance equations for both phases a and b
+
             #include "UEqnsMix.H"
             
-            #include "alphaEqnMix.H"
+            
 
 
             // --- Pressure corrector loop

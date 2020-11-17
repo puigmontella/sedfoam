@@ -11,7 +11,7 @@ FoamFile
     format      ascii;
     class       volScalarField;
     location    "0";
-    object      Alpha;
+    object      alpha;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -38,21 +38,21 @@ internalField   #codeStream
     #{
         const IOdictionary& d = static_cast<const IOdictionary&>(dict);
 	    const fvMesh& mesh = refCast<const fvMesh>(d.db());
-        scalarField Alpha(mesh.nCells(), 0);
+        scalarField alpha(mesh.nCells(), 0);
 
         forAll(mesh.C(), i)
         {
             scalar y = mesh.C()[i].y();
             if (y < 0.049)
             {
-                Alpha[i] = 0.5;
+                alpha[i] = 0.5;
             }
             else
             {
-                Alpha[i] = 0.5*0.5*(1.0+tanh((y-0.054)/(0.0490-y)*10.0));
+                alpha[i] = 0.5*0.5*(1.0+tanh((y-0.054)/(0.0490-y)*10.0));
             }
         }
-        Alpha.writeEntry("", os);
+        alpha.writeEntry("", os);
     #};
 
 };
