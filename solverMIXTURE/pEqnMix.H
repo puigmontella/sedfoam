@@ -84,8 +84,7 @@ License
             // grad(Pf)
              - (fvc::snGrad(pff))*rUAf*mesh.magSf()
             // gravity
-                -(
-                   ghf*fvc::snGrad(rho)
+                -( ghf*fvc::snGrad(rho)
                 )*rUAf*mesh.magSf()
            // relative velocity contribution
       -(fvc::interpolate(alpha*(1-alpha)*(rhoa-rhob)/rho*WRel) & mesh.Sf())
@@ -121,7 +120,6 @@ License
         }
     }
      surfaceScalarField phiRho = oneOverrho*phi;
-
 
 
       
