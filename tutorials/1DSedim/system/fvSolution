@@ -69,7 +69,7 @@ PIMPLE
     nCorrectors     2;
     nNonOrthogonalCorrectors 0;
     correctAlpha    0;
-    nAlphaCorr      1;
+    nAlphaCorr      2;
     pRefCell        0;
     pRefValue       0;
 }

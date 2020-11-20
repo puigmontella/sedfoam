@@ -44,7 +44,7 @@ surfaceScalarField phiAlpha
 		runTime.timeName(),
 		mesh
 	),
-	phi + (mesh.Sf() & fvc::interpolate(((1-alpha)-alpha*(1-alpha)*(rhoa-rhob)/rho)*WRel))
+	(mesh.Sf() & fvc::interpolate(((1-alpha)-alpha*(1-alpha)*(rhoa-rhob)/rho)*WRel))
 );
 
     for (int acorr=0; acorr<nAlphaCorr; acorr++)
@@ -52,6 +52,7 @@ surfaceScalarField phiAlpha
     fvScalarMatrix AlphaEqn
     (
           fvm::ddt( alpha)
+        + fvm::div(phi, alpha)
         + fvm::div(phiAlpha, alpha)
         //- fvm::laplacian(mut, Alpha)
     );

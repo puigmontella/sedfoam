@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
         #include "alphaCourantNo.H"
         #include "setDeltaT.H"
         #include "compressibleCourantNo.H"
-       // #include "rhoEqn.H"
+        #include "rhoEqn.H"
         runTime++;
         Info<< "Time = " << runTime.timeName() << nl << endl;
 

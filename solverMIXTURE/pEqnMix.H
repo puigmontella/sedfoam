@@ -195,7 +195,7 @@ License
 	   // #include "UaUbLimiter.H" NOT needed
 		//phi = (fvc::interpolate(U) & mesh.Sf());
 		//U.correctBoundaryConditions();
-		//#include "rhoEqn.H"
+		#include "rhoEqn.H"
 	//	#include "compressibleContinuityErrs.H"
 
 		// Update mixture velocity
