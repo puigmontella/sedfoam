@@ -22,7 +22,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 \*---------------------------------------------------------------------------*/
-volVectorField Ur(WRel);
+volVectorField Ur(-Ua + Ub);
 volScalarField magUr(mag(Ur));
 
 volScalarField Ka(draga->K(magUr));

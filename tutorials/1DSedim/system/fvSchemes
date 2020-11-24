@@ -30,15 +30,19 @@ divSchemes
     default         none;
 // alphaEqn
 div(phiAlpha,alpha) Gauss limitedLinear01 1;
-    div(phi,alpha)  Gauss upwind;//limitedLinear01 1;
-    div(phir,alpha) Gauss upwind;//limitedLinear01 1;
+    div(phia,alpha)  Gauss limitedLinear01 1;
+
+    div(phi,alpha)  Gauss limitedLinear01 1;
+    div(phir,alpha) Gauss limitedLinear01 1;
     div(phiWRel,WRel) Gauss linear;
-    div(phiRel,RelMixPar) Gauss upwind;
-    div(phi,rho)  Gauss upwind;
+    div(phiRel,RelMixPar) Gauss linear;
+    div(phi,rho)  Gauss limitedLinear01 1;
     div(rhoPhi,U)  Gauss limitedLinearV 1;
 
 // UEqn
     div(phi,U)    Gauss limitedLinearV 1;
+    div(phia,Ua)    Gauss limitedLinearV 1;
+
 // pEqn
     div(alpha,nu)   Gauss linear;
 // alphaPlastic
@@ -62,6 +66,8 @@ laplacianSchemes
     laplacian(nuEffTotal,U) Gauss linear corrected;
     laplacian(nut,U) Gauss linear corrected;
     laplacian(muEff,U) Gauss linear corrected;
+    laplacian(muEff,Ua) Gauss linear corrected;
+
 // pEqn
     laplacian((rho*(1|A(U))),p_rgh) Gauss linear corrected;
 }

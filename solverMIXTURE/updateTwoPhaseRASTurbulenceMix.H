@@ -29,13 +29,13 @@ License
 tmfexp = -B*rhoa*6.0*Cmu/(max((1-alpha)*K, Tpsmall));
 
 // just need the horizontal ones;
-rtemp = (WRel) & gravity;
-Urtemp = WRel;
+rtemp = (Ub-Ua) & gravity;
+Urtemp = Ub-Ua;
 if (Foam::mag(gravity).value() != 0)
 {
     Urtemp = rtemp*gravity/magSqr(gravity);
 }
-Urh = (WRel) - Urtemp;
+Urh = (Ub-Ua) - Urtemp;
 
 // ESD1 for horizontal, ESD4 for vertical density stratification
 // for 1D ESD1 ==0, obviously

@@ -59,12 +59,14 @@ fvVectorMatrix UEqn
     (
         fvm::ddt(rho, U)
       + fvm::div(rhoPhi, U)
+      - fvm::Sp(fvc::div(rhoPhi), U)
       + fvc::div
         ( alpha*(1-alpha)*(rhoa*rhob/rho)*WRel*WRel,
             "div(phiWRel,WRel)"
         )
       - fvm::laplacian(muEff, U, "laplacian(muEff,U)")
-      - (fvc::grad(U) & fvc::grad(muEff))
+      - scalar(1.0)*rhoa/(alpha+alphaSmall)*fvm::laplacian(nuFra, U, "laplacian(nuFra,U)")
+    //  - (fvc::grad(U) & fvc::grad(muEff))
       ==
 	fvOptions(rho, U)
     );
@@ -84,5 +86,5 @@ UEqn.relax();
                 )*mesh.magSf()
             )
         );
-         fvOptions.correct(U);
+         fvOptions.correct(Ua);
     }

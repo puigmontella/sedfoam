@@ -33,14 +33,14 @@ solvers
         tolerance       1e-9;
         relTol          0;
     }
-    "(alpha|U|pa_new_value|alphaPlastic)"
+    "(alpha|U|Ua|pa_new_value|alphaPlastic)"
     {
         solver          PBiCG;
         preconditioner  DILU;
         tolerance       1e-9;
         relTol          0;
     }
-    "(alphaFinal|UFinal|paFinal|alphaPlasticFinal)"
+    "(alphaFinal|UFinal|UaFinal|paFinal|alphaPlasticFinal)"
     {
         solver          PBiCG;
         preconditioner  DILU;
@@ -84,8 +84,8 @@ relaxationFactors
     }
     equations
     {
-        "alpha|U|k|omega"             1.;
-        "(alpha|U|k|omega)Final"      1;
+        "alpha|U|Ua|k|omega"             1.;
+        "(alpha|U|Ua|k|omega)Final"      1;
     }
 
 }

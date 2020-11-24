@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
         #include "alphaCourantNo.H"
         #include "setDeltaT.H"
         #include "compressibleCourantNo.H"
-        #include "rhoEqn.H"
+       // #include "rhoEqn.H"
         runTime++;
         Info<< "Time = " << runTime.timeName() << nl << endl;
 
@@ -165,6 +165,7 @@ int main(int argc, char *argv[])
             // --- Pressure corrector loop
             while (pimple.correct())
             {
+				#include "RelVelEqnMix.H"
                 #include "pEqnMix.H"
             }
 

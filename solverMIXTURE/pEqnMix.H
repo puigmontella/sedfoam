@@ -177,6 +177,45 @@ License
                 U.correctBoundaryConditions();
                 fvOptions.correct(U);
 			}
+
+		fvVectorMatrix UaEqn
+			(
+				fvm::ddt( Ua)
+			  + fvm::div(phia, Ua)
+			  - fvm::Sp(fvc::div(phia), Ua)
+			  - scalar(1.0)/rhoa*fvm::laplacian(muEff, Ua, "laplacian(muEff,Ua)")
+			  - scalar(1.0)/(alpha+alphaSmall)*fvm::laplacian(nuFra, Ua, "laplacian(nuFra,U)")
+			 // ==
+			 //  fvm::Sp((1-alpha)/rhoa*K, Ua)
+		//	fvOptions( Ua)
+			);
+			
+			
+		UaEqn.relax();
+		UaEqn +=  fvm::Sp((1-alpha)/rhoa*K, Ua)+ (1-alpha)/rhoa*K*Ub;
+
+		// fvOptions.constrain(UaEqn);
+		 solve(UaEqn ==
+				fvc::reconstruct
+				(
+				(rhoa-rhob)/rhoa*(gravity & mesh.Sf())+
+					(
+					   - (fvc::snGrad(pff))/rhoa
+					   - (fvc::snGrad(pa))/rhoa        
+					  - fvc::snGrad(p_rgh)/rhoa     
+					)*mesh.magSf()
+				)
+			);
+	    fvOptions.correct(Ua);
+	    phia = (fvc::interpolate(Ua) & mesh.Sf());
+			
+		//Info<< "U"<< U<< endl;	
+		//Info<< "Ua"<< Ua<< endl;
+		//Info<< "Ub"<< Ub<< endl;
+		Ub=(U*rho-alpha*Ua*rhoa)/((1-alpha)*rhob);
+		WRel=Ua-Ub;
+			
+			
 		}
 		p = p_rgh + rho*gh;
 
@@ -192,10 +231,11 @@ License
 		    p_rgh.correctBoundaryConditions();
 		}
 
+
 	   // #include "UaUbLimiter.H" NOT needed
 		//phi = (fvc::interpolate(U) & mesh.Sf());
 		//U.correctBoundaryConditions();
-		#include "rhoEqn.H"
+	//	#include "rhoEqn.H"
 	//	#include "compressibleContinuityErrs.H"
 
 		// Update mixture velocity

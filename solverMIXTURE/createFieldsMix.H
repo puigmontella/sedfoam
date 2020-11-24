@@ -554,6 +554,57 @@ volVectorField WRel
 );
 
 
+
+Info<< "Initialising field Ua\n" << endl;
+volVectorField Ua
+(
+    IOobject
+    (
+        "Ua",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedVector("0.0", U.dimensions(), vector::zero),
+    U.boundaryField().types()
+);
+
+
+Info<< "calculating face flux field phia\n" << endl;
+
+surfaceScalarField phia
+(
+    IOobject
+    (
+        "phia",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    linearInterpolate(Ua) & mesh.Sf()
+);
+
+
+Info<< "Initialising field Ub\n" << endl;
+volVectorField Ub
+(
+    IOobject
+    (
+        "Ub",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedVector("0.0", U.dimensions(), vector::zero),
+    U.boundaryField().types()
+);
+
+
 Info<< "Calculating field g.h\n" << endl;
 volScalarField gh("gh", gravity & mesh.C());
 surfaceScalarField ghf("ghf", gravity & mesh.Cf());

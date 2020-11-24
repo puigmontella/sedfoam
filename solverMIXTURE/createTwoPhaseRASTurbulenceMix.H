@@ -130,14 +130,14 @@ volScalarField tmfexp
     -B*rhoa*6.0*Cmu/(max((1-alpha)*K, Tpsmall))
 );
 
-volScalarField rtemp = (WRel) & gravity;
-volVectorField Urtemp =  WRel;
+volScalarField rtemp = (Ub-Ua) & gravity;
+volVectorField Urtemp = Ub-Ua;
 if (Foam::mag(gravity).value() != 0)
 {
      Urtemp = rtemp*gravity/magSqr(gravity);
 }
 
-volVectorField Urh = (WRel) - Urtemp;
+volVectorField Urh = (Ub-Ua) - Urtemp;
 volScalarField ESD1 = (K/rhob)*(fvc::grad(alpha)) & Urh;
 
 volScalarField ESD3

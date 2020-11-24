@@ -26,7 +26,7 @@ License
 
 volScalarField Re_p=d_part*sqrt(WRel & WRel)/nub;
 volScalarField nVal=4.7*(1+0.15*pow(Re_p,0.687))/(1+0.253*pow(Re_p,0.687));
-volScalarField Drag_cO=24/max(Re_p,1e-22)*(1+0.15*pow(Re_p,0.687));
+volScalarField Drag_cO=24./max(Re_p,1e-22)*(1+0.15*pow(Re_p,0.687));
 volScalarField Drag_c=Drag_cO*pow(1-alpha,3-2*nVal);
 
 
@@ -78,12 +78,8 @@ volScalarField magD_Rel = ::sqrt(2.0)*mag(D_Rel);
 
 volVectorField w_sd=-0.15*pow(d_part*alpha,2)*fvc::grad(magD_Rel);
 
-
 //Info<< "WRel" << WRel << endl;
-WRel=(w_i+w_sd);
-//WRel=w_i+w_td+w_sd;
-volVectorField WRelIni=WRel;
-
+WRel=(w_i+0*w_sd);
 
 
 //for (int i = 0; i < 30; i++) {
@@ -92,18 +88,18 @@ volVectorField WRelIni=WRel;
 	//Drag_cO=24/max(Re_p,1e-22)*(1+0.15*pow(Re_p,0.687));
 	//Drag_c=Drag_cO*pow(1-alpha,3-2*nVal);
 	//w_i=4./3.*d_part*d_part*(rhoa-rho)/(rhob*nub*max(Drag_c,1e-22)
-//*max(Re_p,1e-22))*(gravity-fvc::ddt(U)- fvc::div(phi, U));
+//*max(Re_p,1e-22))*(gravity-0*fvc::ddt(U)- 0*fvc::div(phi, U));
 	//WRel=(w_i+w_sd);
 	////Info<< i << " -  DifWRel: " << abs(WRel[].y()-WRelIni.y()) << endl;
 
 //}
 
-forAll(WRel, cellI)
-{  if( alpha[cellI]>0.61)
-	{
-   WRel[cellI]=WRel[cellI]*0; //cell center coordinate of cellI
-	}
-}
+//forAll(WRel, cellI)
+//{  if( alpha[cellI]<0.1)
+	//{
+   //WRel[cellI]=WRel[cellI]*0; //cell center coordinate of cellI
+	//}
+//}
 
 WRel.correctBoundaryConditions();
 

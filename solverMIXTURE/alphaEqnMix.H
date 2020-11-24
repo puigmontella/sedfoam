@@ -67,7 +67,7 @@ surfaceScalarField phiAlpha
 
 	alpha.min(alphaMax);
 	alpha.max(0);
-    rho == rhob*(scalar(1)-alpha)+alpha*rhoa;
+    rho = rhob*(scalar(1)-alpha)+alpha*rhoa;
 
     
     
