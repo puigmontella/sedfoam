@@ -127,7 +127,7 @@ volScalarField tmfexp
         IOobject::NO_READ,
         IOobject::NO_WRITE
     ),
-    -B*rhoa*6.0*Cmu/(max((1-alpha)*K, Tpsmall))
+    -B*rhoa*6.0*Cmu/(max(beta*K, Tpsmall))
 );
 
 volScalarField rtemp = (Ub-Ua) & gravity;
@@ -163,7 +163,7 @@ volScalarField ESD4
         IOobject::NO_READ,
         IOobject::NO_WRITE
     ),
-    (-(SUS/(1-alpha))*(rhoa/rhob-1.0)*gravity & fvc::grad(alpha)) + KE1*ESD1
+    (-(SUS/beta)*(rhoa/rhob-1.0)*gravity & fvc::grad(alpha)) + KE1*ESD1
 );
 
 volScalarField ESD5
@@ -178,7 +178,7 @@ volScalarField ESD5
     ),
     max
     (
-        -(SUS/(1-alpha))*(rhoa/rhob-1.0)*gravity & fvc::grad(alpha),
+        -(SUS/beta)*(rhoa/rhob-1.0)*gravity & fvc::grad(alpha),
         scalar(0.0)*ESD1
     )
     + KE1*ESD1

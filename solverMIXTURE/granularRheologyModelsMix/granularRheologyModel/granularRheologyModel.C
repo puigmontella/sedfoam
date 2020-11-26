@@ -38,13 +38,12 @@ Foam::granularRheologyModel::granularRheologyModel
 (
     const Foam::phaseModel& phasea,
     const Foam::phaseModel& phaseb,
-    const Foam::volScalarField& alpha,
     const Foam::volScalarField& pa,
     const Foam::dimensionedScalar& Dsmall
 )
 :
-    alpha_(alpha),
-//    phi_(phasea.phi()),
+    alpha_(phasea.alpha()),
+    phia_(phasea.phi()),
     rhoa_(phasea.rho()),
     da_(phasea.d()),
     pa_new_value(pa),
@@ -311,14 +310,10 @@ Foam::granularRheologyModel::~granularRheologyModel()
 
 void Foam::granularRheologyModel::solve
 (
-    const volTensorField& gradUt,
+    const volTensorField& gradUat,
     const volScalarField& pf,
     const dimensionedScalar& alphaSmall,
-    const dimensionedScalar& Dsmall,
-    const surfaceScalarField& phi,
-    const volScalarField& alpha
-
-
+    const dimensionedScalar& Dsmall
 )
 {
     if (not granularRheology_)
@@ -335,7 +330,7 @@ void Foam::granularRheologyModel::solve
 
     // compute the particulate velocity shear rate
     //
-    volSymmTensorField D = symm(gradUt);
+    volSymmTensorField D = symm(gradUat);
     volScalarField magD = ::sqrt(2.0)*mag(D);
     volScalarField magD2 = pow(magD, 2);
     volScalarField patot_ = pf*scalar(0.0);
@@ -354,17 +349,17 @@ void Foam::granularRheologyModel::solve
     //  whereas large value are prone to numerical error
     volScalarField tau_inv_par = relaxPa_*alpha_*magD;
 
-    //fvScalarMatrix paEqn
-    //(
-         //fvm::ddt(pa_new_value)
-         //+ fvm::div(phi, pa_new_value, "div(phi,pa_new_value)")
-         //- fvm::Sp(fvc::div(phi), pa_new_value)
-        //==
-        //tau_inv_par*(pa_)
-        //-fvm::Sp(tau_inv_par, pa_new_value)
-    //);
-    //paEqn.relax();
-    //paEqn.solve();
+    fvScalarMatrix paEqn
+    (
+         fvm::ddt(pa_new_value)
+         + fvm::div(phia_, pa_new_value, "div(phia,pa_new_value)")
+         - fvm::Sp(fvc::div(phia_), pa_new_value)
+        ==
+        tau_inv_par*(pa_)
+        -fvm::Sp(tau_inv_par, pa_new_value)
+    );
+    paEqn.relax();
+    paEqn.solve();
 
     pa_new_value.max(0.0);
 

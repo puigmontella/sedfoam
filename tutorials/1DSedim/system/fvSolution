@@ -17,59 +17,51 @@ FoamFile
 
 solvers
 {
-
-    p_rgh
+    p_rbgh
     {
-        solver          PCG;
-        preconditioner  DIC;
-        tolerance       1e-07;
+        solver          GAMG;
+        tolerance       1e-9;
         relTol          0.0001;
+        smoother        DIC;
+        nPreSweeps      0;
+        nPostSweeps     2;
+        nFinestSweeps   2;
+        cacheAgglomeration true;
+        nCellsInCoarsestLevel 10;
+        agglomerator    faceAreaPair;
+        mergeLevels     1;
     }
-    
 
-    p_rghFinal
+    p_rbghFinal
     {
-        $p_rgh;
+        $p_rbgh;
         tolerance       1e-9;
         relTol          0;
     }
-    "(alpha|U|Ua|pa_new_value|alphaPlastic)"
+    "(alpha_a|U|Ub|pa_new_value|alphaPlastic)"
     {
         solver          PBiCG;
         preconditioner  DILU;
         tolerance       1e-9;
         relTol          0;
     }
-    "(alphaFinal|UFinal|UaFinal|paFinal|alphaPlasticFinal)"
+    "(alpha_aFinal|UFinal|UbFinal|paFinal|alphaPlasticFinal)"
     {
         solver          PBiCG;
         preconditioner  DILU;
         tolerance       1e-9;
-        relTol          0;
-    }
-
-   rho
-    {
-        solver          PCG;
-        preconditioner  DIC;
-        tolerance       1e-8;
-        relTol          0.000001;
-    }
-
-    rhoFinal
-    {
-        $rho;
-        tolerance       1e-8;
         relTol          0;
     }
 }
 
 PIMPLE
 {
-    nCorrectors     2;
+    momentumPredictor 0;
+    nOuterCorrectors  1;
+    nCorrectors     1;
     nNonOrthogonalCorrectors 0;
     correctAlpha    0;
-    nAlphaCorr      2;
+    nAlphaCorr      1;
     pRefCell        0;
     pRefValue       0;
 }
@@ -79,13 +71,13 @@ relaxationFactors
 {
     fields
     {
-        //p_rgh               1.;
-        //p_rghFinal          1;
+        p_rbgh               1.;
+        p_rbghFinal          1;
     }
     equations
     {
-        "alpha|U|Ua|k|omega"             1.;
-        "(alpha|U|Ua|k|omega)Final"      1;
+        "U|Ub|k|omega"             1.;
+        "(U|Ub|k|omega)Final"      1;
     }
 
 }

@@ -79,7 +79,7 @@ volScalarField magD_Rel = ::sqrt(2.0)*mag(D_Rel);
 volVectorField w_sd=-0.15*pow(d_part*alpha,2)*fvc::grad(magD_Rel);
 
 //Info<< "WRel" << WRel << endl;
-WRel=(w_i+0*w_sd);
+WRel=(w_i+w_sd);
 
 
 //for (int i = 0; i < 30; i++) {

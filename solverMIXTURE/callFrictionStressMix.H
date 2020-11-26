@@ -24,28 +24,28 @@ License
 \*---------------------------------------------------------------------------*/
 //
 
-volSymmTensorField D_tensor = symm(gradUT);
+volSymmTensorField D_tensor = symm(gradUaT);
 volScalarField magDtensor = ::sqrt(2.0)*mag(D_tensor);
 
 //// Solving the evolution of plastic volume fraction
 volScalarField dila_shearRate = delta*magDtensor;
 
-//fvScalarMatrix phi_pl_Eqn
-//(
- //fvm::ddt(alphaPlastic)
- //+ fvm::div(phi, alphaPlastic, "div(phi,alphaPlastic)")
- //- fvm::Sp(fvc::div(phi), alphaPlastic)
-//==
-//-fvc::Sp(dila_shearRate, alphaPlastic) // explicit term
-//);
-//phi_pl_Eqn.relax();
-//phi_pl_Eqn.solve();
+fvScalarMatrix phi_pl_Eqn
+(
+ fvm::ddt(alphaPlastic)
+ + fvm::div(phia, alphaPlastic, "div(phia,alphaPlastic)")
+ - fvm::Sp(fvc::div(phia), alphaPlastic)
+==
+-fvc::Sp(dila_shearRate, alphaPlastic) // explicit term
+);
+phi_pl_Eqn.relax();
+phi_pl_Eqn.solve();
 
 //Info<< "alphaMinFriction BB =" << alphaPlastic <<endl;
 
 //alphaMinFriction=alphaPlastic;
 
-alphaPlastic.max(0.40);
+alphaPlastic.max(0.48);
 alphaPlastic.min(0.585);
 
 
@@ -53,9 +53,6 @@ alphaPlastic.min(0.585);
 // exceeding the maximum volume fraction.
 pff = pp->pff(alpha, alphaPlastic, alphaMax, Fr_, eta0_, eta1_);
 
-
-//pff.max(0.0);
-//pff.min(600.585);
 //
 //
 //  Kinetic THEORY PART
@@ -63,7 +60,7 @@ pff = pp->pff(alpha, alphaPlastic, alphaMax, Fr_, eta0_, eta1_);
 //
 if (kineticTheory.on())
 {
-    volTensorField dU = fvc::grad(U);
+    volTensorField dU = fvc::grad(Ua);
     volSymmTensorField dUU = symm(dU);
     volSymmTensorField devS = dUU - (scalar(1.0)/scalar(3.0))*tr(dUU)*I;
     dimensionedScalar I2Dsmall = pow(Dsmall, 2);
@@ -72,12 +69,11 @@ if (kineticTheory.on())
     // T && T = T_ij*T_ij
     volScalarField muEff_f =
     (
-       // pff*Foam::sin(kineticTheory.phi())
-        pff*Foam::sin(0.) //TO BE CHANGED!!!!!!
+        pff*Foam::sin(kineticTheory.phi())
        /sqrt(scalar(2.0)*(devS && devS) + I2Dsmall)
     );
 // the actual expression for nuFra depends on the way this term is discretized
-// in UEqn
+// in UaEqn
     nuFra = muEff_f/rhoa;
 //   nuFra = muEff_f/((alpha+alphaSmall)*rhoa);
 
@@ -93,7 +89,7 @@ if (kineticTheory.on())
 else if (granularRheology.on())
 {
 // solving granular rheology
-    granularRheology.solve(gradUT, pff, alphaSmall, Dsmall, phi,alpha);
+    granularRheology.solve(gradUaT, pff, alphaSmall, Dsmall);
 
 // Particulate pressure and viscosity
     pa = granularRheology.pa();
@@ -115,8 +111,6 @@ else if (granularRheology.on())
 
 // Compute nuEffb the total fluid phase viscosity
     nuEffb = turbulenceb->nut() + granularRheology.nuvb();
-    nuEffTotal=(nuFra*rhoa+nuEffa*rhoa+nuEffb*rhob)/rho;
-
 }
 //
 //
@@ -132,8 +126,6 @@ else
     pa = pa*scalar(0.0);
     nuFra = nua*scalar(0.0);
     nuEffa = nua;
-    
-    nuEffTotal=(nuFra*rhoa+nuEffa*rhoa+nuEffb*rhob)/rho;
 }
 // Add a numerical viscosity to damp the instabilities close to the outlet
 if (spongeLayer)
@@ -154,4 +146,3 @@ if (spongeLayer)
 nuFra.min(nuMax);
 nuEffa.min(nuMax);
 nuEffb.min(nuMax);
-nuEffTotal.min(nuMax);

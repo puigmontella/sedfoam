@@ -24,10 +24,10 @@ License
 \*---------------------------------------------------------------------------*/
 #include "createTwoPhaseRASTurbulenceMix.H"
 
-singlePhaseTransportModel phasebTransport(U, phi);
+singlePhaseTransportModel phasebTransport(Ub, phib);
 
 surfaceScalarField alphacf("alphacf", fvc::interpolate(alpha));
-surfaceScalarField alphaPhic("alphaPhic", alphacf*phi);
+surfaceScalarField alphaPhic("alphaPhic", alphacf*phib);
 
 autoPtr<PhaseIncompressibleTurbulenceModel<singlePhaseTransportModel>>
 turbulenceb
@@ -35,9 +35,9 @@ turbulenceb
     PhaseIncompressibleTurbulenceModel<singlePhaseTransportModel>::New
     (
         alpha,
-        U,
+        Ub,
         alphaPhic,
-        phi,
+        phib,
         phasebTransport
     )
 );
@@ -77,21 +77,6 @@ volScalarField nuEffb
     IOobject
     (
         "nuEffb",
-        runTime.timeName(),
-        mesh,
-        IOobject::NO_READ,
-        IOobject::AUTO_WRITE
-    ),
-    mesh,
-    dimensionedScalar("zero", dimensionSet(0, 2, -1, 0, 0), 0.0)
-);
-
-Info<< "Calculating field nuEffTotal\n" << endl;
-volScalarField nuEffTotal
-(
-    IOobject
-    (
-        "nuEffTotal",
         runTime.timeName(),
         mesh,
         IOobject::NO_READ,

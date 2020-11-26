@@ -46,12 +46,11 @@ namespace Foam
 Foam::JohnsonJackson::JohnsonJackson
 (
     const dictionary& ppDict,
-    const volScalarField& alpha,
     const phaseModel& phasea,
     const phaseModel& phaseb
 )
 :
-    ppModel(ppDict, alpha, phasea, phaseb)
+    ppModel(ppDict, phasea, phaseb)
 {}
 
 

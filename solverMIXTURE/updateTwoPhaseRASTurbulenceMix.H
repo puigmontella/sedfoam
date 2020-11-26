@@ -26,7 +26,7 @@ License
 // drag dissipation and stratification terms.
 
 // Exponent of the turbulence damping term for k,epsilon and omega equations
-tmfexp = -B*rhoa*6.0*Cmu/(max((1-alpha)*K, Tpsmall));
+tmfexp = -B*rhoa*6.0*Cmu/(max(beta*K, Tpsmall));
 
 // just need the horizontal ones;
 rtemp = (Ub-Ua) & gravity;
@@ -45,11 +45,11 @@ ESD1 = (K/rhob)*(fvc::grad(alpha)) & Urh;
 ESD3 = -2.0*K*alpha/rhob;
 
 // stratification
-ESD4 = -(SUS/(1-alpha))*(rhoa/rhob-1.0)*gravity & fvc::grad(alpha);
+ESD4 = -(SUS/beta)*(rhoa/rhob-1.0)*gravity & fvc::grad(alpha);
 ESD4 = ESD4 + KE1*ESD1;
 
 // the following term is implemented in epsilon equation.
-ESD5 = -(SUS/(1-alpha))*(rhoa/rhob-1.0)*gravity & fvc::grad(alpha);
+ESD5 = -(SUS/beta)*(rhoa/rhob-1.0)*gravity & fvc::grad(alpha);
 
 // if ESD5 > 0, then it should be implemented, else, no
 ESD5 = max(ESD5, scalar(0.0)*ESD5);

@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2016 OpenFOAM Foundation
+    \\  /    A nd           | Copyright (C) 2011 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -21,19 +21,33 @@ License
     You should have received a copy of the GNU General Public License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
+Global
+    setDeltaT
+
+Description
+    Reset the timestep to maintain a constant maximum courant Number.
+    Reduction of time-step is immediate, but increase is damped to avoid
+    unstable oscillations.
+
 \*---------------------------------------------------------------------------*/
+
+if (adjustTimeStep)
 {
-    DDtUa =
+    scalar maxDeltaTFact =
+        min(maxCo/(CoNum + SMALL), maxAlphaCo/(alphaCoNum + SMALL));
+
+    scalar deltaTFact = min(min(maxDeltaTFact, 1.0 + 0.1*maxDeltaTFact), 1.2);
+
+    runTime.setDeltaT
     (
-        fvc::ddt(Ua)
-      + fvc::div(phia, Ua)
-      - fvc::div(phia)*Ua
+        min
+        (
+            deltaTFact*runTime.deltaTValue(),
+            maxDeltaT
+        )
     );
 
-    DDtUb =
-    (
-        fvc::ddt(Ub)
-      + fvc::div(phib, Ub)
-      - fvc::div(phib)*Ub
-    );
+    Info<< "deltaT = " <<  runTime.deltaTValue() <<" < "<<maxDeltaT<< endl;
 }
+
+// ************************************************************************* //

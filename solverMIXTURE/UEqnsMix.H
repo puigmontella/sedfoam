@@ -33,58 +33,180 @@ gradPOSC =
   + gradPAMP2*Foam::sin(initTheta*(pi)/90.0 + 4.0*(pi)*runTime.value()/oscpT)
 );
 
-
-muEff=rhob*nuEffb;
-//volSymmTensorField tau_Diffusion = 1*alpha*beta*rhoa*rhob/rho/rho*symm(WRel * WRel);
-//volSymmTensorField tauTot= 1*nuEffTotal*devS;
-//volSymmTensorField tauTurb= 0*turbulenceb->nut()*devS;
-
- //Info<< "tauTot"<<tauTot<<endl;
+rho = alpha*rhoa+beta*rhob;
 
 
- //Info<< "tauTurb"<<tauTurb<<endl;
-surfaceScalarField oneOverrho =
+/* JC Contribution from Hugo commented
+//added tensor (comment if not added)
+dimensionedTensor iso
 (
-    fvc::interpolate
-    (
-        scalar(1.0)/(rho),
-        "interpolate(oneOverrho)"
-    )
+  "iso",
+  dimensionSet(0, 0, 0, 0, 0, 0, 0),
+  tensor(1e0, 0e0 , 0e0, 0e0, 1e0, 0e0, 0e0, 0e0 ,1e0)
+  //      XX, XY,   XZ,   YX, YY,  YZ,  ZX,  ZY,  ZZ
 );
 
-//Info<< "phi BBBBBBBBBBB"<< phi<< endl;
+dimensionedTensor aniso
+(
+  "aniso",
+  dimensionSet(0, 0, 0, 0, 0, 0, 0),
+  tensor(0.0, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0 ,0.0)
+  //      XX, XY,  XZ,  YX,  YY,  YZ,  ZX,  ZY,  ZZ
+);
+
+volVectorField susa
+(
+    "susa",
+    //turbulence suspension
+    SUS*(K/rhoa)*beta/(alpha+alphaSmall)*turbulenceb->nut()
+    *((SUS_I*iso-SUS_A*aniso) & fvc::grad(alpha))
+);
+volVectorField susb
+(
+    "susb",
+    //turbulence suspension
+    SUS*(K/rhob)*turbulenceb->nut()*((SUS_I*iso-SUS_A*aniso) & fvc::grad(alpha))
+);
+//end added tensor
+// end contribution from Hugo
+    */
+
 
 
 fvVectorMatrix UEqn
-    (
+(
         fvm::ddt(rho, U)
-      + fvm::div(rhoPhi, U)
-      - fvm::Sp(fvc::div(rhoPhi), U)
+      + fvm::div( phiRho, U,"div(phi,U)")
+      - fvm::Sp(fvc::div(phiRho), U)
       + fvc::div
         ( alpha*(1-alpha)*(rhoa*rhob/rho)*WRel*WRel,
             "div(phiWRel,WRel)"
         )
-      - fvm::laplacian(muEff, U, "laplacian(muEff,U)")
-      - scalar(1.0)*rhoa/(alpha+alphaSmall)*fvm::laplacian(nuFra, U, "laplacian(nuFra,U)")
-    //  - (fvc::grad(U) & fvc::grad(muEff))
-      ==
-	fvOptions(rho, U)
-    );
+// effective stress term from dispersed phase
+  - scalar(1.0)/(alpha+alphaSmall)*rhoa*fvm::laplacian(nuFra, U)
+//- fvm::laplacian(nuFra, Ua)
+  - fvm::laplacian(rhoa*nuEffa+rhob*nuEffb, U)
+
+   // ==
+//    fvm::Sp(-beta/rhoa*K,Ua)        // implicit drag term
+//+ beta/rhoa*K*Ub                    // explicit drag transfered to p-equation
+    // Hugo  -susa                    // term to add with tensor
+// - gradPs              // shear induced pressure gradient moved to p-equation
+//  - gradPf                  // contact pressure gradient moved to p-equation
+  //- beta/rhoa*(liftCoeff - Cvm*rhob*DDtUb)  // lift and added mass forces
+  //    + fvOptions(Ua)
+);
 UEqn.relax();
 
- fvOptions.constrain(UEqn);
-   if (pimple.momentumPredictor())
-    {   solve
-        (UEqn
-          ==
-            fvc::reconstruct
-            ((
-                  - ghf*fvc::snGrad(rho)
-                   - (fvc::snGrad(pff))
-                   - (fvc::snGrad(pa))           
-                  - fvc::snGrad(p_rgh)     
-                )*mesh.magSf()
-            )
+
+//UaEqn += fvm::Sp(beta/rhoa*K, Ua);
+//fvOptions.constrain(UaEqn());
+
+surfaceScalarField phiRb =
+(
+  - fvc::interpolate(nuEffb)*mesh.magSf()*(fvc::snGrad(beta))
+   /fvc::interpolate(beta)
+);
+
+
+//fvVectorMatrix UaEqn
+//(
+    //(scalar(1.0) + Cvm*rhob*beta/rhoa)*
+    //(
+        //fvm::ddt(Ua)
+      //+ fvm::div(phia, Ua, "div(phia,Ua)")
+      //- fvm::Sp(fvc::div(phia), Ua)
+    //)
+//// effective stress term from dispersed phase
+  //- scalar(1.0)/(alpha+alphaSmall)*fvm::laplacian(nuFra, Ua)
+////- fvm::laplacian(nuFra, Ua)
+  //- fvm::laplacian(nuEffa, Ua)
+  //+ fvm::div(phiRa, Ua, "div(phiRa,Ua)")
+  //- fvm::Sp(fvc::div(phiRa), Ua)
+    //==
+////    fvm::Sp(-beta/rhoa*K,Ua)        // implicit drag term
+////+ beta/rhoa*K*Ub                    // explicit drag transfered to p-equation
+    //// Hugo  -susa                    // term to add with tensor
+//// - gradPs              // shear induced pressure gradient moved to p-equation
+////  - gradPf                  // contact pressure gradient moved to p-equation
+  //- beta/rhoa*(liftCoeff - Cvm*rhob*DDtUb)  // lift and added mass forces
+  ////    + fvOptions(Ua)
+//);
+//UaEqn.relax();
+//UaEqn += fvm::Sp(beta/rhoa*K, Ua);
+////fvOptions.constrain(UaEqn());
+
+//surfaceScalarField phiRb =
+//(
+  //- fvc::interpolate(nuEffb)*mesh.magSf()*(fvc::snGrad(beta))
+   // /fvc::interpolate(beta)
+//);
+
+fvVectorMatrix UbEqn
+(
+    (scalar(1.0) + Cvm*rhob*alpha/rhob)*
+    (
+        fvm::ddt(Ub)
+      + fvm::div(phib, Ub, "div(phib,Ub)")
+      - fvm::Sp(fvc::div(phib), Ub)
+    )
+  - fvm::laplacian(nuEffb, Ub)
+  + fvm::div(phiRb, Ub, "div(phiRb,Ub)")
+  - fvm::Sp(fvc::div(phiRb), Ub)
+    ==
+//    fvm::Sp(-alpha/rhob*K,Ub)                 // implicit drag term
+    // Hugo   susb                                 //term to add with tensor
+//+ alpha/rhob*K*Ua                 // Explicit drag transfered to p-equation
+    alpha/rhob*(liftCoeff + Cvm*rhob*DDtUa) // lift and added mass forces
+//  + fvOptions(Ub)
+);
+UbEqn.relax();
+UbEqn += fvm::Sp(alpha/rhob*K, Ub);
+
+//fvOptions.constrain(UbEqn());
+
+/*    if (pimple.momentumPredictor())
+    {
+    word schemeA("div(alpha,nu)");
+
+// limiter for the explicit stress terms to avoid numerical instability and/or
+// too strong limitation on the time step
+    volScalarField nuFraExp = nuFra;
+    nuFraExp.min(nub*1e3);
+    nuFraExp.correctBoundaryConditions();
+
+    surfaceScalarField oneOverAlpha =
+    (
+        fvc::interpolate
+        (
+            scalar(1.0)/(alpha+alphaSmall),
+            "interpolate(oneoveralpha)"
+        )
+    );
+
+
+        solve
+        (
+            UbEqn()
+         ==
+            alpha/rhob*K*Ua
+          - fvc::grad(p_rbgh)/rhob
+          + (SUS*(K/rhob)*turbulenceb->nut())*fvc::grad(alpha)
+          - (scalar(2.0)/(beta*scalar(3.0)))
+            *fvc::grad(((nuEffb*tr(gradUbT)))*beta)
+          + (scalar(1.0)/beta)
+            *(fvc::div(beta*nuEffb*gradUbT,schemeA))
+          + (gradPOSC/rhob)
         );
-         fvOptions.correct(Ua);
+        solve
+        (
+            UaEqn()
+         ==
+            beta/rhoa*K*Ub
+          - fvc::grad(p_rbgh)/rhoa
+          fvc::reconstruct
+          (
+          )
+        );
     }
+*/

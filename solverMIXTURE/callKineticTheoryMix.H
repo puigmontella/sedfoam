@@ -22,22 +22,22 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 \*---------------------------------------------------------------------------*/
-volTensorField gradUT = fvc::grad(U)().T();
-//volTensorField gradUbT = fvc::grad(Ub)().T();
-volSymmTensorField devS = dev(symm(gradUT));
+volTensorField gradUaT = fvc::grad(Ua)().T();
+volTensorField gradUbT = fvc::grad(Ub)().T();
+volSymmTensorField devS = dev(symm(gradUaT));
 
 if (kineticTheory.on())
 {
     // Compute Kinetic Theory including granular temperature solution
     kineticTheory.solve
     (
-        gradUT, turbulenceb->k(), turbulenceb->epsilon(),
-        turbulenceb->nut(), B, runTime,alpha
+        gradUaT, turbulenceb->k(), turbulenceb->epsilon(),
+        turbulenceb->nut(), B, runTime
     );
 
     // Update solid phase viscosities and collisional pressure
     nuEffa = kineticTheory.mua()/((alpha + alphaSmall)*rhoa);
-    lambdaU = kineticTheory.lambda();
+    lambdaUa = kineticTheory.lambda();
     pa = kineticTheory.pa();
 
     if (debugInfo)

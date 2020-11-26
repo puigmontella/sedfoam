@@ -26,10 +26,10 @@ License
 {
     scalar UrCoNum = 0.5*gMax
     (
-        fvc::surfaceSum(mag(phi))().internalField()/mesh.V().field()
+        fvc::surfaceSum(mag(phia - phib))().internalField()/mesh.V().field()
     )*runTime.deltaTValue();
 
-    Info<< "Max U Courant Number = " << UrCoNum << endl;
+    Info<< "Max Ur Courant Number = " << UrCoNum << endl;
 
     CoNum = max(CoNum, UrCoNum);
 }

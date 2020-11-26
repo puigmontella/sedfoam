@@ -30,7 +30,6 @@ License
 Foam::autoPtr<Foam::ppModel> Foam::ppModel::New
 (
     const dictionary& ppDict,
-    const volScalarField& alpha,
     const phaseModel& phasea,
     const phaseModel& phaseb
 )
@@ -58,7 +57,7 @@ Foam::autoPtr<Foam::ppModel> Foam::ppModel::New
              << abort(FatalError);
     }
 
-    return cstrIter()(ppDict, alpha, phasea, phaseb);
+    return cstrIter()(ppDict, phasea, phaseb);
 }
 
 

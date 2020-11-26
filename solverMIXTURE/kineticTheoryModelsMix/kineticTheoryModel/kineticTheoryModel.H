@@ -57,9 +57,12 @@ class kineticTheoryModel
     // Private data
 
         const phaseModel& phasea_;
-        const volVectorField& U_;
-        //const volScalarField& alpha_;
-        const surfaceScalarField& phi_;
+        const volVectorField& Ua_;
+        const volVectorField& Ub_;
+        const volScalarField& alpha_;
+        const surfaceScalarField& phia_;
+
+        const dragModel& draga_;
 
         const dimensionedScalar& rhoa_;
         const dimensionedScalar& da_;
@@ -105,8 +108,8 @@ class kineticTheoryModel
         const dimensionedScalar ttone;
         const dimensionedScalar MaxTheta;
 
-        ////- angle of internal friction
-        //const dimensionedScalar phi_;
+        //- angle of internal friction
+        const dimensionedScalar phi_;
 
         //- Relaxation factor for pa
         const dimensionedScalar relaxPaKin_;
@@ -161,8 +164,8 @@ public:
         kineticTheoryModel
         (
             const phaseModel& phasea,
-            const volVectorField& U,
-            const surfaceScalarField& phi
+            const volVectorField& Ub,
+            const dragModel& draga
         );
 
 
@@ -174,22 +177,19 @@ public:
 
         void solve
         (
-            const volTensorField& gradUt,
+            const volTensorField& gradUat,
             const volScalarField& kb,
             const volScalarField& epsilonb,
             const volScalarField& nuft,
             const dimensionedScalar& B,
-            const dimensionedScalar& tt,
-            const volScalarField& alpha
-            
+            const dimensionedScalar& tt
         );
 
         void updateRheo
         (
             const volScalarField& kb,
             const volScalarField& epsilonb,
-            const dimensionedScalar& B,
-            const volScalarField& alpha
+            const dimensionedScalar& B
         );
 
         bool on() const
@@ -237,10 +237,10 @@ public:
             return kappa_;
         }
 
-        //const dimensionedScalar& phi() const
-        //{
-            //return phi_;
-        //}
+        const dimensionedScalar& phi() const
+        {
+            return phi_;
+        }
 
 };
 

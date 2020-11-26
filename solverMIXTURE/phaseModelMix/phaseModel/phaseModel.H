@@ -70,14 +70,14 @@ class phaseModel
         //- density
         dimensionedScalar rho_;
 
-        ////- Velocity
-        //volVectorField U_;
+        //- Velocity
+        volVectorField U_;
 
         //- Concentration
-     //   volScalarField alpha_;
+        volScalarField alpha_;
 
-        ////- Fluxes
-        //autoPtr<surfaceScalarField> phiPtr_;
+        //- Fluxes
+        autoPtr<surfaceScalarField> phiPtr_;
 
 
 public:
@@ -139,35 +139,35 @@ public:
             return rho_;
         }
 
-        //const volVectorField& U() const
-        //{
-            //return U_;
-        //}
+        const volVectorField& U() const
+        {
+            return U_;
+        }
 
-        //volVectorField& U()
-        //{
-            //return U_;
-        //}
+        volVectorField& U()
+        {
+            return U_;
+        }
 
-        //const volScalarField& alpha() const
-        //{
-            //return alpha_;
-        //}
+        const volScalarField& alpha() const
+        {
+            return alpha_;
+        }
 
-        //volScalarField& alpha()
-        //{
-            //return alpha_;
-        //}
+        volScalarField& alpha()
+        {
+            return alpha_;
+        }
 
-        //const surfaceScalarField& phi() const
-        //{
-            //return phiPtr_();
-        //}
+        const surfaceScalarField& phi() const
+        {
+            return phiPtr_();
+        }
 
-        //surfaceScalarField& phi()
-        //{
-            //return phiPtr_();
-        //}
+        surfaceScalarField& phi()
+        {
+            return phiPtr_();
+        }
 };
 
 

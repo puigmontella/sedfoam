@@ -47,7 +47,7 @@ Description
  * \version 3.1
  * \date September 16, 2019
  *
- * Solver for a mixture system with one phase dispersed
+ * Solver for a system of 2 phases with one phase dispersed
  *
  */
 /*
@@ -97,7 +97,6 @@ int main(int argc, char *argv[])
     #include "setInitialDeltaT.H"
     
     #include "RelVelEqnMix.H"
-
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
     if (SUSlocal)
     {
@@ -124,28 +123,25 @@ int main(int argc, char *argv[])
 
     while (runTime.run())
     {
-        #include "readTwoPhaseEulerFoamControls.H"
-
-       // #include "CourantNos.H"
+        #include "readTwoPhaseEulerFoamControlsMix.H"
+        #include "CourantNosMix.H"
         #include "alphaCourantNo.H"
         #include "setDeltaT.H"
-        #include "compressibleCourantNo.H"
-       // #include "rhoEqn.H"
+
         runTime++;
         Info<< "Time = " << runTime.timeName() << nl << endl;
 
         #include "gravityRamp.H"
 
-
 //      Pressure-velocity PIMPLE corrector loop
         while (pimple.loop())
         {
-            
-            //#include "liftDragCoeffs.H"
             #include "RelVelEqnMix.H"
 
 
 			#include "alphaEqnMix.H"
+			#include "liftDragCoeffs.H"
+
 //          Compute the Kinetic Theory parameters: nuEffa and lambdaUa from the
 //          solution of the Granular temperature equation
             #include "callKineticTheoryMix.H"
@@ -156,20 +152,11 @@ int main(int argc, char *argv[])
             #include "callFrictionStressMix.H"
 
 //          Create the momentum balance equations for both phases a and b
-
             #include "UEqnsMix.H"
-            
-            
 
+            #include "pEqnMix.H"
 
-            // --- Pressure corrector loop
-            while (pimple.correct())
-            {
-				#include "RelVelEqnMix.H"
-                #include "pEqnMix.H"
-            }
-
-         //   #include "DDtUMix.H"
+            #include "DDtUMix.H"
 
             if (pimple.turbCorr())
             {
@@ -184,10 +171,10 @@ int main(int argc, char *argv[])
         }
         if (debugInfo)
         {
-            Info<< "min(U) = " << gMin(U)
-                << "max(U) = " << gMax(U) << endl;
-            //Info<< "min(Ub) = " << gMin(Ub)
-                //<< "max(Ub) = " << gMax(Ub) << nl << endl;
+            Info<< "min(Ua) = " << gMin(Ua)
+                << "max(Ua) = " << gMax(Ua) << endl;
+            Info<< "min(Ub) = " << gMin(Ub)
+                << "max(Ub) = " << gMax(Ub) << nl << endl;
         }
         #include "OutputGradPOSC.H"
         #include "writeTauMix.H"

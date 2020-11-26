@@ -66,7 +66,6 @@ public:
         Hsu
         (
             const dictionary& ppDict,
-            const volScalarField& alpha,
             const phaseModel& phasea,
             const phaseModel& phaseb
         );

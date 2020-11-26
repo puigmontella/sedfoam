@@ -39,13 +39,12 @@ namespace Foam
 Foam::ppModel::ppModel
 (
     const dictionary& ppDict,
-    const volScalarField& alpha,
     const phaseModel& phasea,
     const phaseModel& phaseb
 )
 :
     ppDict_(ppDict),
-    alpha_(alpha),
+    alpha_(phasea.alpha()),
     phasea_(phasea),
     phaseb_(phaseb)
 {}

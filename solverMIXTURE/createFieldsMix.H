@@ -174,24 +174,21 @@ autoPtr<phaseModel> phaseb = phaseModel::New
     "b"
 );
 
-
-//volScalarField& alpha = phasea->alpha();
-//volVectorField& Ub = phaseb->U();
-//volScalarField& beta = phaseb->alpha();
-//Info<< "Warning : alpha_b read but not used!\n" << endl;
-//Info<< "alpha_b is set to 1 - alpha_a\n" << endl;
-
-//surfaceScalarField& phib = phaseb->phi();
+volScalarField& alpha = phasea->alpha();
+volVectorField& Ub = phaseb->U();
+volScalarField& beta = phaseb->alpha();
+Info<< "Warning : alpha_b read but not used!\n" << endl;
+Info<< "alpha_b is set to 1 - alpha_a\n" << endl;
+beta = 1 - alpha;
+surfaceScalarField& phib = phaseb->phi();
 const dimensionedScalar& rhob = phaseb->rho();
 const dimensionedScalar& nub = phaseb->nu();
 const dimensionedScalar& d_part = phasea->d();
 
-
-//volVectorField& Ua = phasea->U();
-//surfaceScalarField& phia = phasea->phi();
+volVectorField& Ua = phasea->U();
+surfaceScalarField& phia = phasea->phi();
 const dimensionedScalar& rhoa = phasea->rho();
 const dimensionedScalar& nua = phasea->nu();
-
 
 // Reading ForceProperties
 
@@ -386,8 +383,6 @@ OFstream gradPOSCFile
     "gradPOSC.txt"
 );
 
-
-
 // Initialize variables
 
 //Info<< "Calculating face flux field phi\n" << endl;
@@ -402,15 +397,88 @@ OFstream gradPOSCFile
     //fvc::interpolate(alpha)*phia + fvc::interpolate(beta)*phib
 //);
 
-//#include "UaUbLimiter.H"
-//U.correctBoundaryConditions();
 
-Info<< "Reading field p_rgh\n" << endl;
-volScalarField p_rgh
+Info<< "Initialising field U\n" << endl;
+volVectorField U
 (
     IOobject
     (
-        "p_rgh",
+        "U",
+        runTime.timeName(),
+        mesh,
+        IOobject::MUST_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh
+);
+
+
+
+
+Info<< "Initialising field WRel\n" << endl;
+volVectorField WRel
+(
+    IOobject
+    (
+        "WRel",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedVector("0.0", U.dimensions(), vector::zero),
+    U.boundaryField().types()
+);
+
+volScalarField rho
+(
+    IOobject
+    (
+        "rho",
+        runTime.timeName(),
+        mesh
+    ),
+    alpha*rhoa + beta*rhob
+);
+
+surfaceScalarField phi
+(
+    IOobject
+    (
+        "phi",
+        runTime.timeName(),
+        mesh,
+        IOobject::READ_IF_PRESENT,
+        IOobject::AUTO_WRITE
+    ),
+    linearInterpolate(U) & mesh.Sf()
+);
+
+
+
+Info<< "Calculating face flux field phiRho\n" << endl;
+surfaceScalarField phiRho
+(
+    IOobject
+    (
+        "phiRho",
+        runTime.timeName(),
+        mesh
+    ),
+    fvc::interpolate(rho)*phi
+);
+
+
+#include "UaUbLimiter.H"
+Ua.correctBoundaryConditions();
+
+Info<< "Reading field p_rbgh\n" << endl;
+volScalarField p_rbgh
+(
+    IOobject
+    (
+        "p_rbgh",
         runTime.timeName(),
         mesh,
         IOobject::MUST_READ,
@@ -433,84 +501,8 @@ volScalarField pa
 );
 
 
-
-volScalarField alpha
-(
-    IOobject
-    (
-        "alpha",
-        runTime.timeName(),
-        mesh,
-        IOobject::MUST_READ,
-        IOobject::AUTO_WRITE
-    ),
-    mesh
-);
-
-
-
-Info<< "Reading field U\n" << endl;
-volVectorField U
-(
-    IOobject
-    (
-        "U",
-        runTime.timeName(),
-        mesh,
-        IOobject::MUST_READ,
-        IOobject::AUTO_WRITE
-    ),
-    mesh
-);
-
-
-volScalarField rho
-(
-    IOobject
-    (
-        "rho",
-        runTime.timeName(),
-        mesh,
-        IOobject::NO_READ,
-        IOobject::AUTO_WRITE
-    ),
-    rhob*(scalar(1)-alpha)+alpha*rhoa
-);
-
-
-Info<< "Reading/calculating face flux field phi\n" << endl;
-
-surfaceScalarField phi
-(
-    IOobject
-    (
-        "phi",
-        runTime.timeName(),
-        mesh,
-        IOobject::READ_IF_PRESENT,
-        IOobject::AUTO_WRITE
-    ),
-    linearInterpolate(U) & mesh.Sf()
-);
-
-
-
-// Mass flux
-surfaceScalarField rhoPhi
-(
-	IOobject
-	(
-		"rhoPhi",
-		runTime.timeName(),
-		mesh,
-		IOobject::NO_READ,
-		IOobject::NO_WRITE
-	),
-	fvc::interpolate(rho)*phi
-);
-    
 //creating alphaPlastic field
-Info<< "Reading field alphaPlastic\n" << endl;
+Info<< "Computing field alphaPlastic\n" << endl;
 volScalarField alphaPlastic
     (
         IOobject
@@ -537,93 +529,26 @@ volScalarField delta
     mesh
 );
 
-Info<< "Initialising field WRel\n" << endl;
-volVectorField WRel
-(
-    IOobject
-    (
-        "WRel",
-        runTime.timeName(),
-        mesh,
-        IOobject::NO_READ,
-        IOobject::AUTO_WRITE
-    ),
-    mesh,
-    dimensionedVector("0.0", U.dimensions(), vector::zero),
-    U.boundaryField().types()
-);
 
 
 
-Info<< "Initialising field Ua\n" << endl;
-volVectorField Ua
-(
-    IOobject
-    (
-        "Ua",
-        runTime.timeName(),
-        mesh,
-        IOobject::NO_READ,
-        IOobject::AUTO_WRITE
-    ),
-    mesh,
-    dimensionedVector("0.0", U.dimensions(), vector::zero),
-    U.boundaryField().types()
-);
+Info<< "Calculating field DDtUa and DDtUb\n" << endl;
 
+volVectorField DDtUa =
+    fvc::ddt(Ua)
+  + fvc::div(phia, Ua)
+  - fvc::div(phia)*Ua;
 
-Info<< "calculating face flux field phia\n" << endl;
-
-surfaceScalarField phia
-(
-    IOobject
-    (
-        "phia",
-        runTime.timeName(),
-        mesh,
-        IOobject::NO_READ,
-        IOobject::AUTO_WRITE
-    ),
-    linearInterpolate(Ua) & mesh.Sf()
-);
-
-
-Info<< "Initialising field Ub\n" << endl;
-volVectorField Ub
-(
-    IOobject
-    (
-        "Ub",
-        runTime.timeName(),
-        mesh,
-        IOobject::NO_READ,
-        IOobject::AUTO_WRITE
-    ),
-    mesh,
-    dimensionedVector("0.0", U.dimensions(), vector::zero),
-    U.boundaryField().types()
-);
+volVectorField DDtUb =
+    fvc::ddt(Ub)
+  + fvc::div(phib, Ub)
+  - fvc::div(phib)*Ub;
 
 
 Info<< "Calculating field g.h\n" << endl;
 volScalarField gh("gh", gravity & mesh.C());
 surfaceScalarField ghf("ghf", gravity & mesh.Cf());
 
-
-Info<< "Calculating field muEff\n" << endl;
-volScalarField muEff
-(
-    IOobject
-    (
-        "muEff",
-        runTime.timeName(),
-        mesh,
-        IOobject::NO_READ,
-        IOobject::AUTO_WRITE
-    ),
-    nub*rho
-);
-    
 // Read interfacial properties
 
 IOdictionary interfacialProperties
@@ -641,7 +566,6 @@ IOdictionary interfacialProperties
 autoPtr<dragModel> draga = dragModel::New
 (
     interfacialProperties,
-    alpha,
     phasea,
     phaseb
 );
@@ -649,7 +573,6 @@ autoPtr<dragModel> draga = dragModel::New
 autoPtr<dragModel> dragb = dragModel::New
 (
     interfacialProperties,
-    alpha,
     phaseb,
     phasea
 );
@@ -686,7 +609,6 @@ dimensionedScalar Ufall
 autoPtr<ppModel> pp = ppModel::New
 (
     ppProperties,
-    alpha,
     phasea,
     phaseb
 );
@@ -695,8 +617,8 @@ autoPtr<ppModel> pp = ppModel::New
 kineticTheoryModel kineticTheory
 (
     phasea,
-    U,
-    phi
+    Ub,
+    draga
 );
 
 // Initialize granular rheology
@@ -704,17 +626,16 @@ granularRheologyModel granularRheology
 (
     phasea,
     phaseb,
-    alpha,
     pa,
     Dsmall
 );
 
 // Declare variables
-surfaceScalarField rUAf
+surfaceScalarField rUaAf
 (
     IOobject
     (
-        "rUAf",
+        "rUaAf",
         runTime.timeName(),
         mesh,
         IOobject::NO_READ,
@@ -724,11 +645,11 @@ surfaceScalarField rUAf
     dimensionedScalar("zero", dimensionSet(0, 0, 1, 0, 0), 0.0)
 );
 
-volScalarField lambdaU
+volScalarField lambdaUa
 (
     IOobject
     (
-        "lambdaU",
+        "lambdaUa",
         runTime.timeName(),
         mesh,
         IOobject::NO_READ,
@@ -748,7 +669,7 @@ volScalarField K
         IOobject::NO_READ,
         IOobject::NO_WRITE
     ),
-    draga->K(mag(WRel))
+    draga->K(mag(Ub-Ua))
 );
 
 volVectorField gradPs
@@ -817,7 +738,7 @@ volScalarField p
         IOobject::NO_READ,
         IOobject::AUTO_WRITE
     ),
-    p_rgh + rho*gh
+    p_rbgh + rho*gh
 );
 
 label pRefCell = 0;
@@ -825,12 +746,12 @@ scalar pRefValue = 0.0;
 setRefCell
 (
     p,
-    p_rgh,
+    p_rbgh,
     mesh.solutionDict().subDict("PIMPLE"),
     pRefCell,
     pRefValue
 );
-if (p_rgh.needReference())
+if (p_rbgh.needReference())
 {
     p += dimensionedScalar
     (
@@ -838,6 +759,6 @@ if (p_rgh.needReference())
         p.dimensions(),
         pRefValue - getRefCellValue(p, pRefCell)
     );
-    p_rgh = p - rho*gh;
+    p_rbgh = p - rho*gh;
 }
 Info<<"end of createFields"<<endl;

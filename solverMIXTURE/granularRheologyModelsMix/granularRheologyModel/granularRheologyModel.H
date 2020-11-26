@@ -55,8 +55,8 @@ class granularRheologyModel
 {
     // Private data
 
-    volScalarField alpha_;
-
+    const volScalarField& alpha_;
+    const surfaceScalarField& phia_;
     volScalarField pa_new_value;
     const dimensionedScalar& rhoa_;
     const dimensionedScalar& da_;
@@ -152,7 +152,6 @@ public:
     (
         const phaseModel& phasea,
         const phaseModel& phaseb,
-        const volScalarField& alpha,
         const volScalarField& p_p_total,
         const dimensionedScalar& Dsmall
     );
@@ -169,9 +168,7 @@ public:
         const volTensorField& gradUat,
         const volScalarField& pf,
         const dimensionedScalar& alphaSmall,
-        const dimensionedScalar& Dsmall,
-        const surfaceScalarField& phi,
-        const volScalarField& alpha
+        const dimensionedScalar& Dsmall
     );
 
     bool on() const

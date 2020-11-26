@@ -75,11 +75,10 @@ public:
             dictionary,
             (
                 const dictionary& ppDict,
-                const volScalarField& alpha,
                 const phaseModel& phasea,
                 const phaseModel& phaseb
             ),
-            (ppDict, alpha,  phasea, phaseb)
+            (ppDict, phasea, phaseb)
         );
 
 
@@ -88,7 +87,6 @@ public:
         ppModel
         (
             const dictionary& ppDict,
-            const volScalarField& alpha,
             const phaseModel& phasea,
             const phaseModel& phaseb
         );
@@ -103,7 +101,6 @@ public:
         static autoPtr<ppModel> New
         (
             const dictionary& ppDict,
-            const volScalarField& alpha,
             const phaseModel& phasea,
             const phaseModel& phaseb
         );

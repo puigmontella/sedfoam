@@ -80,91 +80,100 @@ Foam::phaseModel::phaseModel
             "rho",
             dimensionedScalar("rho", dimensionSet(1, -3, 0, 0, 0, 0, 0), 1e3)
         )
+    ),
+    U_
+    (
+        IOobject
+        (
+            "U" + phaseName,
+            mesh.time().timeName(),
+            mesh,
+            IOobject::MUST_READ,
+            IOobject::AUTO_WRITE
+        ),
+        mesh
+    ),
+    alpha_
+    (
+        IOobject
+        (
+            "alpha_" + phaseName,
+            mesh.time().timeName(),
+            mesh,
+            IOobject::READ_IF_PRESENT,
+            IOobject::AUTO_WRITE
+        ),
+        mesh,
+        dimensionedScalar("alpha", dimless, 0)
     )
-    //,
-    //alpha_
-    //(
-        //IOobject
-        //(
-            //"alpha_" + phaseName,
-            //mesh.time().timeName(),
-            //mesh,
-            //IOobject::READ_IF_PRESENT,
-            //IOobject::AUTO_WRITE
-        //),
-        //mesh,
-        //dimensionedScalar("alpha", dimless, 0)
-    //)
-    
-    {}
-//{
-    //const word phiName = "phi" + phaseName;
+{
+    const word phiName = "phi" + phaseName;
 
-    //IOobject phiHeader
-    //(
-        //phiName,
-        //mesh.time().timeName(),
-        //mesh,
-        //IOobject::NO_READ
-    //);
+    IOobject phiHeader
+    (
+        phiName,
+        mesh.time().timeName(),
+        mesh,
+        IOobject::NO_READ
+    );
 
-    //if (phiHeader.typeHeaderOk<surfaceScalarField>(true))
-////    if (phiHeader.headerOk())
-    //{
-        //Info<< "Reading face flux field " << phiName << endl;
+    if (phiHeader.typeHeaderOk<surfaceScalarField>(true))
+//    if (phiHeader.headerOk())
+    {
+        Info<< "Reading face flux field " << phiName << endl;
 
-        //phiPtr_.reset
-        //(
-            //new surfaceScalarField
-            //(
-                //IOobject
-                //(
-                    //phiName,
-                    //mesh.time().timeName(),
-                    //mesh,
-                    //IOobject::MUST_READ,
-                    //IOobject::AUTO_WRITE
-                //),
-                //mesh
-            //)
-        //);
-    //}
-    //else
-    //{
-        //Info<< "Calculating face flux field " << phiName << endl;
+        phiPtr_.reset
+        (
+            new surfaceScalarField
+            (
+                IOobject
+                (
+                    phiName,
+                    mesh.time().timeName(),
+                    mesh,
+                    IOobject::MUST_READ,
+                    IOobject::AUTO_WRITE
+                ),
+                mesh
+            )
+        );
+    }
+    else
+    {
+        Info<< "Calculating face flux field " << phiName << endl;
 
-        //wordList phiTypes
-        //(
-            //U_.boundaryField().size(),
-            //calculatedFvPatchScalarField::typeName
-        //);
+        wordList phiTypes
+        (
+            U_.boundaryField().size(),
+            calculatedFvPatchScalarField::typeName
+        );
 
-        //forAll(U_.boundaryField(), i)
-        //{
-            //if (isA<fixedValueFvPatchVectorField>(U_.boundaryField()[i]))
-            //{
-                //phiTypes[i] = fixedValueFvPatchScalarField::typeName;
-            //}
-        //}
+        forAll(U_.boundaryField(), i)
+        {
+            if (isA<fixedValueFvPatchVectorField>(U_.boundaryField()[i]))
+            {
+                phiTypes[i] = fixedValueFvPatchScalarField::typeName;
+            }
+        }
 
-        //phiPtr_.reset
-        //(
-            //new surfaceScalarField
-            //(
-                //IOobject
-                //(
-                    //phiName,
-                    //mesh.time().timeName(),
-                    //mesh,
-                    //IOobject::NO_READ,
-                    //IOobject::AUTO_WRITE
-                //),
-                //fvc::interpolate(U_) & mesh.Sf(),
-                //phiTypes
-            //)
-        //);
-    //}
-//}
+        phiPtr_.reset
+        (
+            new surfaceScalarField
+            (
+                IOobject
+                (
+                    phiName,
+                    mesh.time().timeName(),
+                    mesh,
+                    IOobject::NO_READ,
+                    IOobject::AUTO_WRITE
+                ),
+                fvc::interpolate(U_) & mesh.Sf(),
+                phiTypes
+            )
+        );
+    }
+}
 
 
 Foam::autoPtr<Foam::phaseModel> Foam::phaseModel::New
