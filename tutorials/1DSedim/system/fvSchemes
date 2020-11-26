@@ -29,25 +29,26 @@ divSchemes
 {
     default         none;
 // alphaEqn
-    div(phiAlpha,alpha) Gauss limitedLinear01 1;
-    div(phia,alpha)  Gauss limitedLinear01 1;
+    div(phiAlpha,alpha) Gauss upwind;
+    div(phia,alpha)  Gauss upwind;
 
-    div(phi,alpha)  Gauss limitedLinear01 1;
-    div(phir,alpha) Gauss limitedLinear01 1;
-    div(phiWRel,WRel) Gauss linear;
-    div(phiRel,RelMixPar) Gauss linear;
-    div(phi,rho)  Gauss limitedLinear01 1;
-    div(rhoPhi,U)  Gauss limitedLinearV 1;
+    div(phi,alpha)  Gauss upwind;
+    div(phir,alpha) Gauss upwind;
+    div(phiWRel,WRel)  Gauss linear;
+    //div(phiRel,RelMixPar) Gauss upwind;
+    div(phi,rho)  Gauss upwind;
+    div(rhoPhi,U)   Gauss limitedLinearV 1;
 
 // UEqn
 
-    div(phi,U)    Gauss limitedLinearV 1;
-    div(phi,Ua)    Gauss limitedLinearV 1;
+    div(phi,U)     Gauss limitedLinearV 1;
+    div(phi,Ua)     Gauss limitedLinearV 1;
 
-    div(phia,Ua)    Gauss limitedLinearV 1;
-    div(phib,Ub)    Gauss limitedLinearV 1;
-    div(phiRb,Ub)    Gauss limitedLinearV 1;
-
+    div(phia,Ua)     Gauss limitedLinearV 1;
+    div(phib,Ub)     Gauss limitedLinearV 1;
+    div(phiRb,Ub)    Gauss limitedLinear 1;
+    
+    
 // pEqn
     div(alpha,nu)   Gauss linear;
 // alphaPlastic

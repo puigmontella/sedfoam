@@ -315,6 +315,10 @@ License
                 Ua.correctBoundaryConditions();
                 Ub.correctBoundaryConditions();
                 phiRho= fvc::interpolate(rho)*phi;
+                
+                phia=linearInterpolate(Ua) & mesh.Sf();
+                phib=linearInterpolate(Ub) & mesh.Sf();
+
                 // Update mixture velocity
                // U = alpha*Ua + beta*Ub;
                // U.correctBoundaryConditions();
