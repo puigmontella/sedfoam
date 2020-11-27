@@ -96,7 +96,6 @@ int main(int argc, char *argv[])
     #include "CourantNo.H"
     #include "setInitialDeltaT.H"
     
-    #include "RelVelEqnMix.H"
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
     if (SUSlocal)
     {
@@ -132,13 +131,10 @@ int main(int argc, char *argv[])
         Info<< "Time = " << runTime.timeName() << nl << endl;
 
         #include "gravityRamp.H"
-
+		//#include "RelVelEqnMix.H"
 //      Pressure-velocity PIMPLE corrector loop
         while (pimple.loop())
         {
-            #include "RelVelEqnMix.H"
-
-
 			#include "alphaEqnMix.H"
 			#include "liftDragCoeffs.H"
 

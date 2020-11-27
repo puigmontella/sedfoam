@@ -26,7 +26,7 @@ License
 
 volScalarField Re_p=d_part*sqrt(WRel & WRel)/nub;
 volScalarField nVal=4.7*(1+0.15*pow(Re_p,0.687))/(1+0.253*pow(Re_p,0.687));
-volScalarField Drag_cO=24./max(Re_p,1e-22)*(1+0.15*pow(Re_p,0.687));
+volScalarField Drag_cO=24./max(Re_p,1e-12)*(1+0.15*pow(Re_p,0.687));
 volScalarField Drag_c=Drag_cO*pow(1-alpha,3-2*nVal);
 
 
@@ -36,12 +36,12 @@ dimensionedScalar Ksmall
 (
 	"Ksmall",
 	dimensionSet(1, -3, -1, 0, 0, 0, 0),
-	1e-8
+	1e-12
 );
 
 //volVectorField w_i=4./3.*d_part*d_part*rhob*(rhoa-rho)/(nub*K*Re_p)*(gravity-fvc::div( U, schemeRel)*( U)-fvc::ddt( U));
-volVectorField w_i=4./3.*d_part*d_part*(rhoa-rho)/(rhob*nub*max(Drag_c,1e-22)
-*max(Re_p,1e-22))*(gravity-fvc::ddt(U)- fvc::div(phi, U));
+volVectorField w_i=4./3.*d_part*d_part*(rhoa-rho)/(rhob*nub*max(Drag_c,1e-12)
+*max(Re_p,1e-12))*(gravity-fvc::ddt(U)- fvc::div(phi, U));
 
 
 
@@ -82,24 +82,15 @@ volVectorField w_sd=-0.15*pow(d_part*alpha,2)*fvc::grad(magD_Rel);
 WRel=(w_i+w_sd);
 
 
-//for (int i = 0; i < 30; i++) {
-	//Re_p=d_part*sqrt(WRel & WRel)/nub;
-	//nVal=4.7*(1+0.15*pow(Re_p,0.687))/(1+0.253*pow(Re_p,0.687));
-	//Drag_cO=24/max(Re_p,1e-22)*(1+0.15*pow(Re_p,0.687));
-	//Drag_c=Drag_cO*pow(1-alpha,3-2*nVal);
-	//w_i=4./3.*d_part*d_part*(rhoa-rho)/(rhob*nub*max(Drag_c,1e-22)
-//*max(Re_p,1e-22))*(gravity-0*fvc::ddt(U)- 0*fvc::div(phi, U));
-	//WRel=(w_i+w_sd);
-	////Info<< i << " -  DifWRel: " << abs(WRel[].y()-WRelIni.y()) << endl;
-
-//}
 
 //forAll(WRel, cellI)
-//{  if( alpha[cellI]<0.1)
+//{  if( alpha[cellI]<0.05 or alpha[cellI]>alphaMax.value())
 	//{
    //WRel[cellI]=WRel[cellI]*0; //cell center coordinate of cellI
 	//}
 //}
+
+
 
 WRel.correctBoundaryConditions();
 

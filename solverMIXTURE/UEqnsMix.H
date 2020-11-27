@@ -102,11 +102,7 @@ UEqn.relax();
 //UaEqn += fvm::Sp(beta/rhoa*K, Ua);
 //fvOptions.constrain(UaEqn());
 
-surfaceScalarField phiRb =
-(
-  - fvc::interpolate(nuEffb)*mesh.magSf()*(fvc::snGrad(beta))
-   /fvc::interpolate(beta)
-);
+
 
 
 //fvVectorMatrix UaEqn
@@ -142,26 +138,26 @@ surfaceScalarField phiRb =
    // /fvc::interpolate(beta)
 //);
 
-fvVectorMatrix UbEqn
-(
-    (scalar(1.0) + Cvm*rhob*alpha/rhob)*
-    (
-        fvm::ddt(Ub)
-      + fvm::div(phib, Ub, "div(phib,Ub)")
-      - fvm::Sp(fvc::div(phib), Ub)
-    )
-  - fvm::laplacian(nuEffb, Ub)
-  + fvm::div(phiRb, Ub, "div(phiRb,Ub)")
-  - fvm::Sp(fvc::div(phiRb), Ub)
-    ==
-//    fvm::Sp(-alpha/rhob*K,Ub)                 // implicit drag term
-    // Hugo   susb                                 //term to add with tensor
-//+ alpha/rhob*K*Ua                 // Explicit drag transfered to p-equation
-    alpha/rhob*(liftCoeff + Cvm*rhob*DDtUa) // lift and added mass forces
-//  + fvOptions(Ub)
-);
-UbEqn.relax();
-UbEqn += fvm::Sp(alpha/rhob*K, Ub);
+//fvVectorMatrix UbEqn
+//(
+    //(scalar(1.0) + Cvm*rhob*alpha/rhob)*
+    //(
+        //fvm::ddt(Ub)
+      //+ fvm::div(phib, Ub, "div(phib,Ub)")
+      //- fvm::Sp(fvc::div(phib), Ub)
+    //)
+  //- fvm::laplacian(nuEffb, Ub)
+  //+ fvm::div(phiRb, Ub, "div(phiRb,Ub)")
+  //- fvm::Sp(fvc::div(phiRb), Ub)
+    //==
+////    fvm::Sp(-alpha/rhob*K,Ub)                 // implicit drag term
+    //// Hugo   susb                                 //term to add with tensor
+////+ alpha/rhob*K*Ua                 // Explicit drag transfered to p-equation
+    //alpha/rhob*(liftCoeff + Cvm*rhob*DDtUa) // lift and added mass forces
+////  + fvOptions(Ub)
+//);
+//UbEqn.relax();
+//UbEqn += fvm::Sp(alpha/rhob*K, Ub);
 
 //fvOptions.constrain(UbEqn());
 

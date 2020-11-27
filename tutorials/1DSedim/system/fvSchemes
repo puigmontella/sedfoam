@@ -47,6 +47,8 @@ divSchemes
     div(phia,Ua)     Gauss limitedLinearV 1;
     div(phib,Ub)     Gauss limitedLinearV 1;
     div(phiRb,Ub)    Gauss limitedLinear 1;
+    div(phiCC,alpha_a)  Gauss upwind;
+    div(phiBeta,alpha_a)  Gauss upwind;
     
     
 // pEqn

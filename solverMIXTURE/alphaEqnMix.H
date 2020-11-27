@@ -43,14 +43,39 @@ License
 	);
 
 
+
+	surfaceScalarField phiBeta
+	(
+		IOobject
+		(
+			"phiBeta",
+			runTime.timeName(),
+			mesh
+		),
+		(mesh.Sf() & fvc::interpolate((1-alpha)*WRel))
+	);
+	
+	surfaceScalarField phiCC
+	(
+		IOobject
+		(
+			"phiCC",
+			runTime.timeName(),
+			mesh
+		),
+		(mesh.Sf() & fvc::interpolate((alpha*(1-alpha)*(rhoa-rhob)/rho)*WRel))
+	);
+	
     for (int acorr=0; acorr<nAlphaCorr; acorr++)
     {
         fvScalarMatrix alphaEqn
         (
              fvm::ddt(alpha)
            + fvm::div(phic, alpha, scheme)
+           + fvm::div(phiBeta, alpha)
+           - fvm::div(phiCC, alpha)
           // + fvm::div(-fvc::flux(-phir, beta, schemer), alpha, schemer)
-           + fvm::div(phiAlpha, alpha, schemedif)
+         //  + fvm::div(phiAlpha, alpha, schemedif)
         );
 
         alphaEqn.relax();
