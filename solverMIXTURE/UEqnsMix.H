@@ -78,16 +78,17 @@ fvVectorMatrix UEqn
         fvm::ddt(rho, U)
       + fvm::div( phiRho, U,"div(phi,U)")
       - fvm::Sp(fvc::div(phiRho), U)
-      + fvc::div
-        ( alpha*(1-alpha)*(rhoa*rhob/rho)*WRel*WRel,
-            "div(phiWRel,WRel)"
-        )
+
 // effective stress term from dispersed phase
   - scalar(1.0)/(alpha+alphaSmall)*rhoa*fvm::laplacian(nuFra, U)
 //- fvm::laplacian(nuFra, Ua)
   - fvm::laplacian(rhoa*nuEffa+rhob*nuEffb, U)
 
-   // ==
+   ==
+       fvc::div
+        ( alpha*(1-alpha)*(rhoa*rhob/rho)*WRel*WRel,
+            "div(phiWRel,WRel)"
+        )
 //    fvm::Sp(-beta/rhoa*K,Ua)        // implicit drag term
 //+ beta/rhoa*K*Ub                    // explicit drag transfered to p-equation
     // Hugo  -susa                    // term to add with tensor

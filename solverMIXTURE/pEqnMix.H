@@ -89,9 +89,9 @@ License
             //)
            //*fvc::snGrad(alpha))*rUaAf*mesh.magSf()
             // grad(pa)
-          - (oneOverAlpha*fvc::snGrad(pa))*rUAf*mesh.magSf()
+          - (fvc::snGrad(pa))*rUAf*mesh.magSf()
             // grad(Pf)
-             - (oneOverAlpha*fvc::snGrad(pff))*rUAf*mesh.magSf()
+             - (fvc::snGrad(pff))*rUAf*mesh.magSf()
             // diagonal part of stress
           //+ (oneOverAlpha/rhoa*fvc::snGrad(lambdaUa*tr(gradUaT)))
            //*rUaAf*mesh.magSf()
@@ -105,22 +105,22 @@ License
           //- (scalar(2.0/3.0)*oneOverAlpha*fvc::snGrad(nuFraExp*tr(gradUaT)))
            //*rUaAf*mesh.magSf()
            // stress part 3
-          + rUAf*(oneOverAlpha*rhoa
-           *fvc::interpolate
-            (
-                fvc::div((alpha+alphaSmall)*nuEffa*gradUT, schemeA)
-            )
-          & mesh.Sf())
-          + rUAf*(oneOverAlpha*rhoa
-           *fvc::interpolate(fvc::div(nuFraExp*gradUT, schemeA)) & mesh.Sf())
+          //+ rUAf*(oneOverAlpha*rhoa
+           //*fvc::interpolate
+            //(
+                //fvc::div((alpha+alphaSmall)*nuEffa*gradUT, schemeA)
+            //)
+          //& mesh.Sf())
+          //+ rUAf*(oneOverAlpha*rhoa
+           //*fvc::interpolate(fvc::div(nuFraExp*gradUT, schemeA)) & mesh.Sf())
            
-            // gravity     
+          //   gravity     
 			-( ghf*fvc::snGrad(rho)
 			)*rUAf*mesh.magSf()
             
           //+ rUAf
            //*(
-               //(rhoa-rhob)/fvc::interpolate(rho)*(gravity & mesh.Sf())
+               //1/oneOverAlpha*(rhoa-rhob)*(gravity & mesh.Sf())
             //)
             );
      
@@ -192,12 +192,13 @@ License
 					  - fvm::laplacian(nuEffb, Ub)
 					  + fvm::div(phiRb, Ub, "div(phiRb,Ub)")
 					  - fvm::Sp(fvc::div(phiRb), Ub)
-						+fvm::Sp(alpha/rhob*K,Ub)                 // implicit drag term
+						//+fvm::Sp(alpha/rhob*K,Ub)           
 					== alpha/rhob*K*Ua                 // Explicit drag transfered to p-equation
 			);
 			
 		UbEqn.relax();
-		UbEqn += fvm::Sp(alpha/rhob*K, Ub);
+		UbEqn += fvm::Sp(alpha/rhob*K, Ub);       // implicit drag term
+		
 					
         while (pimple.correctNonOrthogonal())
         {
@@ -280,20 +281,19 @@ License
 				// fvOptions.constrain(UaEqn);
 				 solve(UbEqn ==
 						fvc::reconstruct
-						(
-							(      
-							  - fvc::snGrad(p_rbgh)/rhob     
-							)*mesh.magSf()
-						)
+							((rhob-fvc::interpolate(rho))/rhob*(gravity & mesh.Sf())+
+							( - fvc::snGrad(p_rbgh)/rhob  
+							-ghf*fvc::snGrad(rho)/rhob  
+							)*mesh.magSf())
 					);
+
+            
+            
 				fvOptions.correct(Ub);
-					
-				//Info<< "U"<< U<< endl;	
-				//Info<< "Ua"<< Ua<< endl;
-				//Info<< "Ub"<< Ub<< endl;
-				WRel=(Ub-U)/(-alpha-alpha*beta*(rhoa-rhob)/rho);
-			    //Ub = U+(-alpha-alpha*beta*(rhoa-rhob)/rho)*WRel;
+				
 				Ua=(U*rho-beta*Ub*rhob)/((alpha)*rhoa);
+				WRel=Ua-Ub;
+		
 
                 #include "UaUbLimiter.H"
                 U.correctBoundaryConditions();
@@ -312,7 +312,7 @@ License
                
 
 				forAll(WRel, cellI)
-				{  if( alpha[cellI]<0.05 or alpha[cellI]>alphaMax.value())
+				{  if( alpha[cellI]<0.001 or alpha[cellI]>alphaMax.value())
 					{
 				   WRel[cellI]=WRel[cellI]*0; //cell center coordinate of cellI
 					}
