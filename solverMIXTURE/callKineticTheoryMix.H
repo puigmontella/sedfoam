@@ -24,6 +24,8 @@ License
 \*---------------------------------------------------------------------------*/
 volTensorField gradUaT = fvc::grad(Ua)().T();
 volTensorField gradUbT = fvc::grad(Ub)().T();
+volTensorField gradUT = fvc::grad(U)().T();
+
 volSymmTensorField devS = dev(symm(gradUaT));
 
 if (kineticTheory.on())

@@ -52,7 +52,7 @@ License
 			runTime.timeName(),
 			mesh
 		),
-		(mesh.Sf() & fvc::interpolate((1-alpha)*WRel))
+		(mesh.Sf() & fvc::interpolate(alpha*rhob/rho*WRel))
 	);
 	
 	surfaceScalarField phiCC
@@ -63,7 +63,7 @@ License
 			runTime.timeName(),
 			mesh
 		),
-		(mesh.Sf() & fvc::interpolate((alpha*(1-alpha)*(rhoa-rhob)/rho)*WRel))
+		(mesh.Sf() & fvc::interpolate(rhob/rho*WRel))
 	);
 	
     for (int acorr=0; acorr<nAlphaCorr; acorr++)
@@ -72,8 +72,8 @@ License
         (
              fvm::ddt(alpha)
            + fvm::div(phic, alpha, scheme)
-           + fvm::div(phiBeta, alpha)
-           - fvm::div(phiCC, alpha)
+           - fvm::div(phiBeta, alpha)
+           + fvm::div(phiCC, alpha)
           // + fvm::div(-fvc::flux(-phir, beta, schemer), alpha, schemer)
          //  + fvm::div(phiAlpha, alpha, schemedif)
         );

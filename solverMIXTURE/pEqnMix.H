@@ -93,35 +93,31 @@ License
             // grad(Pf)
              - (fvc::snGrad(pff))*rUAf*mesh.magSf()
             // diagonal part of stress
-          //+ (oneOverAlpha/rhoa*fvc::snGrad(lambdaUa*tr(gradUaT)))
-           //*rUaAf*mesh.magSf()
-            // diagonal part of stress 2
+          + (fvc::snGrad(lambdaUa*tr(gradUaT)))
+           *rUAf*mesh.magSf()
+          //   diagonal part of stress 2
           //- (
                 //scalar(2.0/3.0)*oneOverAlpha
                //*fvc::snGrad((alpha+alphaSmall)*(sqr(Ct)*turbulenceb->k()
               //+ nuEffa*tr(gradUaT)))
             //)
            //*rUaAf*mesh.magSf()
-          //- (scalar(2.0/3.0)*oneOverAlpha*fvc::snGrad(nuFraExp*tr(gradUaT)))
-           //*rUaAf*mesh.magSf()
+          - (scalar(2.0/3.0)*fvc::snGrad(rhoa*nuFraExp*tr(gradUaT)))
+           *rUAf*mesh.magSf()
            // stress part 3
-          //+ rUAf*(oneOverAlpha*rhoa
-           //*fvc::interpolate
-            //(
-                //fvc::div((alpha+alphaSmall)*nuEffa*gradUT, schemeA)
-            //)
-          //& mesh.Sf())
-          //+ rUAf*(oneOverAlpha*rhoa
-           //*fvc::interpolate(fvc::div(nuFraExp*gradUT, schemeA)) & mesh.Sf())
+          + rUAf*(fvc::interpolate
+            (
+                fvc::div((alpha+alphaSmall)*rhoa*nuEffa*gradUT, schemeA)
+            )
+          & mesh.Sf())
+          + rUAf*(fvc::interpolate(fvc::div(rhoa*nuFraExp*gradUT, schemeA)) & mesh.Sf())
            
           //   gravity     
 			-( ghf*fvc::snGrad(rho)
 			)*rUAf*mesh.magSf()
             
-          //+ rUAf
-           //*(
-               //1/oneOverAlpha*(rhoa-rhob)*(gravity & mesh.Sf())
-            //)
+           // driving force
+          + rUAf*((gradPOSC) & mesh.Sf())
             );
      
 
@@ -193,8 +189,7 @@ License
 					  + fvm::div(phiRb, Ub, "div(phiRb,Ub)")
 					  - fvm::Sp(fvc::div(phiRb), Ub)
 						//+fvm::Sp(alpha/rhob*K,Ub)           
-					== 1/(rhob*rhoa)*K*(U*rho)                 // Explicit drag transfered to p-equation
-										
+					== 1/(rhob*rhoa)*K*(U*rho)                 // Explicit drag transfered to p-equation							
 					
 			);
 			
@@ -223,48 +218,20 @@ License
                 surfaceScalarField SfGradp = pEqn.flux()/Dp;
 
 
-                //surfaceScalarField phias = phiHbyA - rUAf*SfGradp;
-               // surfaceScalarField phibs = phibHbyA - rUbAf*SfGradp/rhob;
-
                 phi = phiHbyA - pEqn.flux();
                 
-                //surfaceScalarField phir
-                //(
-                    //((phias + rAUKda*phibs) - (phibs + rAUKdb*phias))
-                   // /(1 - rAUKda*rAUKdb)
-                //);
-
-              //  phi = phi + betaf*(phir);
-               // phib = phi - alphaf*(phir);
-
                 #include "continuityErrs.H"
                 p_rbgh.relax();
 
                 SfGradp = pEqn.flux()/Dp;
                 
-                // Velocity correction step
-                
-                //volVectorField Ubs =
-                //(
-                    //HbbyA + rUbA*fvc::reconstruct(phiDragb/rUbAf-SfGradp/rhob)
-                //);
                 
                 U =
                 (
                     HbyA + rUA*fvc::reconstruct(phiDrag/rUAf-SfGradp)
                 );
-              //  volScalarField Da(beta/rhoa*K*rUaA);
-               // volScalarField Db(alpha/rhob*K*rUbA);
-             //   U = alpha*(Uas + Da*Ub) + beta*(Ubs + Db*Ua);
-             //   volVectorField Ur(((1 - Db)*Uas - (1 - Da)*Ubs)/(1 - Da*Db));
 
-                //Ua = U + beta*Ur;
                 U.correctBoundaryConditions();
-                //fvOptions.correct(Ua);
-
-            //    Ub = U - alpha*Ur;
-              //  Ub.correctBoundaryConditions();
-                //fvOptions.correct(Ub);
 
                 p = p_rbgh + rho*gh;
                 if (p_rbgh.needReference())
@@ -291,16 +258,12 @@ License
 					);
 
 				fvOptions.correct(Ub);
-                Ua.correctBoundaryConditions();
                 Ub.correctBoundaryConditions();
             
 
-				
-				// Ua=(U*rho-beta*Ub*rhob)/((alpha+0.001)*rhoa);
-				//WRel=Ua-Ub;
 				WRel=(U*rho-(1-alpha)*rhob*Ub)/((alpha+alphaSmall)*rhoa)-Ub;
-		
-
+				//Ua=WRel+Ub;
+				//Ua.correctBoundaryConditions();
                 #include "UaUbLimiter.H"
                 U.correctBoundaryConditions();
 

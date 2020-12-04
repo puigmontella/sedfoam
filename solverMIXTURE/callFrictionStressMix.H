@@ -24,7 +24,7 @@ License
 \*---------------------------------------------------------------------------*/
 //
 
-volSymmTensorField D_tensor = symm(gradUaT);
+volSymmTensorField D_tensor = symm(gradUT);
 volScalarField magDtensor = ::sqrt(2.0)*mag(D_tensor);
 
 //// Solving the evolution of plastic volume fraction
@@ -60,7 +60,7 @@ pff = pp->pff(alpha, alphaPlastic, alphaMax, Fr_, eta0_, eta1_);
 //
 if (kineticTheory.on())
 {
-    volTensorField dU = fvc::grad(Ua);
+    volTensorField dU = fvc::grad(U);
     volSymmTensorField dUU = symm(dU);
     volSymmTensorField devS = dUU - (scalar(1.0)/scalar(3.0))*tr(dUU)*I;
     dimensionedScalar I2Dsmall = pow(Dsmall, 2);
@@ -89,7 +89,7 @@ if (kineticTheory.on())
 else if (granularRheology.on())
 {
 // solving granular rheology
-    granularRheology.solve(gradUaT, pff, alphaSmall, Dsmall);
+    granularRheology.solve(gradUT, pff, alphaSmall, Dsmall);
 
 // Particulate pressure and viscosity
     pa = granularRheology.pa();
