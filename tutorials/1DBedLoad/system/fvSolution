@@ -39,14 +39,14 @@ solvers
         relTol          0;
     }
 
-    "(alpha_a|Ua|Ub|pa_new_value|alphaPlastic)"
+    "(alpha_a|U|Ub|pa_new_value|alphaPlastic)"
     {
         solver          PBiCG;
         preconditioner  DILU;
         tolerance       1e-10;
         relTol          0;
     }
-    "(alpha_aFinal|UaFinal|UbFinal|paFinal|alphaPlasticFinal)"
+    "(alpha_aFinal|UFinal|UbFinal|paFinal|alphaPlasticFinal)"
     {
         solver          PBiCG;
         preconditioner  DILU;
@@ -76,7 +76,7 @@ relaxationFactors
     }
     equations
     {
-        Ua            0.7;
+        U            0.7;
         Ub            0.7;
         k             0.9;
         omega         0.9;

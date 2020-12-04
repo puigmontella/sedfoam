@@ -193,12 +193,15 @@ License
 					  + fvm::div(phiRb, Ub, "div(phiRb,Ub)")
 					  - fvm::Sp(fvc::div(phiRb), Ub)
 						//+fvm::Sp(alpha/rhob*K,Ub)           
-					== alpha/rhob*K*Ua                 // Explicit drag transfered to p-equation
+					== 1/(rhob*rhoa)*K*(U*rho)                 // Explicit drag transfered to p-equation
+										
+					
 			);
 			
 		UbEqn.relax();
 		UbEqn += fvm::Sp(alpha/rhob*K, Ub);       // implicit drag term
-		
+		UbEqn += fvm::Sp((1-alpha)/(rhoa)*K, Ub);       // implicit drag 2 term
+
 					
         while (pimple.correctNonOrthogonal())
         {
@@ -220,7 +223,7 @@ License
                 surfaceScalarField SfGradp = pEqn.flux()/Dp;
 
 
-                surfaceScalarField phias = phiHbyA - rUAf*SfGradp;
+                //surfaceScalarField phias = phiHbyA - rUAf*SfGradp;
                // surfaceScalarField phibs = phibHbyA - rUbAf*SfGradp/rhob;
 
                 phi = phiHbyA - pEqn.flux();
@@ -287,23 +290,24 @@ License
 							)*mesh.magSf())
 					);
 
-            
-            
 				fvOptions.correct(Ub);
+                Ua.correctBoundaryConditions();
+                Ub.correctBoundaryConditions();
+            
+
 				
-				Ua=(U*rho-beta*Ub*rhob)/((alpha)*rhoa);
-				WRel=Ua-Ub;
+				// Ua=(U*rho-beta*Ub*rhob)/((alpha+0.001)*rhoa);
+				//WRel=Ua-Ub;
+				WRel=(U*rho-(1-alpha)*rhob*Ub)/((alpha+alphaSmall)*rhoa)-Ub;
 		
 
                 #include "UaUbLimiter.H"
                 U.correctBoundaryConditions();
- 
-                Ua.correctBoundaryConditions();
-                Ub.correctBoundaryConditions();
+
                 phiRho= fvc::interpolate(rho)*phi;
                 
-                phia=linearInterpolate(Ua) & mesh.Sf();
-                phib=linearInterpolate(Ub) & mesh.Sf();
+                phia=fvc::interpolate(Ua) & mesh.Sf();
+                phib=fvc::interpolate(Ub) & mesh.Sf();
 
                 // Update mixture velocity
                // U = alpha*Ua + beta*Ub;
@@ -312,7 +316,7 @@ License
                
 
 				forAll(WRel, cellI)
-				{  if( alpha[cellI]<0.001 or alpha[cellI]>alphaMax.value())
+				{  if( alpha[cellI]<0.00001 or alpha[cellI]>alphaMax.value())
 					{
 				   WRel[cellI]=WRel[cellI]*0; //cell center coordinate of cellI
 					}

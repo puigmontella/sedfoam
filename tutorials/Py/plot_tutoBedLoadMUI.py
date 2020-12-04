@@ -93,7 +93,7 @@ PpMuI = PpMuI * drho * g * D
 #
 
 #
-case = '1DBedLoad'
+case = '1DBedLoadMix'
 basepath = '../'
 # basepath='../../'
 sol = basepath + case + '/'
@@ -120,14 +120,14 @@ eps_file = sol + case + '.eps'
 #
 X, Y, Z = fluidfoam.readmesh(sol)
 alpha = fluidfoam.readscalar(sol, tread, 'alpha_a')
-Ua = fluidfoam.readvector(sol, tread, 'Ua')
+Ua = fluidfoam.readvector(sol, tread, 'U')
 Ub = fluidfoam.readvector(sol, tread, 'Ub')
 pff = fluidfoam.readscalar(sol, tread, 'pff')
 p = fluidfoam.readscalar(sol, tread, 'p')
 
 Ny = np.size(Y)
 U = np.zeros(Ny)
-U = alpha[:] * Ua[0, :] + (1 - alpha[:]) * Ub[0, :]
+U = Ua[0, :]
 
 print("max(Ub)="+str(np.amax(Ub))+" m/s")
 
