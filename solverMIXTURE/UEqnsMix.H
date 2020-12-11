@@ -80,7 +80,7 @@ fvVectorMatrix UEqn
       - fvm::Sp(fvc::div(phiRho), U)
 
 // effective stress term from dispersed phase
-  - scalar(1.0)/(alpha+alphaSmall)*rhoa*fvm::laplacian(nuFra, U)
+  - rhoa*fvm::laplacian(nuFra, U)
 //- fvm::laplacian(nuFra, Ua)
   - fvm::laplacian(rhoa*nuEffa+rhob*nuEffb, U)
 

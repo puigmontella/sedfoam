@@ -262,7 +262,7 @@ License
             
 
 				WRel=(U*rho-(1-alpha)*rhob*Ub)/((alpha+alphaSmall)*rhoa)-Ub;
-				//Ua=WRel+Ub;
+				Ua=WRel+Ub;
 				//Ua.correctBoundaryConditions();
                 #include "UaUbLimiter.H"
                 U.correctBoundaryConditions();
