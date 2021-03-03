@@ -8,5 +8,5 @@ export OF_VERSION=`echo $WM_PROJECT_VERSION"-00" | sed -e 's/v//' -e 's/+//' -e 
 TurbulenceModels/Allwmake
 solver/Allwmake
 solverMULES/Allwmake
-solverMIXTURE/Allwmake
+
 # ----------------------------------------------------------------- end-of-file

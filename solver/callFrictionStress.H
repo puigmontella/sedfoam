@@ -27,6 +27,105 @@ License
 volSymmTensorField D_tensor = symm(gradUaT);
 volScalarField magDtensor = ::sqrt(2.0)*mag(D_tensor);
 
+
+anisotropy_old=anisotropy;
+
+//forAll(anisotropy, cellI)
+//{  
+   //anisotropy[cellI]=Ua[cellI][0]; //cell center coordinate of cellI
+//}
+
+dimensionedScalar AConstant
+(
+	"AConstant",
+	dimensionSet(0, -0, 0, 0, 0, 0, 0),
+	0
+);
+
+//anisotropy_time=(anisotropy-anisotropy_old)*AConstant;
+
+
+//if (runTime.value()<2000)
+//{
+	//anisotropy_time=1*anisotropy_time;
+//}
+
+
+//forAll(anisotropy_time, cellI)
+//{  if (anisotropy_time[cellI]>0.2)
+	//{
+   //anisotropy_time[cellI]=0.2; //cell center coordinate of cellI
+//}
+  //if (anisotropy_time[cellI]<-0.2)
+	//{
+   //anisotropy_time[cellI]=-0.2; //cell center coordinate of cellI
+//}
+//}
+
+
+
+//anisotropy_time.max(-0.7);
+//anisotropy_time.min(0.7);
+
+//anisotropy=fvc::ddt(Ua[0])/AConstant;
+
+volTensorField D_tensorS = 0.5*(fvc::grad(Ua)().T()+fvc::grad(Ua));
+W_tensor = skew(gradUaT);
+devS_trensor = dev(D_tensorS);
+
+WA_tensor = W_tensor & Afabric;
+AW_tensor = Afabric & W_tensor;
+
+
+volScalarField AS = Afabric && devS_trensor;
+
+
+dttAfabric= fvc::ddt(Afabric);
+Aterm1Afabric= -fvc::Sp(-2.8*magDtensor, Afabric);
+Aterm2Afabric= fvc::Sp(1*AS, Afabric);
+Aterm3Afabric= -fvc::Sp(-0.52, devS_trensor);
+
+
+fvTensorMatrix FrabricEqn
+(
+        fvm::ddt(Afabric)
+  //+ fvm::Sp(W_tensor, Afabric)
+   //- fvm::Sp(Afabric, W_tensor)
+  + fvm::div(phia, Afabric, "div(phia,Afabric)")
+ - fvm::Sp(fvc::div(phia), Afabric)
+   - fvm::Sp(-2.8*magDtensor, Afabric)
+   + fvm::Sp(1*AS, Afabric)
+    ==
+	fvc::Sp(-0.52, devS_trensor)
+	- AW_tensor
+	+ WA_tensor
+);
+FrabricEqn.relax();
+FrabricEqn.solve();
+
+//AConstant=0;
+//forAll(Afabric, cellI)
+//{  
+   //AConstant=Afabric[cellI][1]+AConstant; //cell center coordinate of cellI
+//}
+
+
+
+
+forAll(anisotropy, cellI)
+{  
+   anisotropy[cellI]=Afabric[cellI][1]; //cell center coordinate of cellI
+}
+
+
+anisotropy_time=(anisotropy-anisotropy_old);
+
+
+AfabricMag = ::sqrt(2.0)*mag(Afabric);
+
+
+
+
 //// Solving the evolution of plastic volume fraction
 volScalarField dila_shearRate = delta*magDtensor;
 
@@ -52,6 +151,9 @@ alphaPlastic.min(0.585);
 // Pff corresponds to "contact" pressure which prevent the granular phase from
 // exceeding the maximum volume fraction.
 pff = pp->pff(alpha, alphaPlastic, alphaMax, Fr_, eta0_, eta1_);
+
+pff=pff*(1-4000.00*anisotropy_time);
+
 
 //
 //

@@ -327,7 +327,12 @@ void Foam::granularRheologyModel::solve
         1e-8
     );
     Dsmall2 = sqr(Dsmall);
-
+    dimensionedScalar magDConstant
+    (
+        "magDConstant",
+        dimensionSet(0, 0, -1, 0, 0, 0, 0),
+        1.
+    );
     // compute the particulate velocity shear rate
     //
     volSymmTensorField D = symm(gradUat);
@@ -348,6 +353,14 @@ void Foam::granularRheologyModel::solve
     //  relaxPa_ controls the relaxation of pa. Low values lead to relaxed pa
     //  whereas large value are prone to numerical error
     volScalarField tau_inv_par = relaxPa_*alpha_*magD;
+    
+    
+    //forAll(tau_inv_par, cellI)
+	//{  if( magD[cellI]>100.)
+		//{
+	   //tau_inv_par[cellI]=tau_inv_par[cellI]*magDConstant.value()/magD[cellI]; //cell center coordinate of cellI
+		//}
+	//}
 
     fvScalarMatrix paEqn
     (

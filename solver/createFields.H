@@ -456,6 +456,21 @@ volScalarField delta
 );
 
 
+
+
+volTensorField Afabric
+(
+    IOobject
+    (
+        "Afabric",
+        runTime.timeName(),
+        mesh,
+        IOobject::MUST_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh
+);
+
 Info<< "Calculating field U\n" << endl;
 volVectorField U
 (
@@ -621,6 +636,168 @@ volScalarField K
     draga->K(mag(Ub-Ua))
 );
 
+volScalarField anisotropy
+(
+    IOobject
+    (
+        "anisotropy",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedScalar("zero", dimensionSet(0, 0, -0, 0, 0),  0.0)
+);
+volScalarField anisotropy_old
+(
+    IOobject
+    (
+        "anisotropy_old",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedScalar("zero", dimensionSet(0, 0, -0, 0, 0),  0.0)
+);
+
+volScalarField anisotropy_time
+(
+    IOobject
+    (
+        "anisotropy_time",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedScalar("zero", dimensionSet(0, 0, -0, 0, 0),  0.0)
+);
+
+volTensorField W_tensor
+(
+    IOobject
+    (
+        "W_tensor",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedTensor("zero", dimensionSet(0, 0, -1, 0, 0), tensor::zero)
+);
+
+
+volTensorField devS_trensor
+(
+    IOobject
+    (
+        "devS_trensor",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedTensor("zero", dimensionSet(0, 0, -1, 0, 0), tensor::zero)
+
+);
+
+
+volTensorField WA_tensor
+(
+    IOobject
+    (
+        "WA_tensor",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedTensor("zero", dimensionSet(0, 0, -1, 0, 0), tensor::zero)
+);
+
+
+volTensorField AW_tensor
+(
+    IOobject
+    (
+        "AW_tensor",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedTensor("zero", dimensionSet(0, 0, -1, 0, 0), tensor::zero)
+);
+
+
+volTensorField dttAfabric
+(
+    IOobject
+    (
+        "dttAfabric",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedTensor("zero", dimensionSet(0, 0, -1, 0, 0), tensor::zero)
+);
+
+
+volTensorField Aterm1Afabric
+(
+    IOobject
+    (
+        "Aterm1Afabric",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedTensor("zero", dimensionSet(0, 0, -1, 0, 0), tensor::zero)
+);
+
+
+volTensorField Aterm2Afabric
+(
+    IOobject
+    (
+        "Aterm2Afabric",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedTensor("zero", dimensionSet(0, 0, -1, 0, 0), tensor::zero)
+);
+
+
+
+volTensorField Aterm3Afabric
+(
+    IOobject
+    (
+        "Aterm3Afabric",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedTensor("zero", dimensionSet(0, 0, -1, 0, 0), tensor::zero)
+);
+
 volVectorField gradPs
 (
     IOobject
@@ -662,6 +839,38 @@ volScalarField pff
     mesh,
     dimensionedScalar("zero", dimensionSet(1, -1, -2, 0, 0), 0.0)
 );
+
+volScalarField magDtensor
+
+(
+    IOobject
+    (
+        "magDtensor",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedScalar("zero", dimensionSet(0, -0, -1, 0, 0), 0.0)
+);
+
+
+
+volScalarField AfabricMag
+(
+    IOobject
+    (
+        "AfabricMag",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedScalar("zero", dimensionSet(0, -0, -0, 0, 0), 0.0)
+);
+
 
 volScalarField SUStilde
 (
