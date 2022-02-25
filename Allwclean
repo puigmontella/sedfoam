@@ -11,6 +11,9 @@ fi
 
 TurbulenceModels/Allwclean $*
 solver/Allwclean $*
+solverDriftSed/Allwclean $*
+solverDriftDyMSed/Allwclean $*
 solverMULES/Allwclean $*
+
 
 #------------------------------------------------------------------------------
