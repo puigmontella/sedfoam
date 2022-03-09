@@ -93,7 +93,12 @@ License
             //turbulent suspension term
             phiDraga += -(fvc::interpolate(SUS*(K/rhoa)*turbulenceb->nut()
                                 *(beta/(alpha + alphaSmall)))
-                                *fvc::snGrad(alpha))*rUaAf*mesh.magSf();
+                                *fvc::snGrad(alpha))*rUaAf*mesh.magSf()
+                                
+                                		+ fvc::interpolate(alpha/alphaMax/rhoa)*(gradPhasea & mesh.Sf()) * rUaAf
+;
+                                
+                                
         }
 
         // Momentum flux at the cell faces for phase b
@@ -104,6 +109,8 @@ License
           // Convective acceleration for 1D non-uniform simulation
           - rUbAf*fvc::interpolate(neg(alpha-0.3))*((gradConvAcc/rhob)
             & mesh.Sf())
+            
+
         );
         if (not SUSaniso)
         {

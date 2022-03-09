@@ -33,7 +33,7 @@ zmin = 0
 #
 # dimensional parameters
 d = 0.02
-rho_f = 1e-3
+rho_f = 3e-1
 rho_p = 1
 drho = rho_p - rho_f
 g = 1

@@ -27,6 +27,9 @@
 	gradPOSC =  gradPMEAN + gradPAMP1*Foam::cos(initTheta*(pi)/180.0 + 2.0*(pi)*runTime.value()/oscpT)
 			  + gradPAMP2*Foam::sin(initTheta*(pi)/90.0 + 4.0*(pi)*runTime.value()/oscpT);
 
+
+  //  pff.correctBoundaryConditions();
+
 	//Surface tension, buoyancy and particle pressure contribution to approximate flux
     surfaceScalarField phig
     (
@@ -54,13 +57,7 @@
 								fvc::flux( phiW, alpha*(1-alpha)*(rhoa-rhob)/rho)
 							);
 
-    dimensionedScalar RelaxPhi
-    (
-        "RelaxPhi",
-        dimensionSet(0, 0, 0, 0, 0, 0, 0),
-        1
-    );
-	phirNew=RelaxPhi*phir+(1-RelaxPhi)*phirNew;
+
 							
     // Update the pressure BCs to ensure flux consistency
    constrainPressure(p_rgh, U, phiHbyA, rAUf);
@@ -74,7 +71,7 @@
 
         fvScalarMatrix p_rghEqn
         (
-            fvm::laplacian(rAUf, p_rgh) == fvc::div(phiHbyA - phirNew)
+            fvm::laplacian(rAUf, p_rgh) == fvc::div(phiHbyA - phir)
             //fvm::laplacian(rAUf, p_rgh) == fvc::div(phiHbyA)
         );
 
@@ -118,6 +115,6 @@
             pRefValue - getRefCellValue(p, pRefCell)
         );
         p_rgh = p - rho*gh;
-				p_rgh.correctBoundaryConditions();
+			//	p_rgh.correctBoundaryConditions();
     }
 }

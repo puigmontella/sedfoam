@@ -318,6 +318,18 @@ dimensionedVector gradConvAcc
         vector(0, 0, 0)
     )
 );
+
+dimensionedVector gradPhasea
+(
+    dimensionedVector::getOrDefault
+    (
+        "gradPhasea",
+        forceProperties,
+        dimensionSet(1, -2, -2, 0, 0, 0, 0),
+        vector(0, 0, 0)
+    )
+);
+
 dimensionedScalar gradPOSCMin ("gradPOSCMin", gradPOSC.dimensions(), 1e-6);
 
 dimensionedScalar oscpT

@@ -30,8 +30,9 @@ License
     surfaceScalarField phic("phic", phi);
   //  surfaceScalarField phir("phir", phia - phib);
 
-    //Relative flux between dispersed and continuous phase(s)
-  	#include "WEqn.H"
+
+    ////Relative flux between dispersed and continuous phase(s)
+  	//#include "WEqn.H"
 
   	surfaceScalarField phiW(fvc::flux(W));
     surfaceScalarField phi3
@@ -47,6 +48,9 @@ License
 
     for (int acorr=0; acorr<nAlphaCorr; acorr++)
     {
+		
+
+		
         alpha.correctBoundaryConditions();
         fvScalarMatrix alphaEqn
         (
@@ -54,6 +58,7 @@ License
            + fvm::div(phic, alpha, scheme)
         //   + fvm::div(-fvc::flux(-phir, (1.0-alpha), schemer), alpha, schemer)
            + fvm::div(phi3, alpha, alphadrScheme)
+          // + ((1-alpha)- alpha*(1-alpha)*(rhoa-rhob)/rho)*fvc::div(W)
 
         );
 

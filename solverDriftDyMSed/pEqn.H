@@ -4,22 +4,17 @@
 
     rAU = 1.0/UEqn.A();
     //mesh.interpolate(rAU);
-
     surfaceScalarField faceMask(localMin<scalar>(mesh).interpolate(cellMask));
-
     surfaceScalarField rAUf("rAUf", fvc::interpolate(rAU));
-
     volVectorField H("H", UEqn.H());
 
     volVectorField HbyA("HbyA", U);
     //HbyA = rAU*UEqn.H();
     HbyA = constrainHbyA(rAU*H, U, p_rgh);
-
     if (massFluxInterpolation)
     {
         #include "interpolatedFaces.H"
     }
-
     surfaceScalarField phiHbyA("phiHbyA", fvc::flux(HbyA));
 
     if (ddtCorr)
@@ -31,6 +26,7 @@
         phiHbyA +=
             fvc::interpolate(rho*rAU)*faceMaskOld*fvc::ddtCorr(U, Uf);
     }
+    
     MRF.makeRelative(phiHbyA);
 
     if (p_rgh.needReference())
@@ -46,7 +42,6 @@
         oversetAdjustPhi(phiHbyA, U);
         fvc::makeAbsolute(phiHbyA, U);
     }
-
 
 	// Calculate oscilitary pressure gradient
 	gradPOSC =  gradPMEAN + gradPAMP1*Foam::cos(initTheta*(pi)/180.0 + 2.0*(pi)*runTime.value()/oscpT)
@@ -65,7 +60,6 @@
 	  + (gradPOSC & mesh.Sf()) * rAUf
 		+ fvc::interpolate(alpha/alphaMax)*(gradPhasea & mesh.Sf()) * rAUf
     );
-
     phiHbyA += phig;
 
     if (adjustFringe)
@@ -91,6 +85,7 @@
 		// Update the pressure BCs to ensure flux consistency
     while (pimple.correctNonOrthogonal())
     {
+           
 
         fvScalarMatrix p_rghEqn
         (
@@ -148,6 +143,7 @@
     
     #include "continuityErrs.H"
     p == p_rgh + rho*gh; 
+    
 
     if (p_rgh.needReference())
     {

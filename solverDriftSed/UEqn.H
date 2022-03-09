@@ -6,8 +6,7 @@
 							  * sqr(W)
 							);
 
-muEff.correctBoundaryConditions();
-
+//muEff.correctBoundaryConditions();
 
 
 
@@ -75,8 +74,10 @@ muEff.correctBoundaryConditions();
 //Construct the Momentum equation
     fvVectorMatrix UEqn
     (
-        fvm::ddt(rho, U) + fvm::div(rhoPhi, U)
-      - fvm::Sp(fvc::ddt(rho) + fvc::div(rhoPhi), U)
+        fvm::ddt(rho, U)
+         + fvm::div(rhoPhi, U)
+         //+ fvm::div(rhoPhi, U)
+      //- fvm::Sp(fvc::ddt(rho) + fvc::div(rhoPhi), U)
       
       - fvm::laplacian(muEff, U)
 	  - fvc::div(muEff * dev2(T(fvc::grad(U))))

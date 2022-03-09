@@ -13,7 +13,7 @@
 // 	
 
 MRF.correctBoundaryVelocity(U);
-muEff.correctBoundaryConditions();
+//muEff.correctBoundaryConditions();
 
 //Construct the Momentum equation
     fvVectorMatrix UEqn

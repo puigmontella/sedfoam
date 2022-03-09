@@ -32,7 +32,7 @@ transportModel  Newtonian;
 
 nu              nu [ 0 2 -1 0 0 0 0 ] 2.52e-4;
 
-nuMax           nuMax [0 2 -1 0 0 0 0] 1e0;      // viscosity limiter for the Frictional model (required for stability)
+nuMax           nuMax [0 2 -1 0 0 0 0] 1e1;      // viscosity limiter for the Frictional model (required for stability)
 
 alphaSmall      alphaSmall [ 0 0 0 0 0 0 0 ] 1e-6;  // minimum volume fraction (phase a) for division by alpha 
 

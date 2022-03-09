@@ -30,7 +30,7 @@ License
     surfaceScalarField phic("phic", MRF.absolute(phi));
 surfaceScalarField phir("phir", MRF.absolute(phia - phib));
     //Relative flux between dispersed and continuous phase(s)
-  	#include "WEqn.H"
+  //	#include "WEqn.H"
 
   	surfaceScalarField phiW(fvc::flux(W));
   	
@@ -74,14 +74,14 @@ surfaceScalarField phir("phir", MRF.absolute(phia - phib));
             }
         }
 
-        
+
+        alpha.min(alphaMax);
+        alpha.max(0);
 
         alpha *= cellMask;
 
         
 
-        alpha.min(alphaMax);
-        alpha.max(0);
         alpha*= pos(alpha-alphaSmall);
 
         
@@ -90,7 +90,7 @@ surfaceScalarField phir("phir", MRF.absolute(phia - phib));
         beta.max(0);
         
         alpha.correctBoundaryConditions();
-        beta.correctBoundaryConditions();
+       // beta.correctBoundaryConditions();
 
         if (debugInfo)
         {

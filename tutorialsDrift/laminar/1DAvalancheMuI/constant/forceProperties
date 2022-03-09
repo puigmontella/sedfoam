@@ -18,7 +18,7 @@ FoamFile
 // * * * * * * * * * * * * * following are for presure * * * * * * * * * * * * * * * //
 gradPMEAN        gradPMEAN        [ 1 -2 -2 0 0 0 0 ] (0 0 0 );
 
-gradPhasea        gradPhasea        [ 1 -2 -2 0 0 0 0 ] (0.3 0 0 );
+gradPhasea        gradPhasea        [ 1 -2 -2 0 0 0 0 ] (1 0 0 );
 
 tilt             tilt [ 0 0 0 0 0 0 0 ] 1;
 

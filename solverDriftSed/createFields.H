@@ -511,6 +511,22 @@ volScalarField pa
     dimensionedScalar("zero", dimensionSet(1, -1, -2, 0, 0), 0.0)
 );
 
+volScalarField CdRe
+(
+    IOobject
+    (
+        "CdRe",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedScalar("zero", dimensionSet(0, -0, -0, 0, 0), 0.0)
+);
+
+
+
 
 Info<< "Calculating field muEff\n" << endl;
 volScalarField muEff

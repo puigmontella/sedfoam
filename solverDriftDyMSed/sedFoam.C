@@ -183,12 +183,21 @@ int main(int argc, char *argv[])
 //      Apply a ramp in time on the gravity acceleration
         #include "gravityRamp.H"
 
+        // --- Pressure-velocity PIMPLE corrector loop
+        while (pimple.loop())
+        {
+            if (pimple.firstIter() || moveMeshOuterCorrectors)
+            {
+                scalar timeBeforeMeshUpdate = runTime.elapsedCpuTime();
 
+                mesh.update();
 
 
 				mesh.update();
 				if (mesh.changing())
                 {
+					
+					Info << "MESH CHANGED" << endl;
                     //Info<< "Execution time for mesh.update() = "
                         //<< runTime.elapsedCpuTime() - timeBeforeMeshUpdate
                         //<< " s" << endl;
@@ -204,11 +213,12 @@ int main(int argc, char *argv[])
                     //}
                     //gh = (g & mesh.C()) - ghRef;
                     //ghf = (g & mesh.Cf()) - ghRef;
-                    gh = (g & mesh.C()) ;
-                    ghf = (g & mesh.Cf());
+                    //gh = (g & mesh.C()) ;
+                    //ghf = (g & mesh.Cf());
 
                     // Update cellMask field for blocking out hole cells
                     #include "setCellMask.H"
+              
                     #include "setInterpolatedCells.H"
 
                     const surfaceScalarField faceMaskOld
@@ -222,6 +232,8 @@ int main(int argc, char *argv[])
 
 
                     const surfaceVectorField Uint(fvc::interpolate(U));
+
+
                     // Update Uf and phi on new C-I faces
                     Uf += (1-faceMaskOld)*Uint;
 
@@ -261,11 +273,7 @@ int main(int argc, char *argv[])
                 {
                     #include "meshCourantNo.H"
                 }
-
-//      Pressure-velocity PIMPLE corrector loop
-        while (pimple.loop())
-        {
-			
+			}
 			
             
 //          Solve for solid phase mass conservation
@@ -294,6 +302,7 @@ int main(int argc, char *argv[])
 
 //          Assemble the momentum balance equations for both phases a and b
             #include "UEqn.H"
+            
 
 //          Assemble and solve the pressure poisson equation
 //             and apply the velocity correction step for both phases a and b

@@ -71,7 +71,7 @@ if (kineticTheory.on())
     kineticTheory.solve
     (
         gradUT, turbulenceb->k(), turbulenceb->epsilon(),
-        turbulenceb->nut(), 0.2500000000, runTime
+        turbulenceb->nut(),B, runTime
     );
 
     // Compute Frictional viscosity
@@ -86,7 +86,7 @@ if (kineticTheory.on())
     nuFra = muEff_f/rhoa;
 
     // Compute nuEffb the total fluid phase viscosity
- //   nuEffb = nub + turbulenceb->nut();
+    nuEffb = nub + turbulenceb->nut();
 
     // Update solid phase viscosities and collisional pressure
    // nuEffa = kineticTheory.mua()/((alpha + alphaSmall)*rhoa);
