@@ -1,6 +1,6 @@
 
 {
-	W *= cellMask;
+	//W *= cellMask;
 	//################################### solving W #############################
 		
 	surfaceScalarField phiW(fvc::flux(W));
@@ -28,7 +28,7 @@
 
      + MRF.DDt(W)
      
-	// Shear stress contribution - Relative velocity 
+	 //Shear stress contribution - Relative velocity 
       - scalar(1.0)/((alpha+alphaSmall))*fvm::laplacian(nuFra*(1-alpha)*rhob/rho, W)
 	  - scalar(1.0)/((alpha+alphaSmall))*fvc::div(nuFra*(1-alpha)*rhob/rho*dev2(T(fvc::grad(W))))
 	  
@@ -52,11 +52,11 @@
 	  ////Ua=1/rho*(W*(1-alpha)*rhob+rho*U);
 	  ////Ub=1/rho*(-W*alpha*rhoa+rho*U);
 	  
-      + scalar(1.0)/((alpha+alphaSmall))*fvc::laplacian(nuFra, U)
-	  + scalar(1.0)/((alpha+alphaSmall))*fvc::div(nuFra*dev2(T(fvc::grad(U))))
+      + scalar(1.0)/((alpha+alphaSmall))*fvc::laplacian(nuFra, Ua)
+	  + scalar(1.0)/((alpha+alphaSmall))*fvc::div(nuFra*dev2(T(fvc::grad(Ua))))
 	  
-      - scalar(1.0)/(rhob*(1-alpha+alphaSmall))*fvc::laplacian(nuEffb*rhob, U)
-	  - scalar(1.0)/(rhob*(1-alpha+alphaSmall))*fvc::div(nuEffb*rhob*dev2(T(fvc::grad(U))))
+      - scalar(1.0)/(rhob*(1-alpha+alphaSmall))*fvc::laplacian(nuEffb*rhob, Ub)
+	  - scalar(1.0)/(rhob*(1-alpha+alphaSmall))*fvc::div(nuEffb*rhob*dev2(T(fvc::grad(Ub))))
 	  
 	  // Drag term
 	 -fvm::Sp(DragTerm, W)
@@ -72,24 +72,12 @@
     WEqn.relax();
     WEqn.solve();
     W*= pos(alpha-alphaSmall);
- //   W*= pos(mag(W)-Wsmall);
-//volVectorField gradpsf(alphaMax*(fvc::reconstruct(fvc::snGrad(pff)*mesh.magSf()))/max(alpha, alphaSmall));
-	//gradpNet = mag( gradpsf & gUnit) - alpha*(rhoa-rhob)*mag(g);
 
-	//W*= neg(gradpNet);
-	
+
     W *= cellMask;
 
     W.correctBoundaryConditions();
 
-    
-	//Info << "W"<<W<< endl;
-
-	//Info << "fvm::ddt(W)"<< fvm::ddt(W)<< endl;
-	//Info << "fvm::div(phiW, W)"<< fvm::div(phiW, W)<< endl;
-
-	//Info << "-(scalar(1.0)/rhoa-scalar(1.0)/rhob)*(fvc::reconstruct(fvc::snGrad(p)*mesh.magSf()))"<< -(scalar(1.0)/rhoa-scalar(1.0)/rhob)*(fvc::reconstruct(fvc::snGrad(p)*mesh.magSf())) << endl;
-
-	//Info << "((1-alpha)/rhoa+alpha/rhob)*W*draga->K(mag(W))"<< ((1-alpha)/rhoa+alpha/rhob)*W*draga->K(mag(W)) << endl;	
+	
 	
 }

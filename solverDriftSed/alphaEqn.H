@@ -38,14 +38,19 @@ License
     surfaceScalarField phi3
     (
 			 -fvc::flux( -phiW,
-							   (1-alpha)
-						 	 - alpha*(1-alpha)*(rhoa-rhob)/rho,
+							   (1-alpha)*rhob/rho,
 							 alphadrScheme
 					   )
 		);
 
-
-
+    //surfaceScalarField phi4
+    //(
+			 //-fvc::flux( -phiW,
+						 	 //- alpha*rhob/rho,
+							 //alphadrScheme
+					   //)
+		//);
+	
     for (int acorr=0; acorr<nAlphaCorr; acorr++)
     {
 		
@@ -59,6 +64,7 @@ License
         //   + fvm::div(-fvc::flux(-phir, (1.0-alpha), schemer), alpha, schemer)
            + fvm::div(phi3, alpha, alphadrScheme)
           // + ((1-alpha)- alpha*(1-alpha)*(rhoa-rhob)/rho)*fvc::div(W)
+         //  - 2*fvm::div(phi4, alpha, alphadrScheme)
 
         );
 

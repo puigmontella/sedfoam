@@ -104,5 +104,5 @@ surfaceScalarField phir("phir", MRF.absolute(phia - phib));
 }
 
 rho = alpha*rhoa + beta*rhob;
-rho.correctBoundaryConditions();
+//rho.correctBoundaryConditions();
 rhoPhi = fvc::interpolate(rho)*phi;

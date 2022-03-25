@@ -154,8 +154,9 @@ else
 
     // set pa and nuFraa to zero if kineticTheory and granularRheology are off
     pa = pa*scalar(0.0);
-    nuFra = nua*scalar(0.0);
-   muEff = nub*rhob+rho*turbulenceb->nut();
+    pff= pff*scalar(0.0);
+    nuFra = nua;
+   muEff = nub*rhob*beta+nua*alpha*rhoa+rho*turbulenceb->nut();
 //    muEff = nub*rhob;
 //    lambdaU = nua*rho*scalar(0.0);
 }

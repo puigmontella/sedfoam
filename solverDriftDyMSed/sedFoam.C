@@ -170,6 +170,8 @@ int main(int argc, char *argv[])
 	#include "CourantNo.H"
     #include "setInitialDeltaT.H"
     
+	#include "setCellMask.H"
+	#include "setInterpolatedCells.H"
     while (runTime.run())
     {
         #include "readControls.H"
@@ -193,7 +195,6 @@ int main(int argc, char *argv[])
                 mesh.update();
 
 
-				mesh.update();
 				if (mesh.changing())
                 {
 					
@@ -213,8 +214,8 @@ int main(int argc, char *argv[])
                     //}
                     //gh = (g & mesh.C()) - ghRef;
                     //ghf = (g & mesh.Cf()) - ghRef;
-                    //gh = (g & mesh.C()) ;
-                    //ghf = (g & mesh.Cf());
+                    gh = (g & mesh.C()) ;
+                    ghf = (g & mesh.Cf());
 
                     // Update cellMask field for blocking out hole cells
                     #include "setCellMask.H"
@@ -286,11 +287,8 @@ int main(int argc, char *argv[])
             (
                 localMin<scalar>(mesh).interpolate(cellMask)
             );
-            rhoPhi = fvc::interpolate(rho)*phi;
+            //rhoPhi = fvc::interpolate(rho)*phi;
             rhoPhi *= faceMask;
-
-
-			
 
 
 //          Compute lift and drag coefficients

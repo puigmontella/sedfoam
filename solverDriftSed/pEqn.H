@@ -28,7 +28,7 @@
 			  + gradPAMP2*Foam::sin(initTheta*(pi)/90.0 + 4.0*(pi)*runTime.value()/oscpT);
 
 
-  //  pff.correctBoundaryConditions();
+    pff.correctBoundaryConditions();
 
 	//Surface tension, buoyancy and particle pressure contribution to approximate flux
     surfaceScalarField phig

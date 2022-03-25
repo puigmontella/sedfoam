@@ -3,11 +3,12 @@
 	//################################### solving W #############################
     word schemeNu("div(nuW)");
 
+
+
 		
 	surfaceScalarField phiW(fvc::flux(W));
 	volScalarField DragTerm(((1-alpha)/rhoa+alpha/rhob)*draga->K(mag(W)));
 	
-	////volScalarField DragTerm((1+(1-alpha)/alpha*rhob/rhoa)/(rhob*(1-alpha))*draga->K(mag(W)));
 
 	
 	tauSw= scalar(1.0)/(alpha+alphaSmall)*(1-alpha)*rhob/rho*fvc::laplacian(nuFra, W)  + scalar(1.0)/(alpha+alphaSmall)*fvc::div(nuFra*dev2(T(fvc::grad(W*(1-alpha)*rhob/rho))));
@@ -17,14 +18,15 @@
 	pSolid=(-scalar(1.0)/(alpha+alphaSmall)/rhoa)*(fvc::reconstruct(fvc::snGrad(pff+pa)*mesh.magSf()));
 	pmixt=  -(scalar(1.0)/rhoa-scalar(1.0)/rhob)*(fvc::reconstruct(fvc::snGrad(p)*mesh.magSf()));
 	Dragterm=-fvc::Sp(DragTerm, W);
+
 	
 	
-    //dimensionedScalar nuArt
-    //(
-        //"nuArt",
-        //dimensionSet(0, 2, -1, 0, 0, 0, 0),
-        //1e-5
-    //);
+    dimensionedScalar nuArt
+    (
+        "nuArt",
+        dimensionSet(0, 2, -1, 0, 0, 0, 0),
+        1e-5
+    );
 	
 	
 	
@@ -38,12 +40,12 @@
 	  +(2*(1-alpha)*rhob/rho+2*alpha*rhoa/rho)*fvm::div(phi, W)
 
      
-	// Shear stress contribution - Relative velocity 
-      - scalar(1.0)/(alpha+alphaSmall)*(1-alpha)*rhob/rho*fvm::laplacian(nuFra, W)
-	  - scalar(1.0)/(alpha+alphaSmall)*fvc::div(nuFra*dev2(T(fvc::grad(W*(1-alpha)*rhob/rho))),schemeNu)
+	//// Shear stress contribution - Relative velocity 
+      //- scalar(1.0)/(alpha+alphaSmall)*(1-alpha)*rhob/rho*fvm::laplacian(nuFra, W)
+	  //- scalar(1.0)/(alpha+alphaSmall)*fvc::div(nuFra*dev2(T(fvc::grad(W*(1-alpha)*rhob/rho))),schemeNu)
 
-      - scalar(1.0)/(1-alpha+alphaSmall)*(alpha)*rhoa/rho*fvm::laplacian(nuEffb, W)
-	  - scalar(1.0)/(1-alpha+alphaSmall)*fvc::div(nuEffb*dev2(T(fvc::grad(W*(alpha)*rhoa/rho))),schemeNu)
+      //- scalar(1.0)/(1-alpha+alphaSmall)*(alpha)*rhoa/rho*fvm::laplacian(nuEffb, W)
+	  //- scalar(1.0)/(1-alpha+alphaSmall)*fvc::div(nuEffb*dev2(T(fvc::grad(W*(alpha)*rhoa/rho))),schemeNu)
 	  
 	  
 	  == 
@@ -75,7 +77,6 @@
     WEqn.relax();
     WEqn.solve();
     W*= pos(alpha-alphaSmall);
+    
 
-
-	
 }

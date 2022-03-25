@@ -224,6 +224,49 @@ volVectorField U
 //Relative velocity between water and sediment: W = v_s - v_w
 #include "createW.H"
 
+//Components of W
+
+volVectorField Wi
+(
+     IOobject
+     (
+         "Wi",
+         runTime.timeName(),
+         mesh,
+         IOobject::READ_IF_PRESENT,
+         IOobject::AUTO_WRITE
+     ),
+     mesh,
+     dimensionedVector("zero", dimensionSet(0, 1, -1, 0, 0), vector (0,0,0))
+);
+
+
+volVectorField Wtd
+(
+    IOobject
+    (
+        "Wtd",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    W*0
+);
+
+volVectorField Wsd
+(
+    IOobject
+    (
+        "Wsd",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    W*0
+);
+
 
 surfaceScalarField phirNew(fvc::flux(W));
 

@@ -26,6 +26,7 @@ echo
 
 #------------------------------------------------------------------------------
 
+#sixDoFRigidBodyMotionSedFoam/Allwmake $targetType $*
 TurbulenceModels/Allwmake $targetType $*
 solver/Allwmake $targetType $*
 solverDriftSed/Allwmake $targetType $*

@@ -58,7 +58,7 @@
 	    ) *faceMask*rAUf*mesh.magSf()
 
 	  + (gradPOSC & mesh.Sf()) * rAUf
-		+ fvc::interpolate(alpha/alphaMax)*(gradPhasea & mesh.Sf()) * rAUf
+		+ fvc::interpolate(alpha/alphaMax)*(gradPhasea & mesh.Sf()) *faceMask* rAUf
     );
     phiHbyA += phig;
 
@@ -144,16 +144,15 @@
     #include "continuityErrs.H"
     p == p_rgh + rho*gh; 
     
-
-    if (p_rgh.needReference())
+   if (p_rgh.needReference())
     {
-        p += dimensionedScalar
+        p_rgh += dimensionedScalar
         (
-            "p",
+            "p_rgh",
             p.dimensions(),
-            pRefValue - getRefCellValue(p, pRefCell)
+            pRefValue - getRefCellValue(p_rgh, pRefCell)
         );
-        p_rgh = p - rho*gh;
-				p_rgh.correctBoundaryConditions();
+        p == p_rgh + rho*gh;
     }
+
 }

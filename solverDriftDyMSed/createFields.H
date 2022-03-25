@@ -1035,7 +1035,18 @@ surfaceScalarField rhoPhi
 //
 
 
-
+volScalarField pw
+(
+    IOobject
+    (
+        "pw",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    p_rgh + rho*gh
+);
 volScalarField p
 (
     IOobject
@@ -1046,14 +1057,14 @@ volScalarField p
         IOobject::NO_READ,
         IOobject::AUTO_WRITE
     ),
-    p_rgh + rho*gh
+    p_rgh + rho*gh+pff
 );
 
 label pRefCell = 0;
 scalar pRefValue = 0.0;
 setRefCell
 (
-    p,
+    pw,
     p_rgh,
     pimple.dict(),
     pRefCell,
@@ -1062,13 +1073,13 @@ setRefCell
 
 if (p_rgh.needReference())
 {
-    p += dimensionedScalar
+    pw += dimensionedScalar
     (
-        "p",
-        p.dimensions(),
-        pRefValue - getRefCellValue(p, pRefCell)
+        "pw",
+        pw.dimensions(),
+        pRefValue - getRefCellValue(pw, pRefCell)
     );
-    p_rgh = p - rho*gh;
+    p_rgh = pw - rho*gh;
 }
 
 
