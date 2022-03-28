@@ -8,6 +8,7 @@ then
     echo "    no 'wclean' command" 1>&2
     exit 2
 fi
+forcesSedFoam/Allwclean $targetType $*
 sixDoFRigidBodyMotionSedFoam/Allwclean $targetType $*
 TurbulenceModels/Allwclean $*
 solver/Allwclean $*

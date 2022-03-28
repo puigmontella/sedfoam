@@ -329,7 +329,7 @@ void Foam::sixDoFRigidBodyMotion::update
 
 void Foam::sixDoFRigidBodyMotion::status() const
 {
-    Info<< "6-DoF rigid body motion" << nl
+    Info<< "6-DoF rigid body motion SedFoam version" << nl
         << "    Centre of rotation: " << centreOfRotation() << nl
         << "    Centre of mass: " << centreOfMass() << nl
         << "    Orientation: " << orientation() << nl

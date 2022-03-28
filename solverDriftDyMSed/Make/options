@@ -23,6 +23,8 @@ EXE_INC = \
     -I$(LIB_SRC)/dynamicFvMesh/lnInclude \
     -I$(LIB_SRC)/overset/lnInclude \
     -I../TurbulenceModels/turbulenceModels/lnInclude \
+    -I../sixDoFRigidBodyMotionSedFoam/lnInclude \
+    -I../forcesSedFoam/lnInclude \
     -I../solver/kineticTheoryModels/lnInclude \
     -I../solver/granularRheologyModels/lnInclude \
     -I../solver/interfacialModels/lnInclude \
@@ -48,4 +50,6 @@ EXE_LIBS = \
     -lincompressibleTurbulenceModels \
     -ltwoPhaseTurbulenceModels \
     -ltopoChangerFvMesh \
+	-lsixDoFRigidBodyMotionSedFoam \
+	-lforcesSedFoam \
     -loverset 
