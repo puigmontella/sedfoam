@@ -3,13 +3,6 @@ cd "${0%/*}" || exit                            # Run from this directory
 #------------------------------------------------------------------------------
 set -x
 
-wclean libso granularRheologyModels
-wclean libso phaseModel
-wclean libso ppModel
-wclean libso interfacialModels
-wclean libso kineticTheoryModels
-wclean
-cd overSedDymFoam
 wclean
 
 #------------------------------------------------------------------------------

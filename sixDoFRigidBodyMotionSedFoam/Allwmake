@@ -20,12 +20,5 @@ export OF_VERSION="$foam_api"
 
 set -x
 
-wmake libso phaseModel
-wmake libso interfacialModels
-wmake libso ppModel
-wmake libso kineticTheoryModels
-wmake libso granularRheologyModels
-wmake
-cd overSedDymFoam
 wmake
 #------------------------------------------------------------------------------
