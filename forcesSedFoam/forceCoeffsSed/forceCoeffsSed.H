@@ -25,16 +25,16 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::functionObjects::forceCoeffs
+    Foam::functionObjects::forceCoeffsSed
 
 Group
     grpForcesFunctionObjects
 
 Description
-    Extends the \c forces functionObject by providing coefficients for:
-    - drag, side and lift forces (Cd, Cs, and Cl)
+    Extends the \c forcesSed functionObject by providing coefficients for:
+    - drag, side and lift forcesSed (Cd, Cs, and Cl)
     - roll, pitch and yaw moments (CmRoll, CmPitch, and CmYaw)
-    - front and rear axle force contributions (C(f) and C(r)) wherein
+    - front and rear axle forceSed contributions (C(f) and C(r)) wherein
 
     \verbatim
         Cd(f/r) = 0.5*Cd \pm CmRoll
@@ -65,14 +65,14 @@ Usage
     \verbatim
     forceCoeffs1
     {
-        type        forceCoeffs;
-        libs        (forces);
+        type        forceCoeffsSed;
+        libs        (forcesSed);
         ...
         log         yes;
         writeFields yes;
         patches     (walls);
 
-        // input keywords for directions of force/moment coefficients
+        // input keywords for directions of forceSed/moment coefficients
         // refer below for options, and relations
 
         magUInf     100;
@@ -92,10 +92,10 @@ Usage
     Where the entries comprise:
     \table
         Property     | Description                          | Required | Default
-        type         | Type name: forceCoeffs               | yes |
-        log          | Write force data to standard output  | no  | no
-        writeFields  | Write force,moment coefficient fields | no | no
-        patches      | Patches included in the forces calculation | yes |
+        type         | Type name: forceCoeffsSed               | yes |
+        log          | Write forceSed data to standard output  | no  | no
+        writeFields  | Write forceSed,moment coefficient fields | no | no
+        patches      | Patches included in the forcesSed calculation | yes |
         magUInf      | Free stream velocity magnitude       | yes |
         rhoInf       | Free stream density | for compressible cases |
         lRef         | Reference length scale for moment calculations | yes |
@@ -111,7 +111,7 @@ Usage
         cumulative   | Bin data accumulated with incresing distance | yes |
     \endtable
 
-    Input of force/moment coefficient directions:
+    Input of forceSed/moment coefficient directions:
     - require an origin, and two orthogonal directions; the remaining orthogonal
     direction is determined accordingly.
     - can be added by the three options below.
@@ -146,7 +146,7 @@ Usage
     \table
         Property     | Description           | Alias | Direction
         dragDir      | Drag direction        | e1    | (1 0 0)
-        sideDir      | Side force direction  | e2    | (0 1 0)
+        sideDir      | Side forceSed direction  | e2    | (0 1 0)
         liftDir      | Lift direction        | e3    | (0 0 1)
         rollAxis     | Roll axis             | e1    | (1 0 0)
         pitchAxis    | Pitch axis            | e2    | (0 1 0)
@@ -156,17 +156,17 @@ Usage
 See also
     Foam::functionObject
     Foam::functionObjects::timeControl
-    Foam::functionObjects::forces
+    Foam::functionObjects::forcesSed
 
 SourceFiles
-    forceCoeffs.C
+    forceCoeffsSed.C
 
 \*---------------------------------------------------------------------------*/
 
 #ifndef functionObjects_forceCoeffs_H
 #define functionObjects_forceCoeffs_H
 
-#include "forces.H"
+#include "forcesSed.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -176,12 +176,12 @@ namespace functionObjects
 {
 
 /*---------------------------------------------------------------------------*\
-                         Class forceCoeffs Declaration
+                         Class forceCoeffsSed Declaration
 \*---------------------------------------------------------------------------*/
 
-class forceCoeffs
+class forceCoeffsSed
 :
-    public forces
+    public forcesSed
 {
     // Private data
 
@@ -227,10 +227,10 @@ class forceCoeffs
     // Private Member Functions
 
         //- No copy construct
-        forceCoeffs(const forceCoeffs&) = delete;
+        forceCoeffsSed(const forceCoeffsSed&) = delete;
 
         //- No copy assignment
-        void operator=(const forceCoeffs&) = delete;
+        void operator=(const forceCoeffsSed&) = delete;
 
 
 protected:
@@ -260,13 +260,13 @@ protected:
 public:
 
     //- Runtime type information
-    TypeName("forceCoeffs");
+    TypeName("forceCoeffsSed");
 
 
     // Constructors
 
         //- Construct from Time and dictionary
-        forceCoeffs
+        forceCoeffsSed
         (
             const word& name,
             const Time& runTime,
@@ -276,18 +276,18 @@ public:
 
 
     //- Destructor
-    virtual ~forceCoeffs() = default;
+    virtual ~forceCoeffsSed() = default;
 
 
     // Member Functions
 
-        //- Read the forces data
+        //- Read the forcesSed data
         virtual bool read(const dictionary&);
 
         //- Execute
         virtual bool execute();
 
-        //- Write the forces
+        //- Write the forcesSed
         virtual bool write();
 };
 

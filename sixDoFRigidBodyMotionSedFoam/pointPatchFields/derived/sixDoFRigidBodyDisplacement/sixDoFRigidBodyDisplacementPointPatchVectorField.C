@@ -33,7 +33,7 @@ License
 #include "fvMesh.H"
 #include "volFields.H"
 #include "uniformDimensionedFields.H"
-#include "forces.H"
+#include "forcesSed.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -213,17 +213,17 @@ void sixDoFRigidBodyDisplacementPointPatchVectorField::updateCoeffs()
 
     dictionary forcesDict;
 
-    forcesDict.add("type", functionObjects::forces::typeName);
+    forcesDict.add("type", functionObjects::forcesSed::typeName);
     forcesDict.add("patches", wordList(1, ptPatch.name()));
     forcesDict.add("rhoInf", rhoInf_);
     forcesDict.add("rho", rhoName_);
     forcesDict.add("CofR", motion_.centreOfRotation());
 
-    functionObjects::forces f("forces", db(), forcesDict);
+    functionObjects::forcesSed f("forcesSed", db(), forcesDict);
 
     f.calcForcesMoment();
 
-    // Get the forces on the patch faces at the current positions
+    // Get the forcesSed on the patch faces at the current positions
 
     if (lookupGravity_ == 1)
     {

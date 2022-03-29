@@ -24,7 +24,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::functionObjects::propellerInfo
+    Foam::functionObjects::propellerInfoSed
 
 Group
     grpForcesFunctionObjects
@@ -56,7 +56,7 @@ Usage
     \verbatim
     propellerInfo1
     {
-        type            propellerInfo;
+        type            propellerInfoSed;
         libs            (forces);
         writeControl    writeTime;
 
@@ -112,7 +112,7 @@ Usage
     Where the entries comprise:
     \table
         Property        | Description                   | Required | Deflt value
-        type            | Type name: propellerInfo      | yes      |
+        type            | Type name: propellerInfoSed      | yes      |
         log             | Write to standard output      | no       | no
         patches         | Patches included in the forces calculation | yes |
         p               | Pressure field name           | no       | p
@@ -157,14 +157,14 @@ See also
     Foam::Function1
 
 SourceFiles
-    propellerInfo.C
+    propellerInfoSed.C
 
 \*---------------------------------------------------------------------------*/
 
 #ifndef functionObjects_propellerInfo_H
 #define functionObjects_propellerInfo_H
 
-#include "forces.H"
+#include "forcesSed.H"
 #include "Enum.H"
 #include "faceList.H"
 
@@ -182,12 +182,12 @@ namespace functionObjects
 {
 
 /*---------------------------------------------------------------------------*\
-                        Class propellerInfo Declaration
+                        Class propellerInfoSed Declaration
 \*---------------------------------------------------------------------------*/
 
-class propellerInfo
+class propellerInfoSed
 :
-    public forces
+    public forcesSed
 {
 
 public:
@@ -345,22 +345,22 @@ protected:
             ) const;
 
         //- No copy construct
-        propellerInfo(const propellerInfo&) = delete;
+        propellerInfoSed(const propellerInfoSed&) = delete;
 
         //- No copy assignment
-        void operator=(const propellerInfo&) = delete;
+        void operator=(const propellerInfoSed&) = delete;
 
 
 public:
 
     //- Runtime type information
-    TypeName("propellerInfo");
+    TypeName("propellerInfoSed");
 
 
     // Constructors
 
         //- Construct from Time and dictionary
-        propellerInfo
+        propellerInfoSed
         (
             const word& name,
             const Time& runTime,
@@ -369,7 +369,7 @@ public:
         );
 
         //- Construct from objectRegistry and dictionary
-        propellerInfo
+        propellerInfoSed
         (
             const word& name,
             const objectRegistry& obr,
@@ -379,7 +379,7 @@ public:
 
 
     //- Destructor
-    virtual ~propellerInfo() = default;
+    virtual ~propellerInfoSed() = default;
 
 
     // Member Functions

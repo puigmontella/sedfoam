@@ -25,7 +25,7 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "propellerInfo.H"
+#include "propellerInfoSed.H"
 #include "cylindricalCS.H"
 #include "fvMesh.H"
 #include "IOMRFZoneList.H"
@@ -42,13 +42,13 @@ namespace Foam
 {
 namespace functionObjects
 {
-    defineTypeNameAndDebug(propellerInfo, 0);
-    addToRunTimeSelectionTable(functionObject, propellerInfo, dictionary);
+    defineTypeNameAndDebug(propellerInfoSed, 0);
+    addToRunTimeSelectionTable(functionObject, propellerInfoSed, dictionary);
 }
 }
 
-const Foam::Enum<Foam::functionObjects::propellerInfo::rotationMode>
-Foam::functionObjects::propellerInfo::rotationModeNames_
+const Foam::Enum<Foam::functionObjects::propellerInfoSed::rotationMode>
+Foam::functionObjects::propellerInfoSed::rotationModeNames_
 ({
     { rotationMode::SPECIFIED, "specified" },
     { rotationMode::MRF, "MRF" },
@@ -57,7 +57,7 @@ Foam::functionObjects::propellerInfo::rotationModeNames_
 
 // * * * * * * * * * * * * Protected Member Functions  * * * * * * * * * * * //
 
-void Foam::functionObjects::propellerInfo::setCoordinateSystem
+void Foam::functionObjects::propellerInfoSed::setCoordinateSystem
 (
     const dictionary& dict
 )
@@ -134,7 +134,7 @@ void Foam::functionObjects::propellerInfo::setCoordinateSystem
 }
 
 
-void Foam::functionObjects::propellerInfo::setRotationalSpeed()
+void Foam::functionObjects::propellerInfoSed::setRotationalSpeed()
 {
     switch (rotationMode_)
     {
@@ -172,7 +172,7 @@ void Foam::functionObjects::propellerInfo::setRotationalSpeed()
 }
 
 
-void Foam::functionObjects::propellerInfo::createFiles()
+void Foam::functionObjects::propellerInfoSed::createFiles()
 {
     if (!writeToFile())
     {
@@ -209,7 +209,7 @@ void Foam::functionObjects::propellerInfo::createFiles()
 }
 
 
-const Foam::volVectorField& Foam::functionObjects::propellerInfo::U() const
+const Foam::volVectorField& Foam::functionObjects::propellerInfoSed::U() const
 {
     const auto* UPtr = mesh_.cfindObject<volVectorField>(UName_);
 
@@ -226,7 +226,7 @@ const Foam::volVectorField& Foam::functionObjects::propellerInfo::U() const
 }
 
 
-void Foam::functionObjects::propellerInfo::setSampleDiskGeometry
+void Foam::functionObjects::propellerInfoSed::setSampleDiskGeometry
 (
     const coordinateSystem& coordSys,
     const scalar r1,
@@ -329,7 +329,7 @@ void Foam::functionObjects::propellerInfo::setSampleDiskGeometry
 }
 
 
-void Foam::functionObjects::propellerInfo::setSampleDiskSurface
+void Foam::functionObjects::propellerInfoSed::setSampleDiskSurface
 (
     const dictionary& dict
 )
@@ -376,7 +376,7 @@ void Foam::functionObjects::propellerInfo::setSampleDiskSurface
 }
 
 
-void Foam::functionObjects::propellerInfo::updateSampleDiskCells()
+void Foam::functionObjects::propellerInfoSed::updateSampleDiskCells()
 {
     if (!writeWakeFields_)
     {
@@ -473,7 +473,7 @@ void Foam::functionObjects::propellerInfo::updateSampleDiskCells()
 }
 
 
-Foam::scalar Foam::functionObjects::propellerInfo::meanSampleDiskField
+Foam::scalar Foam::functionObjects::propellerInfoSed::meanSampleDiskField
 (
     const scalarField& field
 ) const
@@ -517,7 +517,7 @@ Foam::scalar Foam::functionObjects::propellerInfo::meanSampleDiskField
 }
 
 
-void Foam::functionObjects::propellerInfo::writeSampleDiskSurface
+void Foam::functionObjects::propellerInfoSed::writeSampleDiskSurface
 (
     const vectorField& U,
     const vectorField& Ur,
@@ -551,7 +551,7 @@ void Foam::functionObjects::propellerInfo::writeSampleDiskSurface
 }
 
 
-void Foam::functionObjects::propellerInfo::writePropellerPerformance()
+void Foam::functionObjects::propellerInfoSed::writePropellerPerformance()
 {
     if (!writePropellerPerformance_)
     {
@@ -561,7 +561,7 @@ void Foam::functionObjects::propellerInfo::writePropellerPerformance()
     // Update n_
     setRotationalSpeed();
 
-    const vector sumForce(sum(force_[0]) + sum(force_[1]) + sum(force_[2]));
+    const vector sumForce(sum(forceSed_[0]) + sum(forceSed_[1]) + sum(forceSed_[2]));
     const vector sumMoment(sum(moment_[0]) + sum(moment_[1]) + sum(moment_[2]));
 
     const scalar diameter = 2*radius_;
@@ -609,7 +609,7 @@ void Foam::functionObjects::propellerInfo::writePropellerPerformance()
 }
 
 
-void Foam::functionObjects::propellerInfo::writeWake
+void Foam::functionObjects::propellerInfoSed::writeWake
 (
     const vectorField& U,
     const scalar URef
@@ -668,7 +668,7 @@ void Foam::functionObjects::propellerInfo::writeWake
 }
 
 
-void Foam::functionObjects::propellerInfo::writeAxialWake
+void Foam::functionObjects::propellerInfoSed::writeAxialWake
 (
     const vectorField& U,
     const scalar URef
@@ -728,7 +728,7 @@ void Foam::functionObjects::propellerInfo::writeAxialWake
 }
 
 
-void Foam::functionObjects::propellerInfo::writeWakeFields(const scalar URef)
+void Foam::functionObjects::propellerInfoSed::writeWakeFields(const scalar URef)
 {
     if (!writeWakeFields_)
     {
@@ -749,7 +749,7 @@ void Foam::functionObjects::propellerInfo::writeWakeFields(const scalar URef)
 
 
 template<class Type>
-Foam::tmp<Foam::Field<Type>> Foam::functionObjects::propellerInfo::interpolate
+Foam::tmp<Foam::Field<Type>> Foam::functionObjects::propellerInfoSed::interpolate
 (
     const GeometricField<Type, fvPatchField, volMesh>& psi,
     const Type& defaultValue
@@ -783,7 +783,7 @@ Foam::tmp<Foam::Field<Type>> Foam::functionObjects::propellerInfo::interpolate
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::functionObjects::propellerInfo::propellerInfo
+Foam::functionObjects::propellerInfoSed::propellerInfoSed
 (
     const word& name,
     const Time& runTime,
@@ -791,7 +791,7 @@ Foam::functionObjects::propellerInfo::propellerInfo
     bool readFields
 )
 :
-    forces(name, runTime, dict, false),
+    forcesSed(name, runTime, dict, false),
     radius_(0),
     URefPtr_(nullptr),
     rotationMode_(rotationMode::SPECIFIED),
@@ -821,7 +821,7 @@ Foam::functionObjects::propellerInfo::propellerInfo
 }
 
 
-Foam::functionObjects::propellerInfo::propellerInfo
+Foam::functionObjects::propellerInfoSed::propellerInfoSed
 (
     const word& name,
     const objectRegistry& obr,
@@ -829,15 +829,15 @@ Foam::functionObjects::propellerInfo::propellerInfo
     bool readFields
 )
 :
-    propellerInfo(name, obr.time(), dict, false)
+    propellerInfoSed(name, obr.time(), dict, false)
 {}
 
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
-bool Foam::functionObjects::propellerInfo::read(const dictionary& dict)
+bool Foam::functionObjects::propellerInfoSed::read(const dictionary& dict)
 {
-    if (forces::read(dict))
+    if (forcesSed::read(dict))
     {
         radius_ = dict.getScalar("radius");
         URefPtr_.reset(Function1<scalar>::New("URef", dict, &mesh_));
@@ -866,7 +866,7 @@ bool Foam::functionObjects::propellerInfo::read(const dictionary& dict)
 }
 
 
-bool Foam::functionObjects::propellerInfo::execute()
+bool Foam::functionObjects::propellerInfoSed::execute()
 {
     calcForcesMoment();
 
@@ -900,7 +900,7 @@ bool Foam::functionObjects::propellerInfo::execute()
 }
 
 
-bool Foam::functionObjects::propellerInfo::write()
+bool Foam::functionObjects::propellerInfoSed::write()
 {
     const scalar URef = URefPtr_->value(time_.timeOutputValue());
     writeWakeFields(URef);
@@ -909,13 +909,13 @@ bool Foam::functionObjects::propellerInfo::write()
 }
 
 
-void Foam::functionObjects::propellerInfo::UpdateMesh(const mapPolyMesh& mpm)
+void Foam::functionObjects::propellerInfoSed::UpdateMesh(const mapPolyMesh& mpm)
 {
     updateSampleDiskCells();
 }
 
 
-void Foam::functionObjects::propellerInfo::movePoints(const polyMesh& mesh)
+void Foam::functionObjects::propellerInfoSed::movePoints(const polyMesh& mesh)
 {
     updateSampleDiskCells();
 }

@@ -1,5 +1,5 @@
-forces/forces.C
-forceCoeffs/forceCoeffs.C
-propellerInfo/propellerInfo.C
+forcesSed/forcesSed.C
+forceCoeffsSed/forceCoeffsSed.C
+propellerInfoSed/propellerInfoSed.C
 
 LIB = $(FOAM_MODULE_LIBBIN)/libforcesSedFoam

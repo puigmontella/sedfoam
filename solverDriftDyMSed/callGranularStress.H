@@ -119,7 +119,7 @@ else if  (granularRheology.on())
 
 // Particulate pressure and viscosity
     pa = granularRheology.pa();
-
+    pS=pa+pff;
     delta=granularRheology.delta();
 
     //if (debugInfo)
@@ -155,6 +155,7 @@ else
     // set pa and nuFraa to zero if kineticTheory and granularRheology are off
     pa = pa*scalar(0.0);
     pff= pff*scalar(0.0);
+    pS=pa+pff;
     nuFra = nua;
    muEff = nub*rhob*beta+nua*alpha*rhoa+rho*turbulenceb->nut();
 //    muEff = nub*rhob;

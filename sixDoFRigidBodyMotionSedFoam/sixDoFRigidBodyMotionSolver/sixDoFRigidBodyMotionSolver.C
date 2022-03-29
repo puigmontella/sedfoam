@@ -32,7 +32,7 @@ License
 #include "pointPatchDist.H"
 #include "pointConstraints.H"
 #include "uniformDimensionedFields.H"
-#include "forces.H"
+#include "forcesSed.H"
 #include "mathematicalConstants.H"
 
 // * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
@@ -237,7 +237,7 @@ void Foam::sixDoFRigidBodyMotionSolver::solve()
     {
         dictionary forcesDict;
 
-        forcesDict.add("type", functionObjects::forces::typeName);
+        forcesDict.add("type", functionObjects::forcesSed::typeName);
         forcesDict.add("patches", patches_);
         forcesDict.add("rhoInf", rhoInf_);
         forcesDict.add("rho", rhoName_);
@@ -245,7 +245,7 @@ void Foam::sixDoFRigidBodyMotionSolver::solve()
 
         vector oldPos = motion_.centreOfRotation();
 
-        functionObjects::forces f("forces", db(), forcesDict);
+        functionObjects::forcesSed f("forcesSed", db(), forcesDict);
 
         f.calcForcesMoment();
 

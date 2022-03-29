@@ -42,9 +42,9 @@ Description
 
     Results are written to multiple files as a function of time in the
     postProcessing/\<functionObjectName\> directory:
-    - force.dat          : forces
+    - forceSed.dat          : forces
     - moment.dat         : moments
-    - forceBin.dat       : force bins
+    - forceBin.dat       : forceSed bins
     - momentBin.dat      : moment bins
 
 Usage
@@ -72,8 +72,8 @@ Usage
     \table
         Property     | Description             | Required    | Default value
         type         | Type name: forces       | yes         |
-        log          | Write force data to standard output | no | no
-        writeFields  | Write the force and moment fields | no | no
+        log          | Write forceSed data to standard output | no | no
+        writeFields  | Write the forceSed and moment fields | no | no
         patches      | Patches included in the forces calculation | yes |
         p            | Pressure field name     | no          | p
         U            | Velocity field name     | no          | U
@@ -81,7 +81,7 @@ Usage
         CofR         | Centre of rotation (see below) | no   |
         porosity     | flag to include porosity contributions | no | no
         directForceDensity | Force density supplied directly (see below)|no|no
-        fD           | Name of force density field (see below) | no | fD
+        fD           | Name of forceSed density field (see below) | no | fD
     \endtable
 
     Bin data is optional, but if the dictionary is present, the entries must
@@ -96,8 +96,8 @@ Note
   - For incompressible cases, set \c rho to \c rhoInf.  You will then be
     required to provide a \c rhoInf value corresponding to the free-stream
     constant density.
-  - If the force density is supplied directly, set the \c directForceDensity
-    flag to 'yes', and supply the force density field using the \c
+  - If the forceSed density is supplied directly, set the \c directForceDensity
+    flag to 'yes', and supply the forceSed density field using the \c
     fDName entry
   - The centre of rotation (CofR) for moment calculations can either be
     specified by an \c CofR entry, or be taken from origin of the local
@@ -159,7 +159,7 @@ namespace functionObjects
                            Class forces Declaration
 \*---------------------------------------------------------------------------*/
 
-class forces
+class forcesSed
 :
     public fvMeshFunctionObject,
     public writeFile
@@ -169,8 +169,8 @@ protected:
 
     // Protected data
 
-        //- Pressure, viscous and porous force per bin
-        List<Field<vector>> force_;
+        //- Pressure, viscous and porous forceSed per bin
+        List<Field<vector>> forceSed_;
 
         //- Pressure, viscous and porous moment per bin
         List<Field<vector>> moment_;
@@ -197,17 +197,23 @@ protected:
 
             //- Name of pressure field
             word pName_;
-
+            
+            //- Name of particle pressure field
+            word pSedName_;
+            
+            //- Name of the effective dynamic viscosity field
+            word muEffName_;
+            
             //- Name of velocity field
             word UName_;
 
             //- Name of density field (optional)
             word rhoName_;
 
-            //- Is the force density being supplied directly?
+            //- Is the forceSed density being supplied directly?
             Switch directForceDensity_;
 
-            //- The name of the force density (fD) field
+            //- The name of the forceSed density (fD) field
             word fDName_;
 
             //- Reference density needed for incompressible calculations
@@ -279,7 +285,7 @@ protected:
         //- Initialise the collection bins
         void initialiseBins();
 
-        //- Reset the fields prior to accumulation of force/moments
+        //- Reset the fields prior to accumulation of forceSed/moments
         void resetFields();
 
         //- Return the effective viscous stress (laminar + turbulent).
@@ -300,27 +306,30 @@ protected:
         (
             const vectorField& Md,
             const vectorField& fN,
+            const vectorField& fNsolid,
             const vectorField& fT,
             const vectorField& fP,
             const vectorField& d
         );
 
-        //- Add patch contributions to force and moment fields
+        //- Add patch contributions to forceSed and moment fields
         void addToFields
         (
             const label patchi,
             const vectorField& Md,
             const vectorField& fN,
+            const vectorField& fNsolid,
             const vectorField& fT,
             const vectorField& fP
         );
 
-        //- Add cell contributions to force and moment fields
+        //- Add cell contributions to forceSed and moment fields
         void addToFields
         (
             const labelList& cellIDs,
             const vectorField& Md,
             const vectorField& fN,
+            const vectorField& fNsolid,
             const vectorField& fT,
             const vectorField& fP
         );
@@ -335,7 +344,7 @@ protected:
             autoPtr<OFstream>& osPtr
         ) const;
 
-        //- Write force data
+        //- Write forceSed data
         void writeForces();
 
         //- Helper function to write binned forces and moments
@@ -349,22 +358,22 @@ protected:
         void writeBins();
 
         //- No copy construct
-        forces(const forces&) = delete;
+        forcesSed(const forcesSed&) = delete;
 
         //- No copy assignment
-        void operator=(const forces&) = delete;
+        void operator=(const forcesSed&) = delete;
 
 
 public:
 
     //- Runtime type information
-    TypeName("forces");
+    TypeName("forcesSed");
 
 
     // Constructors
 
         //- Construct from Time and dictionary
-        forces
+        forcesSed
         (
             const word& name,
             const Time& runTime,
@@ -373,7 +382,7 @@ public:
         );
 
         //- Construct from objectRegistry and dictionary
-        forces
+        forcesSed
         (
             const word& name,
             const objectRegistry& obr,
@@ -383,7 +392,7 @@ public:
 
 
     //- Destructor
-    virtual ~forces() = default;
+    virtual ~forcesSed() = default;
 
 
     // Member Functions
@@ -394,7 +403,7 @@ public:
         //- Calculate the forces and moments
         virtual void calcForcesMoment();
 
-        //- Return the total force
+        //- Return the total forceSed
         virtual vector forceEff() const;
 
         //- Return the total moment

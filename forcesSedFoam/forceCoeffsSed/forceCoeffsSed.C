@@ -26,7 +26,7 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "forceCoeffs.H"
+#include "forceCoeffsSed.H"
 #include "dictionary.H"
 #include "Time.H"
 #include "Pstream.H"
@@ -42,15 +42,15 @@ namespace Foam
 {
 namespace functionObjects
 {
-    defineTypeNameAndDebug(forceCoeffs, 0);
-    addToRunTimeSelectionTable(functionObject, forceCoeffs, dictionary);
+    defineTypeNameAndDebug(forceCoeffsSed, 0);
+    addToRunTimeSelectionTable(functionObject, forceCoeffsSed, dictionary);
 }
 }
 
 
 // * * * * * * * * * * * * Protected Member Functions  * * * * * * * * * * * //
 
-void Foam::functionObjects::forceCoeffs::createFiles()
+void Foam::functionObjects::forceCoeffsSed::createFiles()
 {
     // Note: Only possible to create bin files after bins have been initialised
 
@@ -83,7 +83,7 @@ void Foam::functionObjects::forceCoeffs::createFiles()
 }
 
 
-void Foam::functionObjects::forceCoeffs::writeIntegratedHeader
+void Foam::functionObjects::forceCoeffsSed::writeIntegratedHeader
 (
     const word& header,
     Ostream& os
@@ -119,7 +119,7 @@ void Foam::functionObjects::forceCoeffs::writeIntegratedHeader
 }
 
 
-void Foam::functionObjects::forceCoeffs::writeBinHeader
+void Foam::functionObjects::forceCoeffsSed::writeBinHeader
 (
     const word& header,
     Ostream& os
@@ -174,7 +174,7 @@ void Foam::functionObjects::forceCoeffs::writeBinHeader
 }
 
 
-void Foam::functionObjects::forceCoeffs::writeIntegratedData
+void Foam::functionObjects::forceCoeffsSed::writeIntegratedData
 (
     const word& title,
     const List<Field<scalar>>& coeff
@@ -204,7 +204,7 @@ void Foam::functionObjects::forceCoeffs::writeIntegratedData
 }
 
 
-void Foam::functionObjects::forceCoeffs::writeBinData
+void Foam::functionObjects::forceCoeffsSed::writeBinData
 (
     const List<Field<scalar>> coeffs,
     Ostream& os
@@ -230,7 +230,7 @@ void Foam::functionObjects::forceCoeffs::writeBinData
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::functionObjects::forceCoeffs::forceCoeffs
+Foam::functionObjects::forceCoeffsSed::forceCoeffsSed
 (
     const word& name,
     const Time& runTime,
@@ -238,7 +238,7 @@ Foam::functionObjects::forceCoeffs::forceCoeffs
     const bool readFields
 )
 :
-    forces(name, runTime, dict, false),
+    forcesSed(name, runTime, dict, false),
     magUInf_(Zero),
     lRef_(Zero),
     Aref_(Zero),
@@ -261,9 +261,9 @@ Foam::functionObjects::forceCoeffs::forceCoeffs
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
-bool Foam::functionObjects::forceCoeffs::read(const dictionary& dict)
+bool Foam::functionObjects::forceCoeffsSed::read(const dictionary& dict)
 {
-    forces::read(dict);
+    forcesSed::read(dict);
 
     // Free stream velocity magnitude
     dict.readEntry("magUInf", magUInf_);
@@ -325,9 +325,9 @@ bool Foam::functionObjects::forceCoeffs::read(const dictionary& dict)
 }
 
 
-bool Foam::functionObjects::forceCoeffs::execute()
+bool Foam::functionObjects::forceCoeffsSed::execute()
 {
-    forces::calcForcesMoment();
+    forcesSed::calcForcesMoment();
 
     createFiles();
 
@@ -367,7 +367,7 @@ bool Foam::functionObjects::forceCoeffs::execute()
 
     forAll(liftCoeffs, i)
     {
-        const Field<vector> localForce(coordSys.localVector(force_[i]));
+        const Field<vector> localForce(coordSys.localVector(forceSed_[i]));
         const Field<vector> localMoment(coordSys.localVector(moment_[i]));
 
         dragCoeffs[i] = forceScaling*(localForce.component(0));
@@ -469,8 +469,8 @@ bool Foam::functionObjects::forceCoeffs::execute()
 
     if (writeFields_)
     {
-        const volVectorField& force =
-            lookupObject<volVectorField>(scopedName("force"));
+        const volVectorField& forceSed =
+            lookupObject<volVectorField>(scopedName("forceSed"));
 
         const volVectorField& moment =
             lookupObject<volVectorField>(scopedName("moment"));
@@ -484,7 +484,7 @@ bool Foam::functionObjects::forceCoeffs::execute()
         dimensionedScalar f0("f0", dimForce, Aref_*pDyn);
         dimensionedScalar m0("m0", dimForce*dimLength, Aref_*lRef_*pDyn);
 
-        forceCoeff == force/f0;
+        forceCoeff == forceSed/f0;
         momentCoeff == moment/m0;
     }
 
@@ -492,7 +492,7 @@ bool Foam::functionObjects::forceCoeffs::execute()
 }
 
 
-bool Foam::functionObjects::forceCoeffs::write()
+bool Foam::functionObjects::forceCoeffsSed::write()
 {
     if (writeFields_)
     {
