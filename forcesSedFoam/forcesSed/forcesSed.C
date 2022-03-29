@@ -81,7 +81,8 @@ void Foam::functionObjects::forcesSed::writeIntegratedHeader
     writeHeader(os, "");
     writeCommented(os, "Time");
     writeTabbed(os, "(total_x total_y total_z)");
-    writeTabbed(os, "(pressure_x pressure_y pressure_z)");
+    writeTabbed(os, "(pressureFluid_x pressureFluid_y pressureFluid_z)");
+    writeTabbed(os, "(pressureParticle_x pressureParticle_y pressureParticle_z)");
     writeTabbed(os, "(viscous_x viscous_y viscous_z)");
 
     if (porosity_)
@@ -136,7 +137,8 @@ void Foam::functionObjects::forcesSed::writeBinHeader
     {
         const word jn(Foam::name(j) + ':');
         os  << tab << jn << "(total_x total_y total_z)"
-            << tab << jn << "(pressure_x pressure_y pressure_z)"
+            << tab << jn << "(pressureFluid_x pressureFluid_y pressureFluid_z)"
+            << tab << jn << "(pressureParticle_x pressureFluid_y pressureFluid_z)"
             << tab << jn << "(viscous_x viscous_y viscous_z)";
 
         if (porosity_)
@@ -318,10 +320,12 @@ void Foam::functionObjects::forcesSed::resetFields()
     forceSed_[0] = Zero;
     forceSed_[1] = Zero;
     forceSed_[2] = Zero;
+    forceSed_[3] = Zero;
 
     moment_[0] = Zero;
     moment_[1] = Zero;
     moment_[2] = Zero;
+    moment_[3] = Zero;
 
     if (writeFields_)
     {
@@ -485,12 +489,15 @@ void Foam::functionObjects::forcesSed::applyBins
 {
     if (nBin_ == 1)
     {
-        forceSed_[0][0] += sum(fN+fNsolid);
-        forceSed_[1][0] += sum(fT);
-        forceSed_[2][0] += sum(fP);
-        moment_[0][0] += sum(Md^(fN+fNsolid));
-        moment_[1][0] += sum(Md^fT);
-        moment_[2][0] += sum(Md^fP);
+        forceSed_[0][0] += sum(fN);
+        forceSed_[1][0] += sum(fNsolid);
+        forceSed_[2][0] += sum(fT);
+        forceSed_[3][0] += sum(fP);
+        moment_[0][0] += sum(Md^fN);
+        moment_[1][0] += sum(Md^fNsolid);
+        moment_[2][0] += sum(Md^fT);
+        moment_[3][0] += sum(Md^fP);
+        
     }
     else
     {
@@ -500,12 +507,14 @@ void Foam::functionObjects::forcesSed::applyBins
         {
             label bini = min(max(floor(dd[i]/binDx_), 0), forceSed_[0].size() - 1);
 
-            forceSed_[0][bini] += fN[i]+ fNsolid[i];
-            forceSed_[1][bini] += fT[i];
-            forceSed_[2][bini] += fP[i];
-            moment_[0][bini] += Md[i]^(fN[i]+ fNsolid[i]);
-            moment_[1][bini] += Md[i]^fT[i];
-            moment_[2][bini] += Md[i]^fP[i];
+            forceSed_[0][bini] += fN[i];
+            forceSed_[1][bini] += fNsolid[i];
+            forceSed_[2][bini] += fT[i];
+            forceSed_[3][bini] += fP[i];
+            moment_[0][bini] += Md[i]^fN[i];
+            moment_[1][bini] += Md[i]^fNsolid[i];
+            moment_[2][bini] += Md[i]^fT[i];
+            moment_[3][bini] += Md[i]^fP[i];
         }
     }
 }
@@ -569,17 +578,20 @@ void Foam::functionObjects::forcesSed::writeIntegratedForceMoment
     const vectorField& fm0,
     const vectorField& fm1,
     const vectorField& fm2,
+    const vectorField& fm3,
     autoPtr<OFstream>& osPtr
 ) const
 {
-    vector pressure = sum(fm0);
-    vector viscous = sum(fm1);
-    vector porous = sum(fm2);
-    vector total = pressure + viscous + porous;
+    vector pressureFluid = sum(fm0);
+    vector pressureParticle = sum(fm1);
+    vector viscous = sum(fm2);
+    vector porous = sum(fm3);
+    vector total = pressureFluid+pressureParticle + viscous + porous;
 
     Log << "   SedFoam Version. Sum of " << descriptor.c_str() << nl
         << "        Total    : " << total << nl
-        << "        Pressure : " << pressure << nl
+        << "        pressureFluid : " << pressureFluid << nl
+        << "        pressureParticle : " << pressureParticle << nl
         << "        Viscous  : " << viscous << nl;
 
     if (porosity_)
@@ -594,7 +606,8 @@ void Foam::functionObjects::forcesSed::writeIntegratedForceMoment
         writeCurrentTime(os);
 
         os  << tab << total
-            << tab << pressure
+            << tab << pressureFluid
+            << tab << pressureParticle
             << tab << viscous;
 
         if (porosity_)
@@ -619,6 +632,7 @@ void Foam::functionObjects::forcesSed::writeForces()
         coordSys.localVector(forceSed_[0]),
         coordSys.localVector(forceSed_[1]),
         coordSys.localVector(forceSed_[2]),
+        coordSys.localVector(forceSed_[3]),
         forceFilePtr_
     );
 
@@ -628,6 +642,7 @@ void Foam::functionObjects::forcesSed::writeForces()
         coordSys.localVector(moment_[0]),
         coordSys.localVector(moment_[1]),
         coordSys.localVector(moment_[2]),
+        coordSys.localVector(moment_[3]),
         momentFilePtr_
     );
 
@@ -655,6 +670,8 @@ void Foam::functionObjects::forcesSed::writeBinnedForceMoment
             f[0][i] += f[0][i-1];
             f[1][i] += f[1][i-1];
             f[2][i] += f[2][i-1];
+            f[3][i] += f[3][i-1];
+
         }
     }
 
@@ -664,15 +681,16 @@ void Foam::functionObjects::forcesSed::writeBinnedForceMoment
 
     forAll(f[0], i)
     {
-        vector total = f[0][i] + f[1][i] + f[2][i];
+        vector total = f[0][i] + f[1][i] + f[2][i]+ f[3][i];
 
         os  << tab << total
             << tab << f[0][i]
-            << tab << f[1][i];
+            << tab << f[1][i]
+            << tab << f[2][i];
 
         if (porosity_)
         {
-            os  << tab << f[2][i];
+            os  << tab << f[3][i];
         }
     }
 
@@ -684,14 +702,17 @@ void Foam::functionObjects::forcesSed::writeBins()
 {
     const auto& coordSys = coordSysPtr_();
 
-    List<Field<vector>> lf(3);
-    List<Field<vector>> lm(3);
+    List<Field<vector>> lf(4);
+    List<Field<vector>> lm(4);
     lf[0] = coordSys.localVector(forceSed_[0]);
     lf[1] = coordSys.localVector(forceSed_[1]);
     lf[2] = coordSys.localVector(forceSed_[2]);
+    lf[3] = coordSys.localVector(forceSed_[3]);
+
     lm[0] = coordSys.localVector(moment_[0]);
     lm[1] = coordSys.localVector(moment_[1]);
     lm[2] = coordSys.localVector(moment_[2]);
+    lm[3] = coordSys.localVector(moment_[3]);
 
     writeBinnedForceMoment(lf, forceBinFilePtr_);
     writeBinnedForceMoment(lm, momentBinFilePtr_);
@@ -710,8 +731,8 @@ Foam::functionObjects::forcesSed::forcesSed
 :
     fvMeshFunctionObject(name, runTime, dict),
     writeFile(mesh_, name),
-    forceSed_(3),
-    moment_(3),
+    forceSed_(4),
+    moment_(4),
     forceFilePtr_(),
     momentFilePtr_(),
     forceBinFilePtr_(),
@@ -757,8 +778,8 @@ Foam::functionObjects::forcesSed::forcesSed
 :
     fvMeshFunctionObject(name, obr, dict),
     writeFile(mesh_, name),
-    forceSed_(3),
-    moment_(3),
+    forceSed_(4),
+    moment_(4),
     forceFilePtr_(),
     momentFilePtr_(),
     forceBinFilePtr_(),
@@ -1101,13 +1122,13 @@ void Foam::functionObjects::forcesSed::calcForcesMoment()
 
 Foam::vector Foam::functionObjects::forcesSed::forceEff() const
 {
-    return sum(forceSed_[0]) + sum(forceSed_[1]) + sum(forceSed_[2]);
+    return sum(forceSed_[0]) + sum(forceSed_[1]) + sum(forceSed_[2])+ sum(forceSed_[3]);
 }
 
 
 Foam::vector Foam::functionObjects::forcesSed::momentEff() const
 {
-    return sum(moment_[0]) + sum(moment_[1]) + sum(moment_[2]);
+    return sum(moment_[0]) + sum(moment_[1]) + sum(moment_[2])+ sum(moment_[3]);
 }
 
 
@@ -1127,13 +1148,13 @@ bool Foam::functionObjects::forcesSed::execute()
     }
 
     // Write state/results information
-    setResult("normalForce", sum(forceSed_[0]));
-    setResult("tangentialForce", sum(forceSed_[1]));
-    setResult("porousForce", sum(forceSed_[2]));
+    setResult("normalForce", sum(forceSed_[0]+forceSed_[1]));
+    setResult("tangentialForce", sum(forceSed_[2]));
+    setResult("porousForce", sum(forceSed_[3]));
 
-    setResult("normalMoment", sum(moment_[0]));
-    setResult("tangentialMoment", sum(moment_[1]));
-    setResult("porousMoment", sum(moment_[2]));
+    setResult("normalMoment", sum(moment_[0]+moment_[1]));
+    setResult("tangentialMoment", sum(moment_[2]));
+    setResult("porousMoment", sum(moment_[3]));
 
     return true;
 }

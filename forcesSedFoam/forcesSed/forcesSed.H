@@ -341,6 +341,7 @@ protected:
             const vectorField& fm0,
             const vectorField& fm1,
             const vectorField& fm2,
+            const vectorField& fm3,
             autoPtr<OFstream>& osPtr
         ) const;
 

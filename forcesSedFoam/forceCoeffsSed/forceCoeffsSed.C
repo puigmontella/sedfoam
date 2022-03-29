@@ -90,7 +90,7 @@ void Foam::functionObjects::forceCoeffsSed::writeIntegratedHeader
 ) const
 {
     const auto& coordSys = coordSysPtr_();
-    writeHeader(os, "Force coefficients");
+    writeHeader(os, "Force coefficients in SedFoam version");
     writeHeaderValue(os, "dragDir", coordSys.e1());
     writeHeaderValue(os, "sideDir", coordSys.e2());
     writeHeaderValue(os, "liftDir", coordSys.e3());
@@ -190,7 +190,7 @@ void Foam::functionObjects::forceCoeffsSed::writeIntegratedData
     const scalar porous = sum(coeff[2]);
     const scalar total = pressure + viscous + porous;
 
-    Info<< "SedFoam Version        " << title << "       : " << total << token::TAB
+    Info<< "        " << title << "       : " << total << token::TAB
         << '('
         << "pressure: " << pressure << token::TAB
         << "viscous: " << viscous;
