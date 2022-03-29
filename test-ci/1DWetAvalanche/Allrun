@@ -1,9 +1,0 @@
-#!/bin/sh
-
-rm -r 0
-# Create the mesh
-blockMesh
-
-# Run sedFoam
-sedFoam_rbgh
-
