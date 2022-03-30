@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Frequently Asked Questions | SedFOAM</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600&amp;subset=latin-ext" />
+  <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
+  <link rel="icon" href="sedFoam_favicon.png" type="image/png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#22272e" />
+</head>
+<body>
+<header><nav id="navigation">
+  <div class="m-container">
+    <div class="m-row">
+      <a href="index.html" id="m-navbar-brand" class="m-col-t-8 m-col-m-none m-left-m"><img src="sedFoam_favicon.png" alt="" />SedFOAM</a>
+      <div class="m-col-t-4 m-hide-m m-text-right m-nopadr">
+        <a href="#search" class="m-doc-search-icon" title="Search" onclick="return showSearch()"><svg style="height: 0.9rem;" viewBox="0 0 16 16">
+          <path id="m-doc-search-icon-path" d="m6 0c-3.31 0-6 2.69-6 6 0 3.31 2.69 6 6 6 1.49 0 2.85-0.541 3.89-1.44-0.0164 0.338 0.147 0.759 0.5 1.15l3.22 3.79c0.552 0.614 1.45 0.665 2 0.115 0.55-0.55 0.499-1.45-0.115-2l-3.79-3.22c-0.392-0.353-0.812-0.515-1.15-0.5 0.895-1.05 1.44-2.41 1.44-3.89 0-3.31-2.69-6-6-6zm0 1.56a4.44 4.44 0 0 1 4.44 4.44 4.44 4.44 0 0 1-4.44 4.44 4.44 4.44 0 0 1-4.44-4.44 4.44 4.44 0 0 1 4.44-4.44z"/>
+        </svg></a>
+        <a id="m-navbar-show" href="#navigation" title="Show navigation"></a>
+        <a id="m-navbar-hide" href="#" title="Hide navigation"></a>
+      </div>
+      <div id="m-navbar-collapse" class="m-col-t-12 m-show-m m-col-m-none m-right-m">
+        <div class="m-row">
+          <ol class="m-col-t-6 m-col-m-none">
+            <li>
+              <a href="pages.html">Pages</a>
+              <ol>
+                <li><a href="index.html">About sedFoam</a></li>
+                <li><a href="install.html">Installation</a></li>
+                <li><a href="howtodocker.html">How To work with sedFoam container</a></li>
+                <li><a href="howtogit.html">How To work with github</a></li>
+                <li><a href="faq.html" id="m-navbar-current">Frequently Asked Questions</a></li>
+                <li><a href="publicationList.html">Publications</a></li>
+              </ol>
+            </li>
+            <li>
+              <a href="pages.html">Tutorials</a>
+              <ol>
+                <li><a href="tutorials_laminar.html">Laminar flow tutorials</a></li>
+                <li><a href="tutorials_RAS.html">Reynolds-averaged flow tutorials</a></li>
+                <li><a href="tutorials_LES.html">LES tutorials</a></li>
+                <li><a href="inputs.html">Input Parameters</a></li>
+              </ol>
+            </li>
+          </ol>
+          <ol class="m-col-t-6 m-col-m-none" start="3">
+            <li>
+              <a href="governing.html">Governing equations</a>
+              <ol>
+                <li><a href="governing.html">Governing equations</a></li>
+                <li><a href="algoSedFoam.html">Algorithm</a></li>
+              </ol>
+            </li>
+            <li><a href="annotated.html">Classes</a></li>
+            <li><a href="files.html">Files</a></li>
+            <li class="m-show-m"><a href="#search" class="m-doc-search-icon" title="Search" onclick="return showSearch()"><svg style="height: 0.9rem;" viewBox="0 0 16 16">
+              <use href="#m-doc-search-icon-path" />
+            </svg></a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav></header>
+<main><article>
+  <div class="m-container m-container-inflatable">
+    <div class="m-row">
+      <div class="m-col-l-10 m-push-l-1">
+        <h1>
+          Frequently Asked Questions
+        </h1>
+        <p>Answers to FAQ.</p>
+        <nav class="m-block m-default">
+          <h3>Contents</h3>
+          <ul>
+            <li><a href="#sedfoam_app">Which non-standard applications does sedFoam consist?</a></li>
+            <li><a href="#parallel">Are sedFoam applications parallel?</a></li>
+            <li><a href="#industry">Is there any example that sedFoam was applied onto industry-related engineering problems?</a></li>
+            <li><a href="#limitations">What are the limitations of sedFoam; what remains unresolved?</a></li>
+            <li><a href="#maintain_duration">Roughly, how long do you or your colleagues plan to maintain sedFoam?</a></li>
+            <li><a href="#CFL">How to choose the CFL number?</a></li>
+            <li><a href="#alphaMax">How to choose the alphaMax value?</a></li>
+            <li><a href="#relaxPa">What is the meaning of relaxPa?</a></li>
+            <li><a href="#SUS">Which value shall I use for SUS?</a></li>
+          </ul>
+        </nav>
+<p>Here is a list of Frequently Asked Questions about sedFoam:</p><section id="sedfoam_app"><h2><a href="#sedfoam_app">Which non-standard applications does sedFoam consist?</a></h2><p>SedFoam is an Eulerian two-phase model for a wide range of sediment transport processes. By solving the mass and momentum equations for the water phase and fluid phase with closure on turbulence, particle stress, and interphase momentum coupling, SedFoam resolves the full dynamics of sediment transport throughout the entire water column and down to the immobile porous sediment bed without the need to artificially separate transport into near-bed load and suspended load layers. Compared with the conventional single-phase sediment transport model, SedFoam does not require empirical closures on reference concentration, bedload transport rate, and Exner equation for updating the bathymetry evolution.</p></section><section id="parallel"><h2><a href="#parallel">Are sedFoam applications parallel?</a></h2><p>sedFoam is parallel (many thanks to openfoam)</p></section><section id="industry"><h2><a href="#industry">Is there any example that sedFoam was applied onto industry-related engineering problems?</a></h2><p>sedFoam has been used for Three-dimensional scour simulations (cf. paper in Advances in Water Resources : <a href="https://doi.org/10.1016/j.advwatres.2020.103544">https:/<wbr />/<wbr />doi.org/<wbr />10.1016/<wbr />j.advwatres.2020.103544</a>). The French company, Artelia, plans to use the software in its activities but the cost of calculation is prohibitive for 3D calculations on real scale cases.</p></section><section id="limitations"><h2><a href="#limitations">What are the limitations of sedFoam; what remains unresolved?</a></h2><p>From an industrial point of view, it is surely the computational cost. A model resolving a mixture can improve the model. And there is a lot of possible improvement : update of the kinetic theory (Done!), implementation of the finite size model in the official sedfoam release : <a href="http://dx.doi.org/10.1017%2Fjfm.2021.4">http:/<wbr />/<wbr />dx.doi.org/<wbr />10.1017%2Fjfm.2021.4</a>, integrate the dilatancy effects (Done!), implementation of dynamic mesh functionality... We work on all that.</p></section><section id="maintain_duration"><h2><a href="#maintain_duration">Roughly, how long do you or your colleagues plan to maintain sedFoam?</a></h2><p>Cyrille Bonamy, Julien Chauchat, Tian-Jian Hsu and other people involved in the project do not plan to stop the maintenance of the software. We are three people with a permanent position, and so there is no problem for the next few years.</p></section><section id="CFL"><h2><a href="#CFL">How to choose the CFL number?</a></h2><p>sedFoam is based on the PISO algorithm which is an unsteady flow algorithm even when we are looking at steady-state solutions. Another point is the coupling between the two-phase which adds another constraint on the time step. The choice of the time step also depends on the ddt scheme that you are using, values of order unity is possible when using upwind schemes but lower values are required when using second order temporal schemes such as backward or Crank-Nicholson scheme. According to our experience, it is necessary to use a CFL number smaller than unity and sometimes smaller than 0.3 or even less (0.1). The stability of the model remains a difficult problem and more theoretical work is needed to improve this point.</p></section><section id="alphaMax"><h2><a href="#alphaMax">How to choose the alphaMax value?</a></h2><p>alphaMax is prescribed in different places in the code and has different meanings. Here is a quick overview, the value set in ppPropertiesDict corresponds to the maximum packing fraction which for sphere is 0.635, the value set in granularRheologyProperties, denoted as alphaMaxG, corresponds to the maximum packing fraction in the phi(I) or phi(Iv) rheology and the value set in kineticTheoryProperties corresponds to the maximum packing fraction for the kinetic theory closures.</p></section><section id="relaxPa"><h2><a href="#relaxPa">What is the meaning of relaxPa?</a></h2><p>relaxPa is a coefficient that controls the shear induced pressure relaxation toward the predicted value by the phi(I) or phi(Iv) rheology considered as the steady-state solution. The relaxation time-scale is given by:</p><p>T_relaxPa = 1/(relaxPa alpha magD)</p><p>where magD is the magnitude of the velocity shear rate. This equation is solve in granularRheology.solve(...). A smaller value of relaxPa increases the relaxation time-scale and increases the stability while a larger value decreases the time-scale and leads to more unstable solution (the steady-state solution is imposed more instantaneously).</p></section><section id="SUS"><h2><a href="#SUS">Which value shall I use for SUS?</a></h2><p>SUS corresponds to the inverse of the turbulent Schmidt number, according to van Rijn (1984) its values is an increasing function of Ws/u* as:</p><p>SUS = 1 + 2 (Ws/u*)^2</p><p>in the range Ws/u* [0;1] and shall not exceed 3.</p><p>The user can either use a constant value in twophaseRASProperties or activate the local model by switching on SUSlocal in the same file (default is false). In the local model, u* is replaced by the squareroot of the local magnitude of the Reynolds Shear stress. The local value is clipped to 3.</p><p>Van Rijn, L. C. (1984). Sediment transport, part ii: Suspended load transport. J. Hydraul. Eng., 110:1613–1641.</p></section>
+      </div>
+    </div>
+  </div>
+</article></main>
+<div class="m-doc-search" id="search">
+  <a href="#!" onclick="return hideSearch()"></a>
+  <div class="m-container">
+    <div class="m-row">
+      <div class="m-col-m-8 m-push-m-2">
+        <div class="m-doc-search-header m-text m-small">
+          <div><span class="m-label m-default">Tab</span> / <span class="m-label m-default">T</span> to search, <span class="m-label m-default">Esc</span> to close</div>
+          <div id="search-symbolcount">&hellip;</div>
+        </div>
+        <div class="m-doc-search-content">
+          <form>
+            <input type="search" name="q" id="search-input" placeholder="Loading &hellip;" disabled="disabled" autofocus="autofocus" autocomplete="off" spellcheck="false" />
+          </form>
+          <noscript class="m-text m-danger m-text-center">Unlike everything else in the docs, the search functionality <em>requires</em> JavaScript.</noscript>
+          <div id="search-help" class="m-text m-dim m-text-center">
+            <p class="m-noindent">Search for symbols, directories, files, pages, OpenGL, GLSL, Vulkan and OpenAL APIs. You can omit any prefix from the symbol or file path; adding a <code>:</code> or <code>/</code> suffix lists all members of given symbol or directory.</p> <p class="m-noindent">Use <span class="m-label m-dim">&darr;</span> / <span class="m-label m-dim">&uarr;</span> to navigate through the list, <span class="m-label m-dim">Enter</span> to go. <span class="m-label m-dim">Tab</span> autocompletes common prefix, you can copy a link to the result using <span class="m-label m-dim">⌘</span> <span class="m-label m-dim">L</span> while <span class="m-label m-dim">⌘</span> <span class="m-label m-dim">M</span> produces a Markdown link.</p>
+          </div>
+          <div id="search-notfound" class="m-text m-warning m-text-center">Sorry, nothing was found.</div>
+          <ul id="search-results"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="search-v2.js"></script>
+<script src="searchdata-v2.js" async="async"></script>
+<footer><nav>
+  <div class="m-container">
+    <div class="m-row">
+      <div class="m-col-l-10 m-push-l-1">
+        <p>sedFoam docs. Part of the <a href="https://github.com/SedFoam/sedfoam">sedFoam project</a>, copyright © <a href="cyrille.bonamy@univ-grenoble-alpes.fr/">Cyrille Bonamy</a> and <a href="credits-contributors.html">contributors</a>, 2015&ndash;2021.<br />Generated by <a href="https://doxygen.org/">Doxygen</a> 1.9.3 and <a href="https://mcss.mosra.cz/">m.css</a>. Contact the team via <a href="https://github.com/SedFoam/sedfoam">GitHub</a>, <a href="mailto:cyrille.bonamy@univ-grenoble-alpes.fr">e-mail</a> or <a href="https://twitter.com/sedfoam">Twitter</a>.</p>
+      </div>
+    </div>
+  </div>
+</nav></footer>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>How To work with sedFoam container | SedFOAM</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600&amp;subset=latin-ext" />
+  <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
+  <link rel="icon" href="sedFoam_favicon.png" type="image/png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#22272e" />
+</head>
+<body>
+<header><nav id="navigation">
+  <div class="m-container">
+    <div class="m-row">
+      <a href="index.html" id="m-navbar-brand" class="m-col-t-8 m-col-m-none m-left-m"><img src="sedFoam_favicon.png" alt="" />SedFOAM</a>
+      <div class="m-col-t-4 m-hide-m m-text-right m-nopadr">
+        <a href="#search" class="m-doc-search-icon" title="Search" onclick="return showSearch()"><svg style="height: 0.9rem;" viewBox="0 0 16 16">
+          <path id="m-doc-search-icon-path" d="m6 0c-3.31 0-6 2.69-6 6 0 3.31 2.69 6 6 6 1.49 0 2.85-0.541 3.89-1.44-0.0164 0.338 0.147 0.759 0.5 1.15l3.22 3.79c0.552 0.614 1.45 0.665 2 0.115 0.55-0.55 0.499-1.45-0.115-2l-3.79-3.22c-0.392-0.353-0.812-0.515-1.15-0.5 0.895-1.05 1.44-2.41 1.44-3.89 0-3.31-2.69-6-6-6zm0 1.56a4.44 4.44 0 0 1 4.44 4.44 4.44 4.44 0 0 1-4.44 4.44 4.44 4.44 0 0 1-4.44-4.44 4.44 4.44 0 0 1 4.44-4.44z"/>
+        </svg></a>
+        <a id="m-navbar-show" href="#navigation" title="Show navigation"></a>
+        <a id="m-navbar-hide" href="#" title="Hide navigation"></a>
+      </div>
+      <div id="m-navbar-collapse" class="m-col-t-12 m-show-m m-col-m-none m-right-m">
+        <div class="m-row">
+          <ol class="m-col-t-6 m-col-m-none">
+            <li>
+              <a href="pages.html">Pages</a>
+              <ol>
+                <li><a href="index.html">About sedFoam</a></li>
+                <li><a href="install.html">Installation</a></li>
+                <li><a href="howtodocker.html" id="m-navbar-current">How To work with sedFoam container</a></li>
+                <li><a href="howtogit.html">How To work with github</a></li>
+                <li><a href="faq.html">Frequently Asked Questions</a></li>
+                <li><a href="publicationList.html">Publications</a></li>
+              </ol>
+            </li>
+            <li>
+              <a href="pages.html">Tutorials</a>
+              <ol>
+                <li><a href="tutorials_laminar.html">Laminar flow tutorials</a></li>
+                <li><a href="tutorials_RAS.html">Reynolds-averaged flow tutorials</a></li>
+                <li><a href="tutorials_LES.html">LES tutorials</a></li>
+                <li><a href="inputs.html">Input Parameters</a></li>
+              </ol>
+            </li>
+          </ol>
+          <ol class="m-col-t-6 m-col-m-none" start="3">
+            <li>
+              <a href="governing.html">Governing equations</a>
+              <ol>
+                <li><a href="governing.html">Governing equations</a></li>
+                <li><a href="algoSedFoam.html">Algorithm</a></li>
+              </ol>
+            </li>
+            <li><a href="annotated.html">Classes</a></li>
+            <li><a href="files.html">Files</a></li>
+            <li class="m-show-m"><a href="#search" class="m-doc-search-icon" title="Search" onclick="return showSearch()"><svg style="height: 0.9rem;" viewBox="0 0 16 16">
+              <use href="#m-doc-search-icon-path" />
+            </svg></a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav></header>
+<main><article>
+  <div class="m-container m-container-inflatable">
+    <div class="m-row">
+      <div class="m-col-l-10 m-push-l-1">
+        <h1>
+          How To work with sedFoam container
+        </h1>
+        <p>How To use sedFoam docker to test and use sedFoam.</p>
+        <nav class="m-block m-default">
+          <h3>Contents</h3>
+          <ul>
+            <li><a href="#configuration">Configuration of the sedFoam docker</a></li>
+            <li>
+              <a href="#howtouse">How to use/launch sedFoam docker ?</a>
+              <ul>
+                <li>
+                  <a href="#launch">launch/initiate docker:</a>
+                  <ul>
+                    <li><a href="#notebook">In jupyter notebook using your web browser (macOS, linux, windows):</a></li>
+                    <li><a href="#macOS">On macOS with GUI (graphical interface without paraview):</a></li>
+                    <li><a href="#windows">On Windows with GUI (graphical interface without paraview):</a></li>
+                    <li><a href="#linux">On linux with GUI (graphical interface without paraview):</a></li>
+                  </ul>
+                </li>
+                <li><a href="#start">Start a container (if existing and not running) :</a></li>
+                <li><a href="#attach">Attach to a running container (if existing and running):</a></li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+<p>Here is a How To about using the sedFoam docker.</p><p>The prerequisites is to install Docker : <a href="https://docs.docker.com/engine/install/">https:/<wbr />/<wbr />docs.docker.com/<wbr />engine/<wbr />install/<wbr /></a></p><p>This page is organised in two sections:</p><ul><li><a href="howtodocker.html#configuration" class="m-doc">Configuration of the sedFoam docker</a></li><li><a href="howtodocker.html#howtouse" class="m-doc">How to use/launch sedFoam docker ?</a></li></ul><section id="configuration"><h2><a href="#configuration">Configuration of the sedFoam docker</a></h2><p>Operating System : Ubuntu focal</p><p>Openfoam version : v2106 (openfoam.com) with all tutorials and source files</p><p>sedFoam version : the latest of the develop branch</p><p>user : sudofoam (with sudo)</p><p>Installed packages : swak4foam, python3-numpy, python3-matplotlib, fluidfoam, vim...</p><p>Official link : <a href="https://hub.docker.com/r/cbonamy/sedfoam_v2106_ubuntu">https://hub.docker.com/r/cbonamy/sedfoam_<wbr />v2106_<wbr />ubuntu</a></p><p>Dockerfile : <a href="https://github.com/SedFoam/sedfoam/blob/master/docker/Dockerfile">https:/<wbr />/<wbr />github.com/<wbr />SedFoam/<wbr />sedfoam/<wbr />blob/<wbr />master/<wbr />docker/<wbr />Dockerfile</a></p><p>Extended docker (supporting notebook) : <a href="https://hub.docker.com/r/cbonamy/sedfoam_2106_notebook">https://hub.docker.com/r/cbonamy/sedfoam_<wbr />2106_<wbr />notebook</a></p><p>Please note that Paraview is not included in the sedFoam docker. The users are encouraged to install and use Paraview on the host machine.</p></section><section id="howtouse"><h2><a href="#howtouse">How to use/launch sedFoam docker ?</a></h2><section id="launch"><h3><a href="#launch">launch/initiate docker:</a></h3><ul><li><a href="howtodocker.html#notebook" class="m-doc">In jupyter notebook using your web browser (macOS, linux, windows):</a></li><li><a href="howtodocker.html#macOS" class="m-doc">On macOS with GUI (graphical interface without paraview):</a></li><li><a href="howtodocker.html#windows" class="m-doc">On Windows with GUI (graphical interface without paraview):</a></li><li><a href="howtodocker.html#linux" class="m-doc">On linux with GUI (graphical interface without paraview):</a></li></ul><section id="notebook"><h4><a href="#notebook">In jupyter notebook using your web browser (macOS, linux, windows):</a></h4><p>On host :</p><ul><li><p>initiate docker :</p><pre>    docker run -p 8888:8888 --name &quot;sedfoam_2106_notebook&quot; -v=&quot;/Users/toto&quot;:/home/sudofoam/workingDir &quot;cbonamy/sedfoam_2106_notebook&quot;
+</pre></li><li>use your web browser :<ul><li>The previous command will give you a url like <a href="http://127.0.0.1:8888/?token=ae5f299fc77312f079793a9ca818d5973ed4df5a5a85b9fa">http:/<wbr />/<wbr />127.0.0.1:8888/<wbr />?token=ae5f299fc77312f079793a9ca818d5973ed4df5a5a85b9fa</a></li><li>Just copy and paste the link into your web browser</li></ul></li></ul><p>The -v=&quot;/Users/toto&quot;:/home/sudofoam/workingDir option is not mmandatory. It is used to mmount a shared space between host and jupyter notebook. If you use this option, please adapt the directories to your configuration. In this example, &quot;/Users/toto&quot; will be mounted on the vm in /home/sudofoam/workingDir.</p></section><section id="macOS"><h4><a href="#macOS">On macOS with GUI (graphical interface without paraview):</a></h4><p>On host :</p><ul><li>configure xquartz<ul><li>install xquartz to allow network connection</li><li>in Xquartz : Go to Preferences &gt; Security</li><li>and Check &quot;allow connections from network clients&quot;</li><li><p>in a terminal :</p><pre>    IP=$(ifconfig en0 | grep inet | awk &#x27;$1==&quot;inet&quot; {print $2}&#x27;)
+    xhost + $IP
+</pre></li></ul></li><li><p>initiate docker :</p><pre>    docker run -it --net=host -e DISPLAY=$IP:0 -v /tmp/.X11-unix:/tmp/.X11-unix --name &quot;sedfoam_v2106&quot; --workdir=&quot;/home/sudofoam&quot; -v=&quot;/Users/toto&quot;:/home/sudofoam/workingDir &quot;cbonamy/sedfoam_v2106_ubuntu&quot; /bin/bash
+</pre><p>Please adapt the directories to your configuration. In this example, &quot;/Users/toto&quot; will be mounted on the vm in /home/sudofoam/workingDir. If you change IP, for example when returning from work to home, change the Display variable (in the Docker) accordingly.</p></li></ul></section><section id="windows"><h4><a href="#windows">On Windows with GUI (graphical interface without paraview):</a></h4><ul><li>configure Docker Engine for windows (with all system requirements : WSL2, step 1-5 from <a href="https://docs.microsoft.com/en-us/windows/wsl/install-win10">https:/<wbr />/<wbr />docs.microsoft.com/<wbr />en-us/<wbr />windows/<wbr />wsl/<wbr />install-win10</a>)</li><li>configure vcxsrv : <a href="https://sourceforge.net/projects/vcxsrv/">https:/<wbr />/<wbr />sourceforge.net/<wbr />projects/<wbr />vcxsrv/<wbr /></a> (disable access control in extra settings)</li><li><p>Get your IP and set DISPLAY variable :</p><pre>    set-variable -name DISPLAY -value YOUR-IP:0.0
+</pre></li><li><p>initiate docker :</p><pre>    docker run -it --net=host --env DISPLAY=$DISPLAY --name &quot;sedfoam_v2106&quot; --workdir=&quot;/home/sudofoam&quot; -v=&quot;c:/mydataspace&quot;:/home/sudofoam/workingDir &quot;cbonamy/sedfoam_v2106_ubuntu&quot; /bin/bash
+</pre><p>Please adapt the directories to your configuration. In this example, &quot;c:/mydataspace&quot; will be mounted on the vm in /home/sudofoam/workingDir. If you change IP, for example when returning from work to home, change the Display variable (in the Docker) accordingly.</p></li></ul></section><section id="linux"><h4><a href="#linux">On linux with GUI (graphical interface without paraview):</a></h4><pre>    docker run -it --net=host --env DISPLAY=$DISPLAY --volume $XAUTH:/root/.Xauthority --name &quot;sedfoam_v2106&quot; --workdir=&quot;/home/sudofoam&quot; -v=&quot;/home/users/toto&quot;:/home/sudofoam/workingDir &quot;cbonamy/sedfoam_v2106_ubuntu&quot; /bin/bash
+</pre><p>Please adapt the directories to your configuration. In this example, &quot;/home/users/toto&quot; will be mounted on the vm in /home/sudofoam/workingDir. If you change IP, for example when returning from work to home, change the Display variable (in the Docker) accordingly.</p></section></section><section id="start"><h3><a href="#start">Start a container (if existing and not running) :</a></h3><pre>    docker container start sedfoam_v2106
+</pre></section><section id="attach"><h3><a href="#attach">Attach to a running container (if existing and running):</a></h3><pre>    docker container attach sedfoam_v2106
+</pre><p>Now hack and enjoy! The sedFoam files will be in /home/sudofoam and the solver is already compiled. Note that the bashrc file from openfoam is here : /openfoam/bash.rc</p></section></section>
+      </div>
+    </div>
+  </div>
+</article></main>
+<div class="m-doc-search" id="search">
+  <a href="#!" onclick="return hideSearch()"></a>
+  <div class="m-container">
+    <div class="m-row">
+      <div class="m-col-m-8 m-push-m-2">
+        <div class="m-doc-search-header m-text m-small">
+          <div><span class="m-label m-default">Tab</span> / <span class="m-label m-default">T</span> to search, <span class="m-label m-default">Esc</span> to close</div>
+          <div id="search-symbolcount">&hellip;</div>
+        </div>
+        <div class="m-doc-search-content">
+          <form>
+            <input type="search" name="q" id="search-input" placeholder="Loading &hellip;" disabled="disabled" autofocus="autofocus" autocomplete="off" spellcheck="false" />
+          </form>
+          <noscript class="m-text m-danger m-text-center">Unlike everything else in the docs, the search functionality <em>requires</em> JavaScript.</noscript>
+          <div id="search-help" class="m-text m-dim m-text-center">
+            <p class="m-noindent">Search for symbols, directories, files, pages, OpenGL, GLSL, Vulkan and OpenAL APIs. You can omit any prefix from the symbol or file path; adding a <code>:</code> or <code>/</code> suffix lists all members of given symbol or directory.</p> <p class="m-noindent">Use <span class="m-label m-dim">&darr;</span> / <span class="m-label m-dim">&uarr;</span> to navigate through the list, <span class="m-label m-dim">Enter</span> to go. <span class="m-label m-dim">Tab</span> autocompletes common prefix, you can copy a link to the result using <span class="m-label m-dim">⌘</span> <span class="m-label m-dim">L</span> while <span class="m-label m-dim">⌘</span> <span class="m-label m-dim">M</span> produces a Markdown link.</p>
+          </div>
+          <div id="search-notfound" class="m-text m-warning m-text-center">Sorry, nothing was found.</div>
+          <ul id="search-results"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="search-v2.js"></script>
+<script src="searchdata-v2.js" async="async"></script>
+<footer><nav>
+  <div class="m-container">
+    <div class="m-row">
+      <div class="m-col-l-10 m-push-l-1">
+        <p>sedFoam docs. Part of the <a href="https://github.com/SedFoam/sedfoam">sedFoam project</a>, copyright © <a href="cyrille.bonamy@univ-grenoble-alpes.fr/">Cyrille Bonamy</a> and <a href="credits-contributors.html">contributors</a>, 2015&ndash;2021.<br />Generated by <a href="https://doxygen.org/">Doxygen</a> 1.9.3 and <a href="https://mcss.mosra.cz/">m.css</a>. Contact the team via <a href="https://github.com/SedFoam/sedfoam">GitHub</a>, <a href="mailto:cyrille.bonamy@univ-grenoble-alpes.fr">e-mail</a> or <a href="https://twitter.com/sedfoam">Twitter</a>.</p>
+      </div>
+    </div>
+  </div>
+</nav></footer>
+</body>
+</html>
