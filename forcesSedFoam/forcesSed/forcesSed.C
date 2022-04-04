@@ -740,6 +740,7 @@ Foam::functionObjects::forcesSed::forcesSed
     patchSet_(),
     pName_("p"),
     pSedName_("pS"),
+    alphaName_("alpha.a"),
     muEffName_("muEff"),
     UName_("U"),
     rhoName_("rho"),
@@ -787,6 +788,7 @@ Foam::functionObjects::forcesSed::forcesSed
     patchSet_(),
     pName_("p"),
     pSedName_("pS"),
+    alphaName_("alpha.a"),
     muEffName_("muEff"),
     UName_("U"),
     rhoName_("rho"),
@@ -863,6 +865,10 @@ bool Foam::functionObjects::forcesSed::read(const dictionary& dict)
         if (dict.readIfPresent<word>("pS", pSedName_))
         {
             Info<< "    pS: " << pSedName_ << endl;
+        }
+        if (dict.readIfPresent<word>("alpha.a", alphaName_))
+        {
+            Info<< "    alpha: " << alphaName_ << endl;
         }
         if (dict.readIfPresent<word>("muEff", muEffName_))
         {
@@ -1038,6 +1044,8 @@ void Foam::functionObjects::forcesSed::calcForcesMoment()
     {
         const volScalarField& p = lookupObject<volScalarField>(pName_);
         const volScalarField& pS = lookupObject<volScalarField>(pSedName_);
+        const volScalarField& alpha = lookupObject<volScalarField>(alphaName_);
+
 
         const surfaceVectorField::Boundary& Sfb = mesh_.Sf().boundaryField();
 
@@ -1054,11 +1062,11 @@ void Foam::functionObjects::forcesSed::calcForcesMoment()
 
             vectorField fN
             (
-                rho(p)*Sfb[patchi]*(p.boundaryField()[patchi]- pRef)
+                rho(p)*Sfb[patchi]*((1-alpha.boundaryField()[patchi])*p.boundaryField()[patchi]- pRef)
             );
             vectorField fNsolid
             (
-                rho(p)*Sfb[patchi]*(pS.boundaryField()[patchi] - pRef)
+                rho(p)*Sfb[patchi]*(alpha.boundaryField()[patchi]*pS.boundaryField()[patchi] - pRef)
             );
             vectorField fT(Sfb[patchi] & devRhoReffb[patchi]);
 

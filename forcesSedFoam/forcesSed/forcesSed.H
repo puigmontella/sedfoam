@@ -201,6 +201,9 @@ protected:
             //- Name of particle pressure field
             word pSedName_;
             
+            //- Name of particle concentration
+            word alphaName_;
+            
             //- Name of the effective dynamic viscosity field
             word muEffName_;
             
