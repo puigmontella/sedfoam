@@ -1,0 +1,11 @@
+<map id="dragModel" name="dragModel">
+<area shape="rect" id="node1" title=" " alt="" coords="5,183,96,209"/>
+<area shape="rect" id="node2" href="$classFoam_1_1DallaValle.html" title="H, Enwald, E. Peirano, A&#45;E Almstedt &#39;Eulerian Two&#45;Phase Flow Theory Applied to Fluidization&#39; Int...." alt="" coords="199,5,287,32"/>
+<area shape="rect" id="node3" href="$classFoam_1_1Ergun.html" title="H, Enwald, E. Peirano, A&#45;E Almstedt &#39;Eulerian Two&#45;Phase Flow Theory Applied to Fluidization&#39; Int...." alt="" coords="213,56,272,83"/>
+<area shape="rect" id="node4" href="$classFoam_1_1Gibilaro.html" title="H, Enwald, E. Peirano, A&#45;E Almstedt &#39;Eulerian Two&#45;Phase Flow Theory Applied to Fluidization&#39; Int...." alt="" coords="206,107,279,133"/>
+<area shape="rect" id="node5" href="$classFoam_1_1GidaspowErgunWenYu.html" title="D. Gidaspow, Multiphase flow and fluidization, Academic Press, New York, 1994." alt="" coords="159,157,326,184"/>
+<area shape="rect" id="node6" href="$classFoam_1_1GidaspowSchillerNaumann.html" title="H, Enwald, E. Peirano, A&#45;E Almstedt &#39;Eulerian Two&#45;Phase Flow Theory Applied to Fluidization&#39; Int...." alt="" coords="144,208,341,235"/>
+<area shape="rect" id="node7" href="$classFoam_1_1SchillerNaumann.html" title=" " alt="" coords="176,259,309,285"/>
+<area shape="rect" id="node8" href="$classFoam_1_1SyamlalOBrien.html" title="Syamlal, M., Rogers, W. and O&#39;Brien, T. J. (1993) MFIX documentation, Theory Guide...." alt="" coords="183,309,302,336"/>
+<area shape="rect" id="node9" href="$classFoam_1_1WenYu.html" title="H, Enwald, E. Peirano, A&#45;E Almstedt &#39;Eulerian Two&#45;Phase Flow Theory Applied to Fluidization&#39; Int...." alt="" coords="210,360,275,387"/>
+</map>

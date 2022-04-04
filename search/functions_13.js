@@ -1,0 +1,17 @@
+var searchData=
+[
+  ['u_0',['U',['../classFoam_1_1phaseModel.html#a29941fe19a70a5c3ea43a4a454776279',1,'Foam::phaseModel::U()'],['../classFoam_1_1phaseModel.html#a147572a890d8daa1e61757087f76b458',1,'Foam::phaseModel::U() const']]],
+  ['uaeqn_1',['UaEqn',['../pU_2UEqns_8H.html#a7671ff6033643b687e7dc931128f30fb',1,'UaEqn((scalar(1.0)+Cvm *rhob *beta/rhoa) *(fvm::ddt(Ua)+fvm::div(phia, Ua) - fvm::Sp(fvc::div(phia), Ua)) - scalar(1.0)/(alpha+alphaSmall) *fvm::laplacian(nuFra, Ua) - fvm::laplacian(nuEffa, Ua)+fvm::div(phiRa, Ua, &quot;div(phiRa,Ua)&quot;) - fvm::Sp(fvc::div(phiRa), Ua)+fvc::div(Rca)+(fvc::grad(alpha)/(alpha+alphaSmall) &amp;Rca)==- susa - fvc::grad(pff)/(rhoa *(alpha+alphaSmall)) - beta/rhoa *(liftCoeff - Cvm *rhob *DDtUb)+fvOptions(alpha, Ua)):&#160;UEqns.H'],['../pUf_2UEqns_8H.html#aab957d68006576a41af992aa98019b7f',1,'UaEqn((scalar(1.0)+Cvm *rhob *beta/rhoa) *(fvm::ddt(Ua)+fvm::div(phia, Ua) - fvm::Sp(fvc::div(phia), Ua)) - scalar(1.0)/(alpha+alphaSmall) *fvm::laplacian(nuFra, Ua) - fvm::laplacian(nuEffa, Ua)+fvm::div(phiRa, Ua, &quot;div(phiRa,Ua)&quot;) - fvm::Sp(fvc::div(phiRa), Ua)==- susa - beta/rhoa *(liftCoeff - Cvm *rhob *DDtUb)+fvOptions(alpha, Ua)):&#160;UEqns.H']]],
+  ['uameanf_2',['UaMeanF',['../createFavreAveraging_8H.html#a8cdd733bdbc8ca82c2fff2af76fb39e9',1,'createFavreAveraging.H']]],
+  ['uaprime2meanf_3',['UaPrime2MeanF',['../createFavreAveraging_8H.html#a097e7ec860c498416ee631a58bec18c6',1,'createFavreAveraging.H']]],
+  ['uaprimef_4',['UaPrimeF',['../createFavreAveraging_8H.html#ab9dc359b90eac54df2d98b19a14f05ea',1,'createFavreAveraging.H']]],
+  ['ubeqn_5',['UbEqn',['../pUf_2UEqns_8H.html#a03b07a34fb944b8551533c5ca911e722',1,'UbEqn((scalar(1.0)+Cvm *rhob *alpha/rhob) *(fvm::ddt(Ub)+fvm::div(phib, Ub) - fvm::Sp(fvc::div(phib), Ub)) - fvm::laplacian(nuEffb, Ub)+fvm::div(phiRb, Ub, &quot;div(phiRb,Ub)&quot;) - fvm::Sp(fvc::div(phiRb), Ub)==susb+alpha/rhob *(liftCoeff+Cvm *rhob *DDtUa)+fvOptions(beta, Ub)):&#160;UEqns.H'],['../pU_2UEqns_8H.html#a1c81d064aa69c0f1c15c23dab525b9ca',1,'UbEqn((scalar(1.0)+Cvm *rhob *alpha/rhob) *(fvm::ddt(Ub)+fvm::div(phib, Ub) - fvm::Sp(fvc::div(phib), Ub)) - fvm::laplacian(nuEffb, Ub)+fvm::div(phiRb, Ub, &quot;div(phiRb,Ub)&quot;) - fvm::Sp(fvc::div(phiRb), Ub)+fvc::div(Rcb)+(fvc::grad(beta)/(beta) &amp;Rcb)==susb+alpha/rhob *(liftCoeff+Cvm *rhob *DDtUa)+fvOptions(beta, Ub)):&#160;UEqns.H']]],
+  ['ubmeanf_6',['UbMeanF',['../createFavreAveraging_8H.html#a6d4d341a2783a8512948e54d4994825d',1,'createFavreAveraging.H']]],
+  ['ubprime2meanf_7',['UbPrime2MeanF',['../createFavreAveraging_8H.html#a79430787a112dcd72c2574a41bab6d4a',1,'createFavreAveraging.H']]],
+  ['ubprimef_8',['UbPrimeF',['../createFavreAveraging_8H.html#a1fcb927c7ac099cc469ec632da74976d',1,'createFavreAveraging.H']]],
+  ['ufallfield_9',['UfallField',['../calculateUfall_8H.html#a5fd567def7a5d78bffb18f87504d80e2',1,'calculateUfall.H']]],
+  ['ufalltmp_10',['Ufalltmp',['../calculateUfall_8H.html#a04769733946d0274a3382c394cc1d039',1,'calculateUfall.H']]],
+  ['urh_11',['Urh',['../createTwoPhaseTurbulence_8H.html#a5666ffedb3d14b2b63a1443252600067',1,'createTwoPhaseTurbulence.H']]],
+  ['urtemp_12',['Urtemp',['../createTwoPhaseTurbulence_8H.html#ace54af22ba832cd6da9d4e950224b4b3',1,'createTwoPhaseTurbulence.H']]],
+  ['usmall_13',['Usmall',['../createTwoPhaseTurbulence_8H.html#a690953dd8cbc77807e9d06a928f270ad',1,'createTwoPhaseTurbulence.H']]]
+];
