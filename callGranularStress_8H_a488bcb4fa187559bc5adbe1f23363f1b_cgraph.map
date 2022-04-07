@@ -1,8 +1,0 @@
-<map id="if" name="if">
-<area shape="rect" id="node1" title=" " alt="" coords="5,107,44,133"/>
-<area shape="rect" id="node2" href="$createTwoPhaseTurbulence_8H.html#af8f1c12fcddae8ec07c6c31a0e8ec37c" title=" " alt="" coords="128,5,167,32"/>
-<area shape="rect" id="node3" href="$createFields_8H.html#ab57c6299af17b136c3fa6f0bd5c3386b" title=" " alt="" coords="92,56,203,83"/>
-<area shape="rect" id="node4" href="$callGranularStress_8H.html#aed45904f0bb37bc691e571e9d33d2f16" title=" " alt="" coords="96,107,199,133"/>
-<area shape="rect" id="node5" href="$createTurbulence_8H.html#abc448c9642a65336f9970f609e326e4f" title=" " alt="" coords="98,157,197,184"/>
-<area shape="rect" id="node6" href="$createTurbulence_8H.html#a2ff3a08573c936ad0fbb481d5ce65134" title=" " alt="" coords="98,208,197,235"/>
-</map>

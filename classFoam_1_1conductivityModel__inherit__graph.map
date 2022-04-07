@@ -1,8 +1,0 @@
-<map id="conductivityModel" name="conductivityModel">
-<area shape="rect" id="node1" title="This file is in the." alt="" coords="5,107,148,133"/>
-<area shape="rect" id="node2" href="$classFoam_1_1GarzoDuftyConductivity.html" title=" " alt="" coords="210,5,387,32"/>
-<area shape="rect" id="node3" href="$classFoam_1_1GarzoDuftyModConductivity.html" title=" " alt="" coords="196,56,401,83"/>
-<area shape="rect" id="node4" href="$classFoam_1_1GidaspowConductivity.html" title=" " alt="" coords="215,107,383,133"/>
-<area shape="rect" id="node5" href="$classFoam_1_1HrenyaSinclairConductivity.html" title="This file is in the." alt="" coords="199,157,398,184"/>
-<area shape="rect" id="node6" href="$classFoam_1_1SyamlalConductivity.html" title=" " alt="" coords="220,208,377,235"/>
-</map>

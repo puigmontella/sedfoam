@@ -1,9 +1,0 @@
-<map id="correct" name="correct">
-<area shape="rect" id="node1" title=" " alt="" coords="284,177,351,203"/>
-<area shape="rect" id="node2" href="$classFoam_1_1LESModels_1_1fluidDynamicLagrangian.html#a3ae44b28050c3aa494c1d8e18cf618c1" title=" " alt="" coords="5,5,236,47"/>
-<area shape="rect" id="node3" href="$classFoam_1_1LESModels_1_1partDynamicLagrangian.html#a3ae44b28050c3aa494c1d8e18cf618c1" title=" " alt="" coords="7,71,235,112"/>
-<area shape="rect" id="node4" href="$classFoam_1_1RASModels_1_1twophasekEpsilon.html#a3ae44b28050c3aa494c1d8e18cf618c1" title=" " alt="" coords="11,136,230,177"/>
-<area shape="rect" id="node5" href="$classFoam_1_1RASModels_1_1twophasekOmega.html#a3ae44b28050c3aa494c1d8e18cf618c1" title=" " alt="" coords="11,201,230,243"/>
-<area shape="rect" id="node6" href="$classFoam_1_1RASModels_1_1twophaseMixingLength.html#a3ae44b28050c3aa494c1d8e18cf618c1" title=" " alt="" coords="15,267,226,308"/>
-<area shape="rect" id="node7" href="$classFoam_1_1RASModels_1_1twophaseMixingLengthConst.html#a3ae44b28050c3aa494c1d8e18cf618c1" title=" " alt="" coords="15,332,226,373"/>
-</map>

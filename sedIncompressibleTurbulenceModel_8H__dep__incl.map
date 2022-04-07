@@ -1,7 +1,0 @@
-<map id="/root/sedfoam/TurbulenceModels/turbulenceModels/sedIncompressibleTurbulenceModel.H" name="/root/sedfoam/TurbulenceModels/turbulenceModels/sedIncompressibleTurbulenceModel.H">
-<area shape="rect" id="node1" title=" " alt="" coords="379,5,651,61"/>
-<area shape="rect" id="node2" href="$sedIncompressibleTurbulenceModel_8C.html" title=" " alt="" coords="5,109,276,165"/>
-<area shape="rect" id="node3" href="$twophaseTurbulenceModels_8C.html" title=" " alt="" coords="301,109,519,165"/>
-<area shape="rect" id="node4" href="$sedFoam_8C.html" title="Solver for a system of 2 phases with one phase dispersed, e.g. solid particles in a fluid." alt="" coords="543,117,701,158"/>
-<area shape="rect" id="node5" href="$sedFoam__MULES_8C.html" title="Solver for a system of 2 phases with one phase dispersed, e.g. solid particles in a fluid." alt="" coords="725,117,927,158"/>
-</map>

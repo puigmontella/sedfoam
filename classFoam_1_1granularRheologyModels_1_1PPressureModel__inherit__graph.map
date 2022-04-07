@@ -1,6 +1,0 @@
-<map id="PPressureModel" name="PPressureModel">
-<area shape="rect" id="node1" title=" " alt="" coords="136,5,263,32"/>
-<area shape="rect" id="node2" href="$classFoam_1_1granularRheologyModels_1_1MuIPPressure.html" title=" " alt="" coords="5,80,116,107"/>
-<area shape="rect" id="node3" href="$classFoam_1_1granularRheologyModels_1_1MuIvPPressure.html" title=" " alt="" coords="140,80,259,107"/>
-<area shape="rect" id="node4" href="$classFoam_1_1granularRheologyModels_1_1nonePPressure.html" title=" " alt="" coords="283,80,401,107"/>
-</map>

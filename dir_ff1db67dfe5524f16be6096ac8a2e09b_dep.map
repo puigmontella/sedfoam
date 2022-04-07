@@ -1,8 +1,0 @@
-<map id="/root/sedfoam/TurbulenceModels/turbulenceModels/RAS" name="/root/sedfoam/TurbulenceModels/turbulenceModels/RAS">
-<area shape="rect" id="node2" href="dir_56d5cffcf6969c0c05521f6a5fd582f7.html" title="twophasekEpsilon" alt="" coords="634,63,774,111"/>
-<area shape="rect" id="node3" href="dir_0cefad5664d615970315d3830515a3ae.html" title="twophasekOmega" alt="" coords="470,63,610,111"/>
-<area shape="rect" id="node4" href="dir_4ea4cae1e7aa1413fc77480d8404f311.html" title="twophaseMixingLength" alt="" coords="272,63,445,111"/>
-<area shape="rect" id="node5" href="dir_e7e2e8435b39ece242692eaf13c0c8fc.html" title="twophaseMixingLengthConst" alt="" coords="37,63,248,111"/>
-<area shape="rect" id="clust2" href="dir_ff1db67dfe5524f16be6096ac8a2e09b.html" alt="" coords="27,52,881,121"/>
-<area shape="rect" id="clust1" href="dir_3153bed4dad3b3717c1ff72e2a47d63c.html" title="turbulenceModels" alt="" coords="16,16,892,132"/>
-</map>

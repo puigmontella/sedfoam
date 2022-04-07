@@ -1,6 +1,0 @@
-<map id="/root/sedfoam/solver/interfacialModels/dragModels/SchillerNaumann" name="/root/sedfoam/solver/interfacialModels/dragModels/SchillerNaumann">
-<area shape="rect" id="node1" href="dir_aa941ac67dcb18ff7999266ee0f42e99.html" title="dragModel" alt="" coords="48,148,139,196"/>
-<area shape="rect" id="node2" href="dir_cbeae42d878e737df7d69b2806643714.html" title="SchillerNaumann" alt="" coords="27,52,160,100"/>
-<area shape="rect" id="edge1-headlabel" href="dir_000065_000009.html" title="1" alt="" coords="97,122,106,137"/>
-<area shape="rect" id="clust1" href="dir_ca97dd3c074250dc97a5dff9d2877d79.html" title="dragModels" alt="" coords="16,16,171,207"/>
-</map>

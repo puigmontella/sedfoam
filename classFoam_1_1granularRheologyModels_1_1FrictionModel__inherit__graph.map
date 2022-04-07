@@ -1,9 +1,0 @@
-<map id="FrictionModel" name="FrictionModel">
-<area shape="rect" id="node1" title=" " alt="" coords="226,5,337,32"/>
-<area shape="rect" id="node2" href="$classFoam_1_1granularRheologyModels_1_1Coulomb.html" title="This file is in the." alt="" coords="5,80,85,107"/>
-<area shape="rect" id="node3" href="$classFoam_1_1granularRheologyModels_1_1MuI.html" title=" " alt="" coords="110,80,157,107"/>
-<area shape="rect" id="node4" href="$classFoam_1_1granularRheologyModels_1_1MuIdimLess.html" title=" " alt="" coords="181,80,281,107"/>
-<area shape="rect" id="node5" href="$classFoam_1_1granularRheologyModels_1_1MuIv.html" title=" " alt="" coords="305,80,359,107"/>
-<area shape="rect" id="node6" href="$classFoam_1_1granularRheologyModels_1_1MuIvdimLess.html" title=" " alt="" coords="383,80,491,107"/>
-<area shape="rect" id="node7" href="$classFoam_1_1granularRheologyModels_1_1noneFriction.html" title=" " alt="" coords="515,80,618,107"/>
-</map>
