@@ -44,8 +44,8 @@ MRF.correctBoundaryVelocity(U);
     );
 
     UEqn.relax();
-		fvOptions.constrain(UEqn);
-		U.correctBoundaryConditions();
+		//fvOptions.constrain(UEqn);
+		//U.correctBoundaryConditions();
 		fvOptions.correct(U);
 	//Solve the momentum equation if required
     if (pimple.momentumPredictor())

@@ -52,7 +52,7 @@ Date
 #include "singlePhaseTransportModel.H"
 #include "sedIncompressibleTurbulenceModel.H"
 #include "dynamicFvMesh.H"
-
+#include "CMULES.H"
 #include "symmetryFvPatchFields.H"
 #include "fixedFluxPressureFvPatchScalarField.H"
 

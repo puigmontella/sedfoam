@@ -57,7 +57,7 @@
 			-fvc::snGrad(pa)
 	    ) *faceMask*rAUf*mesh.magSf()
 
-	  + (gradPOSC & mesh.Sf()) * rAUf
+	  + (gradPOSC & mesh.Sf())*faceMask * rAUf
 		+ fvc::interpolate(alpha/alphaMax)*(gradPhasea & mesh.Sf()) *faceMask* rAUf
     );
     phiHbyA += phig;

@@ -22,75 +22,76 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 \*---------------------------------------------------------------------------*/
+
+
+///////////////////  MULES ///////////////////////////////
+
 {
     word scheme("div(phi,alpha)");
     word schemer("div(phir,alpha)");
-    word alphadrScheme("div(phir,alpha)");
 
+   // surfaceScalarField phic("phic", phi);
     surfaceScalarField phic("phic", MRF.absolute(phi));
-surfaceScalarField phir("phir", MRF.absolute(phia - phib));
-    //Relative flux between dispersed and continuous phase(s)
-  //	#include "WEqn.H"
-
   	surfaceScalarField phiW(fvc::flux(W));
-  	
-  	
+
     surfaceScalarField phi3
     (
 			 -fvc::flux( -phiW,
 							   (1-alpha)
 						 	 - alpha*(1-alpha)*(rhoa-rhob)/rho,
-							 alphadrScheme
+							 schemer
 					   )
 		);
 
-     phiU=phic;
-          phiWsa=phi3;
-//Info << "phi3 a"<< phi3<<endl;
-
-//Info << "phic a"<< phic<<endl;
+   // surfaceScalarField phir("phir", phia - phib);
 
     for (int acorr=0; acorr<nAlphaCorr; acorr++)
     {
-        alpha.correctBoundaryConditions();
-        fvScalarMatrix alphaEqn
+        surfaceScalarField phiAlpha
         (
-             fvm::ddt(alpha)
-           + fvm::div(phic, alpha, scheme)
-           + fvm::div(phi3, alpha, alphadrScheme)
-
+            fvc::flux
+            (
+                phic,
+                alpha,
+                scheme
+            )
+          + fvc::flux
+            (
+                -fvc::flux(-phi3, alpha, schemer),
+                alpha,
+                schemer
+            )
         );
 
-        alphaEqn.relax();
-        alphaEqn.solve();
+        // Limit to 0.99*alphaMax to avoid extremely small time steps
 
-        if (packingLimiter)
+
+            MULES::explicitSolve
+            (
+                geometricOneField(),
+                alpha,
+                phi,
+                phiAlpha,
+                UniformField<scalar>(0.99*alphaMax.value()),
+                zeroField()
+            );
+
+        /*if (packingLimiter)
         {
             int i=0;
-            while (i<100 && max(alpha).value()>=alphaMax.value())
+            while (i<100 && max(alpha).value()>=alphaMax)
             {
                 #include "packingLimiter.H"
                 i++;
             }
-        }
+        }*/
 
-
-        alpha.min(alphaMax);
+        alpha.min(0.99*alphaMax);
         alpha.max(0);
-
         alpha *= cellMask;
-
-        
-
-        alpha*= pos(alpha-alphaSmall);
-
-        
-        //beta = cellMask*(scalar(1.0) - alpha);
-        beta = (scalar(1.0) - alpha);
-        beta.max(0);
+        beta = scalar(1.0) - alpha;
         
         alpha.correctBoundaryConditions();
-       // beta.correctBoundaryConditions();
 
         if (debugInfo)
         {
@@ -102,6 +103,90 @@ surfaceScalarField phir("phir", MRF.absolute(phia - phib));
         }
     }
 }
+
+
+
+//{
+    //word scheme("div(phi,alpha)");
+    //word schemer("div(phir,alpha)");
+    //word alphadrScheme("div(phir,alpha)");
+
+    //surfaceScalarField phic("phic", MRF.absolute(phi));
+    
+//surfaceScalarField phir("phir", MRF.absolute(phia - phib));
+    ////Relative flux between dispersed and continuous phase(s)
+  ////	#include "WEqn.H"
+
+  	//surfaceScalarField phiW(fvc::flux(W));
+  	
+  	
+    //surfaceScalarField phi3
+    //(
+			 //-fvc::flux( -phiW,
+							   //(1-alpha)
+						 	 //- alpha*(1-alpha)*(rhoa-rhob)/rho,
+							 //alphadrScheme
+					   //)
+		//);
+
+     //phiU=phic;
+          //phiWsa=phi3;
+////Info << "phi3 a"<< phi3<<endl;
+
+////Info << "phic a"<< phic<<endl;
+
+    //for (int acorr=0; acorr<nAlphaCorr; acorr++)
+    //{
+       //// alpha.correctBoundaryConditions();
+        //fvScalarMatrix alphaEqn
+        //(
+             //fvm::ddt(alpha)
+           //+ fvm::div(phic, alpha, scheme)
+           //+ fvm::div(phi3, alpha, alphadrScheme)
+
+        //);
+
+        //alphaEqn.relax();
+        //alphaEqn.solve();
+
+        //if (packingLimiter)
+        //{
+            //int i=0;
+            //while (i<100 && max(alpha).value()>=alphaMax.value())
+            //{
+                //#include "packingLimiter.H"
+                //i++;
+            //}
+        //}
+
+
+        //alpha.min(alphaMax);
+        //alpha.max(0);
+
+        //alpha *= cellMask;
+
+        
+
+        //alpha*= pos(alpha-alphaSmall);
+
+        
+      ////  beta = cellMask*(scalar(1.0) - alpha)+alphaSmall;
+        //beta = (scalar(1.0) - alpha);
+        //beta.max(0);
+        
+        //alpha.correctBoundaryConditions();
+      ////  beta.correctBoundaryConditions();
+
+        //if (debugInfo)
+        //{
+            //Info<< "Dispersed phase volume fraction = "
+            //<< alpha.weightedAverage(mesh.V()).value()
+            //<< "  Min(alpha) = " << gMin(alpha)
+            //<< "  Max(alpha) = " << gMax(alpha)
+            //<< endl;
+        //}
+    //}
+//}
 
 rho = alpha*rhoa + beta*rhob;
 //rho.correctBoundaryConditions();
