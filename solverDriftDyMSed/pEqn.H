@@ -154,5 +154,8 @@
         );
         p == p_rgh + rho*gh;
     }
+    p_rbgh = p - rhob*gh; 
+    p_hyd = rhob*gh; 
+
 
 }

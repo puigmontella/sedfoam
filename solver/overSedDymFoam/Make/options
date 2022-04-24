@@ -23,6 +23,8 @@ EXE_INC = \
     -I$(LIB_SRC)/dynamicFvMesh/lnInclude \
     -I$(LIB_SRC)/overset/lnInclude \
     -I.. \
+    -I../../sixDoFRigidBodyMotionSedFoam/lnInclude \
+    -I../../forcesSedFoam/lnInclude \
     -I../kineticTheoryModels/lnInclude \
     -I../granularRheologyModels/lnInclude \
     -I../interfacialModels/lnInclude \
@@ -41,11 +43,13 @@ EXE_LIBS = \
     -ldynamicMesh \
     -ldynamicFvMesh \
     -ltopoChangerFvMesh \
-    -loverset \
     -ltwoPhaseModel \
     -lkineticTheorySedModel\
     -lgranularRheologySedModel\
     -lincompressibleTransportModels \
     -lturbulenceModels \
     -lincompressibleTurbulenceModels \
-    -ltwoPhaseTurbulenceModels
+    -ltwoPhaseTurbulenceModels \
+	-lsixDoFRigidBodyMotionSedFoam \
+	-lforcesSedFoam \
+    -loverset 

@@ -197,7 +197,13 @@ protected:
 
             //- Name of pressure field
             word pName_;
-            
+
+            //- Name of hydrostatic pressure field
+            word pHydName_;
+            //- Name of excess of pore pressure field
+            word prbghName_;
+            //- Name of excess of pore pressure field
+            word prghName_;
             //- Name of particle pressure field
             word pSedName_;
             

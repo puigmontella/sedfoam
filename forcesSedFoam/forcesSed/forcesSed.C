@@ -739,6 +739,9 @@ Foam::functionObjects::forcesSed::forcesSed
     momentBinFilePtr_(),
     patchSet_(),
     pName_("p"),
+    pHydName_("p_hyd"),
+    prghName_("p_rgh"),
+    prbghName_("p_rbgh"),
     pSedName_("pS"),
     alphaName_("alpha.a"),
     muEffName_("muEff"),
@@ -787,6 +790,9 @@ Foam::functionObjects::forcesSed::forcesSed
     momentBinFilePtr_(),
     patchSet_(),
     pName_("p"),
+    pHydName_("p_hyd"),
+    prghName_("p_rgh"),
+    prbghName_("p_rbgh"),
     pSedName_("pS"),
     alphaName_("alpha.a"),
     muEffName_("muEff"),
@@ -861,6 +867,18 @@ bool Foam::functionObjects::forcesSed::read(const dictionary& dict)
         if (dict.readIfPresent<word>("p", pName_))
         {
             Info<< "    p: " << pName_ << endl;
+        }
+        if (dict.readIfPresent<word>("p_hyd", pHydName_))
+        {
+            Info<< "    p_hyd: " << pHydName_ << endl;
+        }
+        if (dict.readIfPresent<word>("p_rgh", prghName_))
+        {
+            Info<< "    p_rgh: " << prghName_ << endl;
+        }
+        if (dict.readIfPresent<word>("p_rbgh", prbghName_))
+        {
+            Info<< "    p_rbgh: " << prbghName_ << endl;
         }
         if (dict.readIfPresent<word>("pS", pSedName_))
         {
@@ -1043,6 +1061,9 @@ void Foam::functionObjects::forcesSed::calcForcesMoment()
     else
     {
         const volScalarField& p = lookupObject<volScalarField>(pName_);
+        const volScalarField& p_hyd = lookupObject<volScalarField>(pHydName_);
+        const volScalarField& p_rbgh = lookupObject<volScalarField>(prbghName_);
+        const volScalarField& p_rgh = lookupObject<volScalarField>(prghName_);
         const volScalarField& pS = lookupObject<volScalarField>(pSedName_);
         const volScalarField& alpha = lookupObject<volScalarField>(alphaName_);
 
@@ -1060,14 +1081,28 @@ void Foam::functionObjects::forcesSed::calcForcesMoment()
         {
             vectorField Md(mesh_.C().boundaryField()[patchi] - origin);
 
+
+            //vectorField fN
+            //(
+                //rho(p)*Sfb[patchi]*(p.boundaryField()[patchi]- pRef)
+            //);
+            //vectorField fNsolid
+            //(
+                //rho(p)*Sfb[patchi]*(pS.boundaryField()[patchi] - pRef)
+            //);
+
+
             vectorField fN
             (
-                rho(p)*Sfb[patchi]*((1-alpha.boundaryField()[patchi])*p.boundaryField()[patchi]- pRef)
+                rho(p)*Sfb[patchi]*(p_hyd.boundaryField()[patchi]*0+p_rbgh.boundaryField()[patchi]- pRef)
             );
             vectorField fNsolid
             (
-                rho(p)*Sfb[patchi]*(alpha.boundaryField()[patchi]*pS.boundaryField()[patchi] - pRef)
+                rho(p)*Sfb[patchi]*(pS.boundaryField()[patchi] - pRef)
             );
+            
+            
+            
             vectorField fT(Sfb[patchi] & devRhoReffb[patchi]);
 
             vectorField fP(Md.size(), Zero);

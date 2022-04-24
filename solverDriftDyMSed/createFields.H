@@ -1034,6 +1034,32 @@ volScalarField p
     p_rgh + rho*gh
 );
 
+
+volScalarField p_rbgh
+(
+    IOobject
+    (
+        "p_rbgh",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    p - rhob*gh
+);
+
+volScalarField p_hyd
+(
+    IOobject
+    (
+        "p_hyd",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+   rhob*gh
+);
 label pRefCell = 0;
 scalar pRefValue = 0.0;
 setRefCell

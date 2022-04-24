@@ -28,12 +28,12 @@
 
      + MRF.DDt(W)
      
-	 //Shear stress contribution - Relative velocity 
-      - scalar(1.0)/((alpha+alphaSmall))*fvm::laplacian(nuFra*(1-alpha)*rhob/rho, W)
-	  - scalar(1.0)/((alpha+alphaSmall))*fvc::div(nuFra*(1-alpha)*rhob/rho*dev2(T(fvc::grad(W))))
+	 ////Shear stress contribution - Relative velocity 
+      //- scalar(1.0)/((alpha+alphaSmall))*fvm::laplacian(nuFra*(1-alpha)*rhob/rho, W)
+	  //- scalar(1.0)/((alpha+alphaSmall))*fvc::div(nuFra*(1-alpha)*rhob/rho*dev2(T(fvc::grad(W))))
 	  
-      - scalar(1.0)/(rhob*(1-alpha+alphaSmall))*fvm::laplacian(nuEffb*rhob*(alpha)*rhoa/rho, W)
-	  - scalar(1.0)/(rhob*(1-alpha+alphaSmall))*fvc::div(nuEffb*rhob*(alpha)*rhoa/rho*dev2(T(fvc::grad(W))))
+      //- scalar(1.0)/(rhob*(1-alpha+alphaSmall))*fvm::laplacian(nuEffb*rhob*(alpha)*rhoa/rho, W)
+	  //- scalar(1.0)/(rhob*(1-alpha+alphaSmall))*fvc::div(nuEffb*rhob*(alpha)*rhoa/rho*dev2(T(fvc::grad(W))))
 	  
 	  == 
 			fvOptions(W)
@@ -52,11 +52,11 @@
 	  ////Ua=1/rho*(W*(1-alpha)*rhob+rho*U);
 	  ////Ub=1/rho*(-W*alpha*rhoa+rho*U);
 	  
-      + scalar(1.0)/((alpha+alphaSmall))*fvc::laplacian(nuFra, Ua)
-	  + scalar(1.0)/((alpha+alphaSmall))*fvc::div(nuFra*dev2(T(fvc::grad(Ua))))
+      //+ scalar(1.0)/((alpha+alphaSmall))*fvc::laplacian(nuFra, Ua)
+	  //+ scalar(1.0)/((alpha+alphaSmall))*fvc::div(nuFra*dev2(T(fvc::grad(Ua))))
 	  
-      - scalar(1.0)/(rhob*(1-alpha+alphaSmall))*fvc::laplacian(nuEffb*rhob, Ub)
-	  - scalar(1.0)/(rhob*(1-alpha+alphaSmall))*fvc::div(nuEffb*rhob*dev2(T(fvc::grad(Ub))))
+      //- scalar(1.0)/(rhob*(1-alpha+alphaSmall))*fvc::laplacian(nuEffb*rhob, Ub)
+	  //- scalar(1.0)/(rhob*(1-alpha+alphaSmall))*fvc::div(nuEffb*rhob*dev2(T(fvc::grad(Ub))))
 	  
 	  // Drag term
 	 -fvm::Sp(DragTerm, W)
