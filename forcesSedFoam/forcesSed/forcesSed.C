@@ -740,7 +740,7 @@ Foam::functionObjects::forcesSed::forcesSed
     patchSet_(),
     pName_("p"),
     pHydName_("p_hyd"),
-    prghName_("p_rgh"),
+   // prghName_("p_rgh"),
     prbghName_("p_rbgh"),
     pSedName_("pS"),
     alphaName_("alpha.a"),
@@ -791,7 +791,7 @@ Foam::functionObjects::forcesSed::forcesSed
     patchSet_(),
     pName_("p"),
     pHydName_("p_hyd"),
-    prghName_("p_rgh"),
+    //prghName_("p_rgh"),
     prbghName_("p_rbgh"),
     pSedName_("pS"),
     alphaName_("alpha.a"),
@@ -872,10 +872,10 @@ bool Foam::functionObjects::forcesSed::read(const dictionary& dict)
         {
             Info<< "    p_hyd: " << pHydName_ << endl;
         }
-        if (dict.readIfPresent<word>("p_rgh", prghName_))
-        {
-            Info<< "    p_rgh: " << prghName_ << endl;
-        }
+        //if (dict.readIfPresent<word>("p_rgh", prghName_))
+        //{
+            //Info<< "    p_rgh: " << prghName_ << endl;
+        //}
         if (dict.readIfPresent<word>("p_rbgh", prbghName_))
         {
             Info<< "    p_rbgh: " << prbghName_ << endl;
@@ -1063,7 +1063,7 @@ void Foam::functionObjects::forcesSed::calcForcesMoment()
         const volScalarField& p = lookupObject<volScalarField>(pName_);
         const volScalarField& p_hyd = lookupObject<volScalarField>(pHydName_);
         const volScalarField& p_rbgh = lookupObject<volScalarField>(prbghName_);
-        const volScalarField& p_rgh = lookupObject<volScalarField>(prghName_);
+       // const volScalarField& p_rgh = lookupObject<volScalarField>(prghName_);
         const volScalarField& pS = lookupObject<volScalarField>(pSedName_);
         const volScalarField& alpha = lookupObject<volScalarField>(alphaName_);
 

@@ -203,7 +203,7 @@ protected:
             //- Name of excess of pore pressure field
             word prbghName_;
             //- Name of excess of pore pressure field
-            word prghName_;
+          //  word prghName_;
             //- Name of particle pressure field
             word pSedName_;
             

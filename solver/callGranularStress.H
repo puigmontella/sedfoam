@@ -94,6 +94,8 @@ if (kineticTheory.on())
              + turbulencea->nut();
     lambdaUa = kineticTheory.lambda();
     pa = kineticTheory.pa();
+    
+    pS=pa+pff;
 
     if (debugInfo)
     {
@@ -133,6 +135,7 @@ else if (granularRheology.on())
 
     nuEffa = sqr(Ct)*turbulenceb->nut() + nua + turbulencea->nut();
     lambdaUa = nua*rhoa*scalar(0.0);
+     muEff =    granularRheology.mua()+granularRheology.nuvb()*rhob*(1-alpha)+rho*turbulenceb->nut();
 
 // Compute nuEffb the total fluid phase viscosity
     nuEffb = turbulenceb->nut() + granularRheology.nuvb();
@@ -170,5 +173,7 @@ if (spongeLayer)
 }
 // Limit viscosities for numerical stability
 nuFra.min(nuMax);
+muEff.min(nuMax/rhoa);
+
 nuEffa.min(nuMax);
 nuEffb.min(nuMax);

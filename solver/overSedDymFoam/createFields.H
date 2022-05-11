@@ -616,7 +616,7 @@ volVectorField U
         runTime.timeName(),
         mesh,
         IOobject::NO_READ,
-        IOobject::NO_WRITE
+        IOobject::AUTO_WRITE
     ),
     alpha*Ua + beta*Ub
 );
@@ -855,7 +855,18 @@ volScalarField pS
     pff + pa
 );
 
-
+volScalarField p_hyd
+(
+    IOobject
+    (
+        "p_hyd",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+   rhob*gh
+);
 Info<< "Calculating field muEff\n" << endl;
 volScalarField muEff
 (

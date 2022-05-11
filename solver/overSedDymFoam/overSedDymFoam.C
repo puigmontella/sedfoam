@@ -136,7 +136,6 @@ int main(int argc, char *argv[])
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
     Info<< "\nStarting time loop\n" << endl;
-
     while (runTime.run())
     {
         #include "readTwoPhaseEulerFoamControls.H"
@@ -218,8 +217,6 @@ int main(int argc, char *argv[])
             // Calculate absolute flux from the mapped surface velocity
             #include "correctPhi.H"
         }
-
-
         if (mesh.changing() && checkMeshCourantNo)
         {
             #include "meshCourantNo.H"
@@ -229,10 +226,8 @@ int main(int argc, char *argv[])
 //      Pressure-velocity PIMPLE corrector loop
         while (pimple.loop())
         {
-
             #include "alphaEqn.H"
-           #include "liftDragCoeffs.H"
-
+            #include "liftDragCoeffs.H"
   MRF.makeAbsolute(phia);
 
 //          Compute the granular stress: pff, nuFra, nuEffa and lambdaUa
@@ -243,14 +238,13 @@ int main(int argc, char *argv[])
 //          Assemble the momentum balance equations for both phases a and b
             #include "UEqns.H"
 
-//Info << "pass UEqn" << endl;
             #include "pEqn.H"
 
             #include "DDtU.H"
 
             //if (pimple.turbCorr())
             //{
-                //#include "updateTwoPhaseTurbulence.H"
+                //#include "updateTwoPhaseRASTurbulence.H"
                 //turbulenceb->correct();
                 //if (debugInfo)
                 //{
@@ -259,9 +253,6 @@ int main(int argc, char *argv[])
                 //}
             //}
         }
-        
-        
-
         if (debugInfo)
         {
             Info<< "min(Ua) = " << gMin(Ua)
@@ -269,10 +260,9 @@ int main(int argc, char *argv[])
             Info<< "min(Ub) = " << gMin(Ub)
                 << "max(Ub) = " << gMax(Ub) << nl << endl;
         }
-        
-
         #include "OutputGradPOSC.H"
         #include "writeOutput.H"
+        #include "writeLiftDragCoeff.H"
 
         Info<< "ExecutionTime = " << runTime.elapsedCpuTime() << " s"
             << "  ClockTime = " << runTime.elapsedClockTime() << " s"

@@ -25,46 +25,50 @@ License
 //using namespace std;
 
 
-string path = "ForceTotFile.txt";
+//string path = "ForceFiles/ForceTotFile.txt";
 
 
-std::ifstream fin(path);
+//std::ifstream fin(path);
 
-std::ofstream inFileTot;
+//std::ofstream inFileTot;
 
-if(fin.fail()){
-	Info<< "creating ForceTotFile.txt "  << endl;
+//if(fin.fail()){
+	//Info<< "creating ForceTotFile.txt "  << endl;
 	
-	inFileTot.open("ForceTotFile.txt", std::ios_base::app);
-	inFileTot <<  "Time" << tab << "FCont_x" << tab << "FCont_y" << tab << "FCont_z" << tab << "FCol_x" << tab << "FCol_y" << tab << "FCol_z" << tab  << "FShear_x" << tab << "FShear_y" << tab << "FShear_z"<< "\n";
-	inFileTot.close ();
-} 
+	//inFileTot.open("ForceFiles/ForceTotFile.txt", std::ios_base::app);
+	//inFileTot <<  "Time" << tab << "FCont_x" << tab << "FCont_y" << tab << "FCont_z" << tab << "FCol_x" << tab << "FCol_y" << tab << "FCol_z" << tab  << "FShear_x" << tab << "FShear_y" << tab << "FShear_z"<< "\n";
+	//inFileTot.close ();
+//} 
 
 label Patchid=mesh.boundaryMesh().findPatchID("cylinder");
 
 if (runTime.writeTime()){
 	
 	
-		string strCont1 = "ForceContFile";
+		string strCont1 = "ForceFiles/ForceContFile";
 		string strCont2 = strCont1.append(std::to_string(runTime.value()));
 		string strCont3 = strCont2.append(".txt");
 
-		string strCol1 = "ForceColFile";
+		string strCol1 = "ForceFiles/ForceColFile";
 		string strCol2 = strCol1.append(std::to_string(runTime.value()));
 		string strCol3 = strCol2.append(".txt");
 
-		string strShear1 = "ForceShearFile";
+		string strShear1 = "ForceFiles/ForceShearFile";
 		string strShear2 = strShear1.append(std::to_string(runTime.value()));
 		string strShear3 = strShear2.append(".txt");
 
 
 
-		string strShearFluid1 = "ForceShearFluidFile";
+		string strShearFluid1 = "ForceFiles/ForceShearFluidFile";
 		string strShearFluid2 = strShearFluid1.append(std::to_string(runTime.value()));
 		string strShearFluid3 = strShearFluid2.append(".txt");
 
 		std::ofstream inFileForces;
 			
+
+			if (Pstream::master())
+			{
+
 		inFileForces.open(strCont3, std::ios_base::app);
 		inFileForces << "x_pos" << tab << "y_pos" << tab << "z_pos" << tab << "f_con_x" << tab << "f_con_y" << tab<< "f_con_z" << tab << "vf_x" << tab << "vf_y" << tab<< "vf_z" << "\n";
 		inFileForces.close();  
@@ -83,7 +87,9 @@ if (runTime.writeTime()){
 		inFileForces.close();  
 
 	
-	
+			}
+			
+			
         const surfaceVectorField::Boundary& Sfb =
             mesh.Sf().boundaryField();
             
@@ -154,29 +160,45 @@ if (runTime.writeTime()){
             //Info << "Taua: " << TauaMod.boundaryField()[Patchid][i] << endl;
             //Info << "fT_shear[i]: " << fT_shear[i]<< endl;
 
-        inFileForces.open(strCont3, std::ios_base::app);
-		inFileForces << Coordinates[i][0] << tab << Coordinates[i][1] << tab << Coordinates[i][2] << tab << fN_contact[i][0] << tab << fN_contact[i][1] << tab<< fN_contact[i][2] << tab << Sfb[Patchid][i][0] << tab << Sfb[Patchid][i][1] << tab<< Sfb[Patchid][i][2] << "\n";
-		inFileForces.close();  
-		
-        inFileForces.open(strCol3, std::ios_base::app);
-		inFileForces << Coordinates[i][0] << tab << Coordinates[i][1] << tab << Coordinates[i][2] << tab << fN_colisional[i][0] << tab << fN_colisional[i][1] << tab<< fN_colisional[i][2] << tab << Sfb[Patchid][i][0] << tab << Sfb[Patchid][i][1] << tab<< Sfb[Patchid][i][2] << "\n";
-		inFileForces.close();   
-		
-        inFileForces.open(strShear3, std::ios_base::app);
-		inFileForces << Coordinates[i][0] << tab << Coordinates[i][1] << tab << Coordinates[i][2] << tab << fT_shear[i][0] << tab << fT_shear[i][1] << tab<< fT_shear[i][2] << tab << Sfb[Patchid][i][0] << tab << Sfb[Patchid][i][1] << tab<< Sfb[Patchid][i][2] << "\n";
-		inFileForces.close();   
-		
-		
-        inFileForces.open(strShearFluid3, std::ios_base::app);
-		inFileForces << Coordinates[i][0] << tab << Coordinates[i][1] << tab << Coordinates[i][2] << tab << fT_shearFluid[i][0] << tab << fT_shearFluid[i][1] << tab<< fT_shearFluid[i][2] << tab << Sfb[Patchid][i][0] << tab << Sfb[Patchid][i][1] << tab<< Sfb[Patchid][i][2] << "\n";
-		inFileForces.close(); 
+
+
+
+
+			// Only if the processor is the master, write to the file
+			//if (Pstream::master())
+			//{
+
+				inFileForces.open(strCont3, std::ios_base::app);
+				inFileForces << Coordinates[i][0] << tab << Coordinates[i][1] << tab << Coordinates[i][2] << tab << fN_contact[i][0] << tab << fN_contact[i][1] << tab<< fN_contact[i][2] << tab << Sfb[Patchid][i][0] << tab << Sfb[Patchid][i][1] << tab<< Sfb[Patchid][i][2] << "\n";
+				inFileForces.close();  
+				
+				inFileForces.open(strCol3, std::ios_base::app);
+				inFileForces << Coordinates[i][0] << tab << Coordinates[i][1] << tab << Coordinates[i][2] << tab << fN_colisional[i][0] << tab << fN_colisional[i][1] << tab<< fN_colisional[i][2] << tab << Sfb[Patchid][i][0] << tab << Sfb[Patchid][i][1] << tab<< Sfb[Patchid][i][2] << "\n";
+				inFileForces.close();   
+				
+				inFileForces.open(strShear3, std::ios_base::app);
+				inFileForces << Coordinates[i][0] << tab << Coordinates[i][1] << tab << Coordinates[i][2] << tab << fT_shear[i][0] << tab << fT_shear[i][1] << tab<< fT_shear[i][2] << tab << Sfb[Patchid][i][0] << tab << Sfb[Patchid][i][1] << tab<< Sfb[Patchid][i][2] << "\n";
+				inFileForces.close();   
+				
+				
+				inFileForces.open(strShearFluid3, std::ios_base::app);
+				inFileForces << Coordinates[i][0] << tab << Coordinates[i][1] << tab << Coordinates[i][2] << tab << fT_shearFluid[i][0] << tab << fT_shearFluid[i][1] << tab<< fT_shearFluid[i][2] << tab << Sfb[Patchid][i][0] << tab << Sfb[Patchid][i][1] << tab<< Sfb[Patchid][i][2] << "\n";
+				inFileForces.close(); 
+			//}
+
+
+
+
+
+
+
 		
 		  }
 	
 
-	inFileTot.open("ForceTotFile.txt", std::ios_base::app);
-	inFileTot << runTime.value() << tab << FContTot[0] << tab << FContTot[1] << tab << FContTot[2] << tab << FColiTot[0]  << tab << FColiTot[1] << tab << FColiTot[2]  << tab  << FShearTot[0] << tab << FShearTot[1] << tab << FShearTot[2]<< "\n";
-	inFileTot.close();
+	//inFileTot.open("ForceFiles/ForceTotFile.txt", std::ios_base::app);
+	//inFileTot << runTime.value() << tab << FContTot[0] << tab << FContTot[1] << tab << FContTot[2] << tab << FColiTot[0]  << tab << FColiTot[1] << tab << FColiTot[2]  << tab  << FShearTot[0] << tab << FShearTot[1] << tab << FShearTot[2]<< "\n";
+	//inFileTot.close();
    
 	
 }

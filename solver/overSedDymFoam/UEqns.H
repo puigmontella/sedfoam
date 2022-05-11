@@ -109,7 +109,7 @@ volTensorField Rcb
 surfaceScalarField phiRb
 (
   - fvc::interpolate(nuEffb)*mesh.magSf()*(fvc::snGrad(beta))
-   /fvc::interpolate(beta+alphaSmall)
+   /fvc::interpolate(beta)
 );
 
 // Assemble momentum balance equation for phase b
@@ -125,7 +125,7 @@ fvVectorMatrix UbEqn
   + fvm::div(phiRb, Ub, "div(phiRb,Ub)")
   - fvm::Sp(fvc::div(phiRb), Ub)
   + fvc::div(Rcb)
-  + (fvc::grad(beta)/(beta+alphaSmall) & Rcb)
+  + (fvc::grad(beta)/(beta) & Rcb)
     ==
     susb     // anistropic turbulent suspension term
   + alpha/rhob*(liftCoeff + Cvm*rhob*DDtUa) // lift & added mass forces
