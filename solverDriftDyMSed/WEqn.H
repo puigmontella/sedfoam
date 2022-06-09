@@ -66,7 +66,7 @@
     (
         "Wbig",
         dimensionSet(0,1, -1, 0, 0, 0, 0),
-        1e5
+        1e-1
     );
     dimensionedScalar Wsmall
     (
@@ -78,7 +78,7 @@
     WEqn.relax();
     WEqn.solve();
     W*= pos(alpha-alphaSmall);
-   // W*= pos(Wbig-mag(W));
+    W*= pos(Wbig-mag(W));
 
 
     W *= cellMask;

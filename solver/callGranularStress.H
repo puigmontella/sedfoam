@@ -52,6 +52,33 @@ else
 // Pff corresponds to "contact" pressure which prevent the granular phase from
 // exceeding the maximum volume fraction.
 pff = pp->pff(alpha, alphaPlastic, alphaMax, Fr_, eta0_, eta1_);
+//Info << "abans pff" << pff <<endl;
+
+//pff.correctBoundaryConditions();
+
+//volScalarField SecondInvariant(sqrt(mag(0.5*(sqr(tr(gradUaT)) - tr(((gradUaT) & (gradUaT)))))));
+////Info << "pff" << pff <<endl;
+
+//Info << "max(SecondInvariant)" << max(SecondInvariant) <<endl;
+//Info << "min(SecondInvariant)" << min(SecondInvariant) <<endl;
+
+//volScalarField kLee(alpha*2*0.001*SecondInvariant);
+
+    //fvScalarMatrix pff_pl_Eqn
+    //(
+     //fvm::ddt(pff)
+     //+ fvm::div(phia, pff, "div(phia,pff)")
+     //- fvm::Sp(fvc::div(phia), pff)
+     //==
+        //kLee*(pff)
+        //-fvm::Sp(kLee, pff)
+         //);
+    //pff_pl_Eqn.relax();
+    //pff_pl_Eqn.solve();
+
+
+
+
 
 //
 //
@@ -120,6 +147,28 @@ else if (granularRheology.on())
     pa = granularRheology.pa();
     pS=pa+pff;
 
+
+
+	//const labelListList & cellCells = pS.mesh().cellCells();
+
+	//forAll( cellCells, celli )
+	//{
+		//const labelList& neighbour = pff.mesh().cellCells()[celli];
+		//scalar sum = pff[celli];
+
+		//forAll(neighbour,celli)
+		//{
+
+		//sum += pff[neighbour[celli]];
+
+		//}
+
+		//sum /= (neighbour.size()+1);
+		//pS[celli]=sum;
+	
+	//}
+	
+	
     delta=granularRheology.delta();
 
     if (debugInfo)
@@ -134,7 +183,9 @@ else if (granularRheology.on())
     nuFra = granularRheology.mua()/ rhoa;
 
     nuEffa = sqr(Ct)*turbulenceb->nut() + nua + turbulencea->nut();
-    lambdaUa = nua*rhoa*scalar(0.0);
+   // lambdaUa = nua*rhoa*scalar(0.0);
+    lambdaUa = granularRheology.lambda();
+
      muEff =    granularRheology.mua()+granularRheology.nuvb()*rhob*(1-alpha)+rho*turbulenceb->nut();
 
 // Compute nuEffb the total fluid phase viscosity
