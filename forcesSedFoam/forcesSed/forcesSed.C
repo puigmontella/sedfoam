@@ -741,7 +741,7 @@ Foam::functionObjects::forcesSed::forcesSed
     pName_("p"),
     pHydName_("p_hyd"),
    // prghName_("p_rgh"),
-    prbghName_("p_rbgh"),
+    prbghName_("p_rgh"),
     pSedName_("pS"),
     alphaName_("alpha.a"),
     muEffName_("muEff"),
@@ -792,7 +792,7 @@ Foam::functionObjects::forcesSed::forcesSed
     pName_("p"),
     pHydName_("p_hyd"),
     //prghName_("p_rgh"),
-    prbghName_("p_rbgh"),
+    prbghName_("p_rgh"),
     pSedName_("pS"),
     alphaName_("alpha.a"),
     muEffName_("muEff"),
@@ -876,7 +876,7 @@ bool Foam::functionObjects::forcesSed::read(const dictionary& dict)
         //{
             //Info<< "    p_rgh: " << prghName_ << endl;
         //}
-        if (dict.readIfPresent<word>("p_rbgh", prbghName_))
+        if (dict.readIfPresent<word>("p_rgh", prbghName_))
         {
             Info<< "    p_rbgh: " << prbghName_ << endl;
         }
@@ -1094,7 +1094,7 @@ void Foam::functionObjects::forcesSed::calcForcesMoment()
 
             vectorField fN
             (
-                rho(p)*Sfb[patchi]*(p_hyd.boundaryField()[patchi]*0+1*p_rbgh.boundaryField()[patchi]- pRef)
+                rho(p)*Sfb[patchi]*(p_hyd.boundaryField()[patchi]*0+1e-2*p_rbgh.boundaryField()[patchi]- pRef)
             );
             vectorField fNsolid
             (

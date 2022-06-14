@@ -66,7 +66,7 @@
     (
         "Wbig",
         dimensionSet(0,1, -1, 0, 0, 0, 0),
-        1e-1
+        1e-4
     );
     dimensionedScalar Wsmall
     (
