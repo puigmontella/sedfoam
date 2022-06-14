@@ -66,7 +66,7 @@
     (
         "Wbig",
         dimensionSet(0,1, -1, 0, 0, 0, 0),
-        1e0
+        1e-1
     );
     dimensionedScalar Wsmall
     (
@@ -85,5 +85,4 @@
 
     W.correctBoundaryConditions();
 
-	
 }
