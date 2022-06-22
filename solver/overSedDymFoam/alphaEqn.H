@@ -53,7 +53,7 @@ License
         alpha.max(0);
 
         alpha *= cellMask;
-        alpha.correctBoundaryConditions();
+      //  alpha.correctBoundaryConditions();
 
         beta = cellMask*(scalar(1.0) - alpha);
 //        beta = (scalar(1.0) - alpha);

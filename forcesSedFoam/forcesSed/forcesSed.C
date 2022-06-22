@@ -740,8 +740,8 @@ Foam::functionObjects::forcesSed::forcesSed
     patchSet_(),
     pName_("p"),
     pHydName_("p_hyd"),
-   // prghName_("p_rgh"),
-    prbghName_("p_rgh"),
+   // prghName_("p_rbgh"),
+    prbghName_("p_rbgh"),
     pSedName_("pS"),
     alphaName_("alpha.a"),
     muEffName_("muEff"),
@@ -791,8 +791,8 @@ Foam::functionObjects::forcesSed::forcesSed
     patchSet_(),
     pName_("p"),
     pHydName_("p_hyd"),
-    //prghName_("p_rgh"),
-    prbghName_("p_rgh"),
+    //prghName_("p_rbgh"),
+    prbghName_("p_rbgh"),
     pSedName_("pS"),
     alphaName_("alpha.a"),
     muEffName_("muEff"),
@@ -872,11 +872,11 @@ bool Foam::functionObjects::forcesSed::read(const dictionary& dict)
         {
             Info<< "    p_hyd: " << pHydName_ << endl;
         }
-        //if (dict.readIfPresent<word>("p_rgh", prghName_))
+        //if (dict.readIfPresent<word>("p_rbgh", prghName_))
         //{
-            //Info<< "    p_rgh: " << prghName_ << endl;
+            //Info<< "    p_rbgh: " << prghName_ << endl;
         //}
-        if (dict.readIfPresent<word>("p_rgh", prbghName_))
+        if (dict.readIfPresent<word>("p_rbgh", prbghName_))
         {
             Info<< "    p_rbgh: " << prbghName_ << endl;
         }
@@ -1063,7 +1063,7 @@ void Foam::functionObjects::forcesSed::calcForcesMoment()
         const volScalarField& p = lookupObject<volScalarField>(pName_);
         const volScalarField& p_hyd = lookupObject<volScalarField>(pHydName_);
         const volScalarField& p_rbgh = lookupObject<volScalarField>(prbghName_);
-       // const volScalarField& p_rgh = lookupObject<volScalarField>(prghName_);
+       // const volScalarField& p_rbgh = lookupObject<volScalarField>(prghName_);
         const volScalarField& pS = lookupObject<volScalarField>(pSedName_);
         const volScalarField& alpha = lookupObject<volScalarField>(alphaName_);
 
@@ -1094,7 +1094,7 @@ void Foam::functionObjects::forcesSed::calcForcesMoment()
 
             vectorField fN
             (
-                rho(p)*Sfb[patchi]*(p_hyd.boundaryField()[patchi]*0+1e-4*p_rbgh.boundaryField()[patchi]- pRef)
+                rho(p)*Sfb[patchi]*(p_hyd.boundaryField()[patchi]*0+1e-0*p_rbgh.boundaryField()[patchi]- pRef)
             );
             vectorField fNsolid
             (

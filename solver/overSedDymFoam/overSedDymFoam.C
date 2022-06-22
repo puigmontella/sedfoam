@@ -132,7 +132,13 @@ int main(int argc, char *argv[])
         Info<< "\nKinetic theory and granular rheology are set on." << endl;
         Info<< " This option is not supported!" << endl;
     }
-    
+    // stress formulation
+    Switch faceMomentum
+    (
+        pimple.dict().lookupOrDefault<Switch>("faceMomentum", false)
+    );
+    Info<< "Choice for faceMomentum : "<<faceMomentum
+        << endl;
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
     Info<< "\nStarting time loop\n" << endl;
@@ -236,9 +242,19 @@ int main(int argc, char *argv[])
   MRF.makeRelative(phia);
 
 //          Assemble the momentum balance equations for both phases a and b
-            #include "UEqns.H"
+//          And assemble and solve the pressure poisson equation
+//             and apply the velocity correction step for both phases a and b
+            if (faceMomentum)
+            {
+                #include "pUf/UEqns.H"
+                #include "pUf/pEqn.H"
+            }
+            else
+            {
+                #include "pU/UEqns.H"
+                #include "pU/pEqn.H"
+            }
 
-            #include "pEqn.H"
 
             #include "DDtU.H"
 
