@@ -41,7 +41,7 @@ if (granularRheology.dilatancy())
     phi_pl_Eqn.relax();
     phi_pl_Eqn.solve();
 
-    alphaPlastic.max(0.48);
+    alphaPlastic.max(0.40);
     alphaPlastic.min(0.585);
 }
 else
