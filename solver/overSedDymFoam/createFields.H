@@ -510,7 +510,7 @@ surfaceScalarField phi
     fvc::interpolate(alpha)*phia + fvc::interpolate(beta)*phib
 );
 
-#include "UaUbLimiter.H"
+//#include "UaUbLimiter.H"
 Ua.correctBoundaryConditions();
 
 Info<< "Reading field p_rbgh\n" << endl;
@@ -650,8 +650,17 @@ volVectorField DDtUb
 
 
 Info<< "Calculating field g.h\n" << endl;
-volScalarField gh("gh", gravity & mesh.C());
-surfaceScalarField ghf("ghf", gravity & mesh.Cf());
+//volScalarField gh("gh", gravity & mesh.C());
+//surfaceScalarField ghf("ghf", gravity & mesh.Cf());
+
+
+
+
+
+
+#include "readGravitationalAcceleration.H"
+#include "readhRef.H"
+#include "gh.H"
 
 // Read interfacial properties
 
@@ -957,3 +966,7 @@ Info<<"end of createFields"<<endl;
 
 // Create bool field with interpolated cells
 #include "createInterpolatedCells.H"
+
+
+//volScalarField gh("gh", g & (mesh.C() - referencePoint));
+//surfaceScalarField ghf("ghf", g & (mesh.Cf() - referencePoint));
