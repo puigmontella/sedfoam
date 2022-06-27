@@ -67,6 +67,11 @@ License
     // PIMPLE algorithm loop
     while (pimple.correct())
     {
+		
+    // Correct fixed-flux BCs to be consistent with the velocity BCs
+    MRF.correctBoundaryFlux(Ua, phia);
+    MRF.correctBoundaryFlux(Ub, phib);
+		
         // Compute predicted velocity of phase a and b at cell centers
         volVectorField HabyA(Ua);
         HabyA = rUaA*UaEqn.H();
@@ -122,7 +127,7 @@ License
         //    fvOptions.makeRelative(phiHabyA);
         //    fvOptions.makeRelative(phiHbbyA);
 
-
+;
         // Fix for gravity on outlet boundary.
         forAll(p_rbgh.boundaryField(), patchi)
         {
