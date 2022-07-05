@@ -53,9 +53,10 @@ License
         alpha.max(0);
 
         alpha *= cellMask;
-       
-        beta = cellMask*(scalar(1.0) - alpha);
-//       beta = (scalar(1.0) - alpha);
+        alpha.correctBoundaryConditions();
+
+//        beta = cellMask*(scalar(1.0) - alpha);
+       beta = (scalar(1.0) - alpha);
 
         if (debugInfo)
         {
@@ -67,6 +68,5 @@ License
         }
     }
 }
-alpha.correctBoundaryConditions();
 
 rho = alpha*rhoa + beta*rhob;
