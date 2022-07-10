@@ -167,16 +167,61 @@ int main(int argc, char *argv[])
 
 			MRF.update();
             
-            phia = mesh.Sf() & fvc::interpolate(Ua);
-            phib = mesh.Sf() & fvc::interpolate(Ub);
+            Info << "MESH CHANGED" << endl;
+            #include "setCellMask.H"
+            #include "setInterpolatedCells.H"
 
+            surfaceScalarField faceMaskOld
+            (
+                localMin<scalar>(mesh).interpolate(cellMask.oldTime())
+            );
 
+            // Zero Uf on old faceMask (H-I)
+            Ufa *= faceMaskOld;
+            Ufb *= faceMaskOld;
+            // Update Uf and phi on new C-I faces
 
+            const surfaceVectorField Uinta(fvc::interpolate(Ua));
+            const surfaceVectorField Uintb(fvc::interpolate(Ub));
+            // Update Uf and phi on new C-I faces
+            Ufa += (1-faceMaskOld)*Uinta;
+            Ufb += (1-faceMaskOld)*Uintb;
 
+            // Update Uf boundary
+            forAll(Ufa.boundaryField(), patchI)
+            {
+                Ufa.boundaryFieldRef()[patchI] =
+                    Uinta.boundaryField()[patchI];
+            }
+            forAll(Ufb.boundaryField(), patchI)
+            {
+                Ufb.boundaryFieldRef()[patchI] =
+                    Uintb.boundaryField()[patchI];
+            }
+            
+            phia = mesh.Sf() & Ufa;
+            phib = mesh.Sf() & Ufb;
+
+            // Zero phi on current H-I
+            surfaceScalarField faceMask
+            (
+                localMin<scalar>(mesh).interpolate(cellMask)
+            );
+
+            phia *= faceMask;
+            phib *= faceMask;
+
+            Ua *= cellMask;
+            Ub *= cellMask;
         // Make the flux relative to the mesh motion
         fvc::makeRelative(phia, Ua);
         fvc::makeRelative(phib, Ub);
-
+        surfaceScalarField alphaf = fvc::interpolate(alpha);
+        surfaceScalarField betaf = scalar(1.0) - alphaf;
+        phi = alphaf*phia + betaf*phib;
+                    phi *= faceMask;
+                    U   *= cellMask;
+                    alpha   *= cellMask;
                     // Make the flux relative to the mesh motion
                   //  fvc::makeRelative(phi, U);
         }

@@ -24,9 +24,9 @@ License
 \*---------------------------------------------------------------------------*/
 {
     word schemeA("div(alpha,nu)");
+
     surfaceScalarField faceMask(localMin<scalar>(mesh).interpolate(cellMask));
 
-    // Compute volume fraction of phase a and b at cell faces
     surfaceScalarField alphaf(fvc::interpolate(alpha));
     surfaceScalarField betaf(scalar(1.0) - alphaf);
 
@@ -34,11 +34,19 @@ License
     //     at cell centers
     volScalarField rUaA(1.0/UaEqn.A());
     volScalarField rUbA(1.0/UbEqn.A());
+    mesh.interpolate(rUaA);
+    mesh.interpolate(rUbA);
 
     // Interpolate inverse matrix for momentum balance of phase a and b
     //     at cell faces
-    surfaceScalarField rUaAf(fvc::interpolate(rUaA));
+    rUaAf = fvc::interpolate(rUaA);
     surfaceScalarField rUbAf(fvc::interpolate(rUbA));
+
+    // limiter for the explicit stress terms to avoid numerical instability and
+    // too strong limitation on the time step
+    volScalarField nuFraExp(nuFra);
+    nuFraExp.min(nuMaxExp);
+    nuFraExp.correctBoundaryConditions();
 
     // interpolate 1/(alpha+alphaSmall) on the faces
     surfaceScalarField oneOverAlpha
@@ -67,123 +75,137 @@ License
     // PIMPLE algorithm loop
     while (pimple.correct())
     {
-		
-    // Correct fixed-flux BCs to be consistent with the velocity BCs
-    MRF.correctBoundaryFlux(Ua, phia);
-    MRF.correctBoundaryFlux(Ub, phib);
-		
         // Compute predicted velocity of phase a and b at cell centers
         volVectorField HabyA(Ua);
         HabyA = rUaA*UaEqn.H();
         volVectorField HbbyA(Ub);
         HbbyA = rUbA*UbEqn.H();
 
-        // Momentum flux at the cell faces for phase a
+//if (massFluxInterpolation)
+//{
+//    #include "interpolatedFaces.H"
+//}
+
+        // Momentum fluxes computed on the faces for the particle phase phiDraga
+        // and the fluid phase phiDragb
         surfaceScalarField phiDraga(
-          // grad(pa)
+        faceMask*(
+        // turbulent suspension term
+           -(fvc::interpolate
+            (
+                SUS*(K/rhoa)*turbulenceb->nut()*(beta/(alpha + alphaSmall))
+            )
+           *fvc::snGrad(alpha))*rUaAf*mesh.magSf()
+            // grad(pa)
           - (oneOverAlpha/rhoa*fvc::snGrad(pa))*rUaAf*mesh.magSf()
-          // diagonal part of stress --> move to Rca in UEqns.H ?
+            // grad(Pf)
+             - (oneOverAlpha/rhoa*fvc::snGrad(pff))*rUaAf*mesh.magSf()
+            // diagonal part of stress
           + (oneOverAlpha/rhoa*fvc::snGrad(lambdaUa*tr(gradUaT)))
            *rUaAf*mesh.magSf()
-          // gravity
+            // diagonal part of stress 2
+          - (
+                scalar(2.0/3.0)*oneOverAlpha
+               *fvc::snGrad((alpha+alphaSmall)*(sqr(Ct)*turbulenceb->k()
+              + nuEffa*tr(gradUaT)))
+            )
+           *rUaAf*mesh.magSf()
+          - (scalar(2.0/3.0)*oneOverAlpha*fvc::snGrad(nuFraExp*tr(gradUaT)))
+           *rUaAf*mesh.magSf()
+           // stress part 3
+          + rUaAf*(oneOverAlpha
+           *fvc::interpolate
+            (
+                fvc::div((alpha+alphaSmall)*nuEffa*gradUaT, schemeA)
+            )
+          & mesh.Sf())
+          + rUaAf*(oneOverAlpha
+           *fvc::interpolate(fvc::div(nuFraExp*gradUaT, schemeA)) & mesh.Sf())
+            // gravity
           + rUaAf
            *(
                (1.0-rhob/rhoa)*(g & mesh.Sf())
             )
           // mean pressure gradient
           + rUaAf*((gradPOSC/(tilt*rhob +(1.0-tilt)*rhoa)) & mesh.Sf())
-        );
-        if (not SUSaniso)
-        {
-            //turbulent suspension term
-            phiDraga += -(fvc::interpolate(SUS*(K/rhoa)*turbulenceb->nut()
-                                *(beta/(alpha + alphaSmall)))
-                                *fvc::snGrad(alpha))*rUaAf*mesh.magSf()
-                                
-                                
-                                		//+ fvc::interpolate(alpha/alphaMax/rhoa)*(gradPhasea & mesh.Sf()) * rUaAf)
-;
-                                
-                                
-        }
+        ));
 
-        // Momentum flux at the cell faces for phase b
         surfaceScalarField phiDragb(
+        faceMask*(
+        // turbulent suspension term
+            fvc::interpolate(SUS*(K/rhob)*turbulenceb->nut())*fvc::snGrad(alpha)
+            *rUbAf*mesh.magSf()
+            // diagnoal part of stress
+          - (fvc::interpolate(scalar(2.0)/((beta+alphaSmall)*scalar(3.0)))
+           *fvc::snGrad(((nuEffb*tr(gradUbT)))*beta))*rUbAf*mesh.magSf()
+           // stress part 3
+          + rUbAf*(fvc::interpolate(scalar(1.0)/(beta+alphaSmall))
+           *fvc::interpolate
+            (
+                fvc::div(beta*nuEffb*gradUbT, schemeA)) & mesh.Sf()
+            )
           // driving force
-            rUbAf*((gradPOSC/rhob) & mesh.Sf())
+          + rUbAf*((gradPOSC/rhob) & mesh.Sf())
           // Convective acceleration for 1D non-uniform simulation
           - rUbAf*fvc::interpolate(neg(alpha-0.3))*((gradConvAcc/rhob)
             & mesh.Sf())
-            
+        ));
 
-        );
-        if (not SUSaniso)
-        {
-            // turbulent suspension term
-            phiDragb += fvc::interpolate(SUS*(K/rhob)*
-                        turbulenceb->nut())*fvc::snGrad(alpha)
-                        *rUbAf*mesh.magSf();
-        }
         //    fvOptions.makeRelative(phiHabyA);
         //    fvOptions.makeRelative(phiHbbyA);
 
-;
+
         // Fix for gravity on outlet boundary.
         forAll(p_rbgh.boundaryField(), patchi)
+    {
+      if (isA<zeroGradientFvPatchScalarField>(p_rbgh.boundaryField()[patchi]))
+      {
+          phiDraga.boundaryFieldRef()[patchi] = 0.0;
+          phiDragb.boundaryFieldRef()[patchi] = 0.0;
+      }
+        if (isA<symmetryFvPatchScalarField>(p_rbgh.boundaryField()[patchi]))
         {
-             if (isA<zeroGradientFvPatchScalarField>
-                 (p_rbgh.boundaryField()[patchi]))
-             {
-                 phiDraga.boundaryFieldRef()[patchi] = 0.0;
-                 phiDragb.boundaryFieldRef()[patchi] = 0.0;
-             }
-             if (isA<symmetryFvPatchScalarField>
-                 (p_rbgh.boundaryField()[patchi]))
-             {
-                 phiDraga.boundaryFieldRef()[patchi] = 0.0;
-                 phiDragb.boundaryFieldRef()[patchi] = 0.0;
-             }
-             if (p_rbgh.boundaryField().types()[patchi] ==
-                 "symmetryPlane")
-             {
-                 phiDraga.boundaryFieldRef()[patchi] = 0.0;
-                 phiDragb.boundaryFieldRef()[patchi] = 0.0;
-             }
-             if (p_rbgh.boundaryField().types()[patchi] ==
-                 "groovyBC")
-             {
-                 phiDraga.boundaryFieldRef()[patchi] = 0.0;
-                 phiDragb.boundaryFieldRef()[patchi] = 0.0;
-             }
-             if (p_rbgh.boundaryField().types()[patchi] ==
-                 "outletInlet")
-             {
-                 phiDraga.boundaryFieldRef()[patchi] = 0.0;
-                 phiDragb.boundaryFieldRef()[patchi] = 0.0;
-             }
-             if (p_rbgh.boundaryField().types()[patchi] ==
-                 "fixedFluxPressure")
-             {
-                 phiDraga.boundaryFieldRef()[patchi] = 0.0;
-                 phiDragb.boundaryFieldRef()[patchi] = 0.0;
-             }
+            phiDraga.boundaryFieldRef()[patchi] = 0.0;
+            phiDragb.boundaryFieldRef()[patchi] = 0.0;
         }
-        // Compute corrected velocity fluxes at cell faces
-        //      (account for time evolution)
-        
-
+        if (p_rbgh.boundaryField().types()[patchi] == "symmetryPlane")
+        {
+            phiDraga.boundaryFieldRef()[patchi] = 0.0;
+            phiDragb.boundaryFieldRef()[patchi] = 0.0;
+        }
+        if (p_rbgh.boundaryField().types()[patchi] == "groovyBC")
+        {
+            phiDraga.boundaryFieldRef()[patchi] = 0.0;
+            phiDragb.boundaryFieldRef()[patchi] = 0.0;
+        }
+        if (p_rbgh.boundaryField().types()[patchi] == "outletInlet")
+        {
+            phiDraga.boundaryFieldRef()[patchi] = 0.0;
+            phiDragb.boundaryFieldRef()[patchi] = 0.0;
+        }
+        if (p_rbgh.boundaryField().types()[patchi] == "fixedFluxPressure")
+        {
+            phiDraga.boundaryFieldRef()[patchi] = 0.0;
+            phiDragb.boundaryFieldRef()[patchi] = 0.0;
+        }
+    }
+    surfaceScalarField faceMaskOld
+    (
+        localMin<scalar>(mesh).interpolate(cellMask.oldTime())
+    );
 
         surfaceScalarField phiUa
         (
-            (fvc::interpolate(HabyA) & mesh.Sf()) + rUaAf*fvc::ddtCorr(Ua, phia)
+            (fvc::interpolate(HabyA) & mesh.Sf())
+           + faceMaskOld*rUaAf*fvc::ddtCorr(Ua, Ufa)
         );
 
         surfaceScalarField phiUb
         (
-            (fvc::interpolate(HbbyA) & mesh.Sf()) + rUbAf*fvc::ddtCorr(Ub, phib)
+           (fvc::interpolate(HbbyA) & mesh.Sf())
+          + faceMaskOld*rUbAf*fvc::ddtCorr(Ub, Ufb)
         );
-        // Compute predicted velocity fluxes at cell faces
-        //      (account for momentum fluxes computed at cell faces)
+
         surfaceScalarField phiaHbyA(phiUa + phiDraga);
         surfaceScalarField phibHbyA(phiUb + phiDragb);
 
@@ -196,13 +218,17 @@ License
         MRF.makeRelative(phibHbyA);
         surfaceScalarField phiHbyA
         (
-            alphaf*(phiaHbyA + rAUKda*phib)
-          + betaf*(phibHbyA + rAUKdb*phia)
+            alphaf*(phiaHbyA + faceMask*rAUKda*phib)
+          + betaf*(phibHbyA + faceMask*rAUKdb*phia)
         );
 
-        // adjustPhi(phiHbyA, U, p_rbgh);
+    //MRF.makeRelative(phiHbyA);
+    //adjustPhi(phiHbyA, U, p_rbgh);
+    //surfaceScalarField phiHbyA = alphaf*phiaHbyA + betaf*phibHbyA;
 
-        // Assemble Poisson operator for the pressure
+    //    adjustPhi(phiHbyA, U, p_rbgh);
+
+        // Poisson equation for the pressure
         surfaceScalarField Dp
         (
             "(rho*(1|A(U)))",
@@ -215,25 +241,27 @@ License
             p_rbgh.boundaryFieldRef(),
             (
                 phiHbyA.boundaryField()
-              - alphaf.boundaryField()
-               *(mesh.Sf().boundaryField() & Ua.boundaryField())
-              + betaf.boundaryField()
-               *(mesh.Sf().boundaryField() & Ub.boundaryField())
+              - alphaf.boundaryField()*phia.boundaryField()
+               //*MRF.relative(mesh.Sf().boundaryField() & Ua.boundaryField())
+              + betaf.boundaryField()*phib.boundaryField()
+               //*MRF.relative(mesh.Sf().boundaryField() & Ub.boundaryField())
              )
             /(mesh.magSf().boundaryField()*Dp.boundaryField())
         );
 
+//    constrainPressure(p_rbgh, U, phiHbyA, Dp, MRF);
+
+
         while (pimple.correctNonOrthogonal())
         {
-            // Solve for the Poisson equation on the pressure
             fvScalarMatrix pEqn
             (
                 fvm::laplacian(Dp, p_rbgh) == fvc::div(phiHbyA)
             );
-            // Set pressure reference
+
             pEqn.setReference(pRefCell, getRefCellValue(p_rbgh, pRefCell));
 
-#if (defined(OFVERSION) && (OFVERSION >= 700))
+#if OFVERSION >= 700
             pEqn.solve();
 #else
             pEqn.solve(mesh.solver(p_rbgh.select(pimple.finalInnerIter())));
@@ -261,11 +289,8 @@ License
                 phia = phi + betaf*(phir);
                 phib = phi - alphaf*(phir);
 
-                // Compute contibuity error
                 #include "continuityErrs.H"
                 p_rbgh.relax();
-                // Is it useful?
-                SfGradp = pEqn.flux()/Dp;
 
                 // Velocity correction step at cell centers
                 volVectorField Ubs
@@ -276,24 +301,22 @@ License
                 (
                     HabyA + rUaA*fvc::reconstruct(phiDraga/rUaAf-SfGradp/rhoa)
                 );
-                // Compute corrected relative velocity due to drag force
-                //       at cell centers
+                //Uas.correctBoundaryConditions();
+                //Ubs.correctBoundaryConditions();
                 volScalarField Da(beta/rhoa*K*rUaA);
                 volScalarField Db(alpha/rhob*K*rUbA);
-                volVectorField Ur(((1 - Db)*Uas - (1 - Da)*Ubs)/(1 - Da*Db));
-                // Compute mixture velocity flux at cell centers
-                U = alpha*(Uas + Da*Ub) + beta*(Ubs + Db*Ua);
-                // Compute corrected phase velocity at cell centers
-                //       using updated semi-implicit drag
+                U = cellMask*(alpha*(Uas + Da*Ub) + beta*(Ubs + Db*Ua));
+                volVectorField Ur(cellMask*((1 - Db)*Uas - (1 - Da)*Ubs)
+                    /(1 - Da*Db));
+
                 Ua = U + beta*Ur;
                 Ua.correctBoundaryConditions();
-                fvOptions.correct(Ua);
+                //fvOptions.correct(Ua);
 
                 Ub = U - alpha*Ur;
                 Ub.correctBoundaryConditions();
-                fvOptions.correct(Ub);
+                //fvOptions.correct(Ub);
 
-                // Compute total pressure including hydrostatic contribution
                 p = p_rbgh + rhob*gh;
                 if (p_rbgh.needReference())
                 {
@@ -306,20 +329,27 @@ License
                     p_rbgh = p - rhob*gh;
                     p_rbgh.correctBoundaryConditions();
                 }
-                // Apply velocity limiters and correct boundary conditions
-              //  #include "UaUbLimiter.H"
+             //   #include "UaUbLimiter.H"
                 Ua.correctBoundaryConditions();
                 // Update mixture velocity
                 U = alpha*Ua + beta*Ub;
                 U.correctBoundaryConditions();
-                
+{
+    Ufa = fvc::interpolate(Ua);
+    Ufb = fvc::interpolate(Ub);
+    surfaceVectorField n(mesh.Sf()/mesh.magSf());
+    Ufa += n*(phia/mesh.magSf() - (n & Ufa));
+    Ufb += n*(phib/mesh.magSf() - (n & Ufb));
+}
+    //fvc::makeRelative(phi, U);
+    fvc::makeRelative(phia, Ua);
+    fvc::makeRelative(phib, Ub);
 
+    phia *= faceMask;
+    phib *= faceMask;
+    phi = alphaf*phia + betaf*phib;
 
-				phi = alphaf*phia + betaf*phib;
-                
             }
         }
     }
 }
-fvc::makeRelative(phia, Ua);
-fvc::makeRelative(phib, Ub);
