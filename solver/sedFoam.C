@@ -184,7 +184,7 @@ int main(int argc, char *argv[])
                 turbulencea->correct();
                 if (turbulencePropertiesa.get<word>("simulationType")=="LES")
                 {
-                    spherSigmaSGSa = turbulenceb->spherSigmaSGS();
+                    spherSigmaSGSa = turbulencea->spherSigmaSGS();
                 }
 
                 if (debugInfo)
@@ -204,7 +204,11 @@ int main(int argc, char *argv[])
 //      Write output
         #include "OutputGradPOSC.H"
         #include "writeOutput.H"
+<<<<<<< HEAD
         //#include "writeLiftDragCoeff.H"
+=======
+
+>>>>>>> upstream/develop
         Info<< "ExecutionTime = " << runTime.elapsedCpuTime() << " s"
             << "  ClockTime = " << runTime.elapsedClockTime() << " s"
             << nl << endl;
