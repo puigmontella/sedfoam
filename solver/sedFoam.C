@@ -204,11 +204,7 @@ int main(int argc, char *argv[])
 //      Write output
         #include "OutputGradPOSC.H"
         #include "writeOutput.H"
-<<<<<<< HEAD
-        //#include "writeLiftDragCoeff.H"
-=======
 
->>>>>>> upstream/develop
         Info<< "ExecutionTime = " << runTime.elapsedCpuTime() << " s"
             << "  ClockTime = " << runTime.elapsedClockTime() << " s"
             << nl << endl;
