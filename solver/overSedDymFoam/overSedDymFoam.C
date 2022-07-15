@@ -165,9 +165,6 @@ int main(int argc, char *argv[])
 			gh = (g & mesh.C()) - ghRef;
 			ghf = (g & mesh.Cf()) - ghRef;
 
-			MRF.update();
-            
-            Info << "MESH CHANGED" << endl;
             #include "setCellMask.H"
             #include "setInterpolatedCells.H"
 
