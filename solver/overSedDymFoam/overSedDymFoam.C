@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
 
     pimpleControl pimple(mesh);
 
-   // #include "readGravity.H"
+    #include "readGravity.H"
     #include "createFields.H"
     #include "createTurbulence.H"
     #include "createUf.H"
@@ -152,19 +152,13 @@ int main(int argc, char *argv[])
         runTime++;
         Info<< "Time = " << runTime.timeName() << nl << endl;
 
-       // #include "gravityRamp.H"
+        #include "gravityRamp.H"
 
         bool changed = mesh.update();
 
         if (changed)
         {
             Info << "MESH CHANGED" << endl;
-          //  #include "setCellMask.H"
-          //  #include "setInterpolatedCells.H"
-
-			gh = (g & mesh.C()) - ghRef;
-			ghf = (g & mesh.Cf()) - ghRef;
-
             #include "setCellMask.H"
             #include "setInterpolatedCells.H"
 
@@ -284,7 +278,7 @@ int main(int argc, char *argv[])
         }
         #include "OutputGradPOSC.H"
         #include "writeOutput.H"
-       // #include "writeLiftDragCoeff.H"
+        #include "writeLiftDragCoeff.H"
 
         Info<< "ExecutionTime = " << runTime.elapsedCpuTime() << " s"
             << "  ClockTime = " << runTime.elapsedClockTime() << " s"
