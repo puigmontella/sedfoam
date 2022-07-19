@@ -192,6 +192,7 @@ int main(int argc, char *argv[])
             
             phia = mesh.Sf() & Ufa;
             phib = mesh.Sf() & Ufb;
+            //phi = mesh.Sf() & Uf;
 
             // Zero phi on current H-I
             surfaceScalarField faceMask
@@ -278,7 +279,7 @@ int main(int argc, char *argv[])
         }
         #include "OutputGradPOSC.H"
         #include "writeOutput.H"
-        #include "writeLiftDragCoeff.H"
+     //   #include "writeLiftDragCoeff.H"
 
         Info<< "ExecutionTime = " << runTime.elapsedCpuTime() << " s"
             << "  ClockTime = " << runTime.elapsedClockTime() << " s"

@@ -649,18 +649,15 @@ volVectorField DDtUb
 );
 
 
+
+
 Info<< "Calculating field g.h\n" << endl;
-//volScalarField gh("gh", gravity & mesh.C());
-//surfaceScalarField ghf("ghf", gravity & mesh.Cf());
+volScalarField gh("gh", gravity & mesh.C());
+surfaceScalarField ghf("ghf", gravity & mesh.Cf());
 
-
-
-
-
-
-#include "readGravitationalAcceleration.H"
-#include "readhRef.H"
-#include "gh.H"
+//#include "readGravitationalAcceleration.H"
+//#include "readhRef.H"
+//#include "gh.H"
 
 // Read interfacial properties
 
