@@ -55,8 +55,8 @@ License
         alpha *= cellMask;
         alpha.correctBoundaryConditions();
 
-        beta = cellMask*(scalar(1.0) - alpha);
-//       beta = (scalar(1.0) - alpha);
+     //   beta = cellMask*(scalar(1.0) - alpha);
+       beta = (scalar(1.0) - alpha);
 
         if (debugInfo)
         {
