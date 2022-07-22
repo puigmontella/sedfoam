@@ -1094,7 +1094,7 @@ void Foam::functionObjects::forcesSed::calcForcesMoment()
 
             vectorField fN
             (
-                rho(p)*Sfb[patchi]*(p_hyd.boundaryField()[patchi]*0+1e-0*p_rbgh.boundaryField()[patchi]- pRef)
+                rho(p)*Sfb[patchi]*(9e-1*p_rbgh.boundaryField()[patchi]- pRef)
             );
             vectorField fNsolid
             (
