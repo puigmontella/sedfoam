@@ -198,16 +198,6 @@ Foam::granularRheologyModel::granularRheologyModel
                           1e-6)
         )
     ),
-    cohesion_
-    (
-        granularRheologyProperties_.getOrDefault
-        (
-            "cohesion",
-            dimensionedScalar("cohesion",
-                          dimensionSet(1, -1, -2, 0, 0, 0, 0),
-                          0)
-        )
-    ),
     tau_inv_min_
     (
         granularRheologyProperties_.getOrDefault
@@ -257,6 +247,7 @@ Foam::granularRheologyModel::granularRheologyModel
         alpha_.mesh(),
         dimensionedScalar("zero", dimensionSet(1, -1, -1, 0, 0), 0.0)
     ),
+
     pa_
     (
         IOobject
@@ -283,6 +274,7 @@ Foam::granularRheologyModel::granularRheologyModel
         alpha_.mesh(),
         dimensionedScalar("zero", dimensionSet(1, -1, -2, 0, 0), 0.0)
     ),
+
     delta_
     (
         IOobject
@@ -296,6 +288,7 @@ Foam::granularRheologyModel::granularRheologyModel
         alpha_.mesh(),
         dimensionedScalar("zero", alpha_.dimensions(), 0.0)
     ),
+
     nuvb_
     (
         IOobject
@@ -317,21 +310,7 @@ Foam::granularRheologyModel::granularRheologyModel
             alpha_.time().timeName(),
             alpha_.mesh(),
             IOobject::NO_READ,
-            IOobject::AUTO_WRITE
-        ),
-        alpha_.mesh(),
-        dimensionedScalar("zero", dimensionSet(0, 0, 0, 0, 0), 0.0)
-    )
-    ,
-    alphaEq_
-    (
-        IOobject
-        (
-            "alphaEq",
-            alpha_.time().timeName(),
-            alpha_.mesh(),
-            IOobject::NO_READ,
-            IOobject::AUTO_WRITE
+            IOobject::NO_WRITE
         ),
         alpha_.mesh(),
         dimensionedScalar("zero", dimensionSet(0, 0, 0, 0, 0), 0.0)
@@ -418,22 +397,8 @@ void Foam::granularRheologyModel::solve
     {
     //delta_ = DilatancyModel_->delta(K_dila_, alpha_c_, alpha_, magD,
     // da_, rhob_, nub_, p_p_total_, PaMin);
-        //volScalarField alphaEq_
-        //(
-            //PPressureModel_->alphaEq
-            //(
-                //p_p_total_,
-                //Bphi_,
-                //rhoa_,
-                //da_,
-                //rhob_,
-                //nub_,
-                //magD,
-                //alpha_c_
-            //)
-        //);
-      alphaEq_
-        =(
+        volScalarField alphaEq_
+        (
             PPressureModel_->alphaEq
             (
                 p_p_total_,
@@ -452,7 +417,7 @@ void Foam::granularRheologyModel::solve
         delta_.max(-0.5);
     }
     //  Compute the regularized particulate viscosity
-    mua_ = (muI_* p_p_total_ + cohesion_*alpha_)/ pow(magD2 + Dsmall2, 0.5);
+    mua_ = muI_* p_p_total_ / pow(magD2 + Dsmall2, 0.5);
 
     // Compute bulk viscosity (by default BulkFactor = 0)s
     lambda_ = BulkFactor_*p_p_total_ / pow(magD2 + Dsmall2, 0.5);
