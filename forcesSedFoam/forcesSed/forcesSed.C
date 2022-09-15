@@ -1082,24 +1082,32 @@ void Foam::functionObjects::forcesSed::calcForcesMoment()
             vectorField Md(mesh_.C().boundaryField()[patchi] - origin);
 
 
-            //vectorField fN
-            //(
-                //rho(p)*Sfb[patchi]*(p.boundaryField()[patchi]- pRef)
-            //);
-            //vectorField fNsolid
-            //(
-                //rho(p)*Sfb[patchi]*(pS.boundaryField()[patchi] - pRef)
-            //);
 
-
+    dimensionedScalar Pfixd
+    (
+        "Pfixd",
+        dimensionSet(1, -1, -2, 0, 0, 0, 0),
+        100
+    );
+    
             vectorField fN
             (
-                rho(p)*Sfb[patchi]*(0.*p_rbgh.boundaryField()[patchi]- pRef)
+                rho(p)*Sfb[patchi]*(p_rbgh.boundaryField()[patchi]- pRef)
             );
             vectorField fNsolid
             (
-                rho(p)*Sfb[patchi]*(1*pS.boundaryField()[patchi] - pRef)
+                rho(p)*Sfb[patchi]*(Pfixd.value()*alpha.boundaryField()[patchi] - pRef)
             );
+
+
+            //vectorField fN
+            //(
+                //rho(p)*Sfb[patchi]*(1.*p_rbgh.boundaryField()[patchi]- pRef)
+            //);
+            //vectorField fNsolid
+            //(
+                //rho(p)*Sfb[patchi]*(1*pS.boundaryField()[patchi] - pRef)
+            //);
             
             
             
