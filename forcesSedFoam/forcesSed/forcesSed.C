@@ -1087,7 +1087,7 @@ void Foam::functionObjects::forcesSed::calcForcesMoment()
     (
         "Pfixd",
         dimensionSet(1, -1, -2, 0, 0, 0, 0),
-        60
+        2311
     );
     
             vectorField fN
