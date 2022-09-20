@@ -206,6 +206,8 @@ else
     nuFra = nua*scalar(0.0);
     nuEffa = nua + turbulencea->nut();
     lambdaUa = nua*rhoa*scalar(0.0);
+    
+    muEff =    nub*rhob;
 }
 // Add a numerical viscosity to damp the instabilities close to the outlet
 if (spongeLayer)

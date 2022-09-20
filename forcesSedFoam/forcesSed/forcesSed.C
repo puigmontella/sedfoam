@@ -1083,13 +1083,13 @@ void Foam::functionObjects::forcesSed::calcForcesMoment()
 
 
 
-    dimensionedScalar Pfixd
-    (
-        "Pfixd",
-        dimensionSet(1, -1, -2, 0, 0, 0, 0),
-     //  60
-        2311
-    );
+    //dimensionedScalar Pfixd
+    //(
+        //"Pfixd",
+        //dimensionSet(1, -1, -2, 0, 0, 0, 0),
+     ////  60
+        //2311
+    //);
     
             //vectorField fN
             //(
@@ -1100,10 +1100,10 @@ void Foam::functionObjects::forcesSed::calcForcesMoment()
                 //rho(p)*Sfb[patchi]*(Pfixd.value() - pRef)
             //);
 
-
             vectorField fN
             (
-                rho(p)*Sfb[patchi]*(0.*p_rbgh.boundaryField()[patchi]- pRef)
+                rho(p)*Sfb[patchi]*(1.*p_rbgh.boundaryField()[patchi]- pRef)
+                
             );
             vectorField fNsolid
             (
