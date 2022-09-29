@@ -379,7 +379,7 @@ void Foam::granularRheologyModel::solve
 
     pa_new_value.max(0.0);
 
-    pa_=pa_new_value;
+    pa_=pa_new_value*alpha_;
     pa_.correctBoundaryConditions();
     //total particle pressure(shear induced+contact contributions)
     p_p_total_ = mag(pa_new_value+pf);

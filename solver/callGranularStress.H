@@ -48,39 +48,48 @@ else
 {
     alphaPlastic=alphaMinFriction*Unity;
 }
-
+//volScalarField pffNew=pff;
 // Pff corresponds to "contact" pressure which prevent the granular phase from
 // exceeding the maximum volume fraction.
 pff = pp->pff(alpha, alphaPlastic, alphaMax, Fr_, eta0_, eta1_);
-//Info << "abans pff" << pff <<endl;
 
-//pff.correctBoundaryConditions();
 
-//volScalarField SecondInvariant(sqrt(mag(0.5*(sqr(tr(gradUaT)) - tr(((gradUaT) & (gradUaT)))))));
-////Info << "pff" << pff <<endl;
 
-//Info << "max(SecondInvariant)" << max(SecondInvariant) <<endl;
-//Info << "min(SecondInvariant)" << min(SecondInvariant) <<endl;
 
-//volScalarField kLee(alpha*2*0.001*SecondInvariant);
 
-    //fvScalarMatrix pff_pl_Eqn
+////Info << "abans pff" << pff <<endl;
+
+
+////volScalarField SecondInvariant(sqrt(mag(0.5*(sqr(tr(gradUaT)) - tr(((gradUaT) & (gradUaT)))))));
+//////Info << "pff" << pff <<endl;
+
+////Info << "max(SecondInvariant)" << max(SecondInvariant) <<endl;
+////Info << "min(SecondInvariant)" << min(SecondInvariant) <<endl;
+
+////volScalarField kLee(alpha*2*0.001*SecondInvariant);
+    //dimensionedScalar kLee
     //(
-     //fvm::ddt(pff)
-     //+ fvm::div(phia, pff, "div(phia,pff)")
-     //- fvm::Sp(fvc::div(phia), pff)
-     //==
-        //kLee*(pff)
-        //-fvm::Sp(kLee, pff)
-         //);
-    //pff_pl_Eqn.relax();
-    //pff_pl_Eqn.solve();
+        //"kLee",
+        //dimensionSet(0, -0, -1, 0, 0, 0, 0),
+        //0.001
+    //);
+//fvScalarMatrix pff_pl_Eqn
+//(
+ //fvm::ddt(pff_new)
+ ////+ fvm::div(phia, pff_new, "div(phia,pff)")
+ ////- fvm::Sp(fvc::div(phia), pff_new)
+ //==
+	//kLee*(pff)
+	//-fvm::Sp(kLee, pff_new)
+	 //);
+//pff_pl_Eqn.relax();
+//pff_pl_Eqn.solve();
+
+//pff_new.correctBoundaryConditions();
+//pff=pff_new;
 
 
-
-
-
-//
+////
 //
 //  Kinetic THEORY PART
 //
