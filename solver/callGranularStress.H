@@ -48,14 +48,16 @@ else
 {
     alphaPlastic=alphaMinFriction*Unity;
 }
+
 //volScalarField pffNew=pff;
 // Pff corresponds to "contact" pressure which prevent the granular phase from
 // exceeding the maximum volume fraction.
+//pff_new=pff;
+
 pff = pp->pff(alpha, alphaPlastic, alphaMax, Fr_, eta0_, eta1_);
 
 
-
-
+//pff=(1-0.0001)*pff_new+pff*0.0001;
 
 ////Info << "abans pff" << pff <<endl;
 
@@ -71,13 +73,13 @@ pff = pp->pff(alpha, alphaPlastic, alphaMax, Fr_, eta0_, eta1_);
     //(
         //"kLee",
         //dimensionSet(0, -0, -1, 0, 0, 0, 0),
-        //0.001
+        //0.01
     //);
 //fvScalarMatrix pff_pl_Eqn
 //(
  //fvm::ddt(pff_new)
- ////+ fvm::div(phia, pff_new, "div(phia,pff)")
- ////- fvm::Sp(fvc::div(phia), pff_new)
+ //+ fvm::div(phia, pff_new, "div(phia,pff)")
+ //- fvm::Sp(fvc::div(phia), pff_new)
  //==
 	//kLee*(pff)
 	//-fvm::Sp(kLee, pff_new)
@@ -87,7 +89,7 @@ pff = pp->pff(alpha, alphaPlastic, alphaMax, Fr_, eta0_, eta1_);
 
 //pff_new.correctBoundaryConditions();
 //pff=pff_new;
-
+//pff.max(0.);
 
 ////
 //
