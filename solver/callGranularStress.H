@@ -57,7 +57,7 @@ else
 pff = pp->pff(alpha, alphaPlastic, alphaMax, Fr_, eta0_, eta1_);
 
 
-//pff=(1-0.0001)*pff_new+pff*0.0001;
+//pff=(1-0.1)*pff_new+pff*0.1;
 
 ////Info << "abans pff" << pff <<endl;
 
