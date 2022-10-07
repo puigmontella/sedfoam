@@ -64,10 +64,10 @@ pff = pp->pff(alpha, alphaPlastic, alphaMax, Fr_, eta0_, eta1_);
 //// initially, we need to fix the bed level, and let the flow develop
 //// only cell centers are considered
 //// 0-->x, 1-->y, 2-->z
-   //if (mesh.cellCentres()[cell][1] >-0.06 and  pff[cell] >200)
+   //if (mesh.cellCentres()[cell][1] >-0.053 and  pff[cell] >120)
    //{
 //// only exclude the streamwise conponents
-	   //pff[cell] =200;
+	   //pff[cell] =120;
    //}
 //}
 
