@@ -540,20 +540,7 @@ volScalarField pa
     mesh,
     dimensionedScalar("zero", dimensionSet(1, -1, -2, 0, 0), 0.0)
 );
-Info<< "Reading field pff_new\n" << endl;
-volScalarField pff_new
-(
-    IOobject
-    (
-        "pff_new",
-        runTime.timeName(),
-        mesh,
-        IOobject::READ_IF_PRESENT,
-        IOobject::AUTO_WRITE
-    ),
-    mesh,
-    dimensionedScalar("zero", dimensionSet(1, -1, -2, 0, 0), 0.0)
-);
+
 
 volTensorField gradUaT
 (
