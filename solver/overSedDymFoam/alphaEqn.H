@@ -35,8 +35,8 @@ License
         fvScalarMatrix alphaEqn
         (
              fvm::ddt(alpha)
-           //+ fvm::div(phic, alpha, scheme)
-           //+ fvm::div(-fvc::flux(-phir, (1.0-alpha), schemer), alpha, schemer)
+           + fvm::div(phic, alpha, scheme)
+           + fvm::div(-fvc::flux(-phir, (1.0-alpha), schemer), alpha, schemer)
         );
 
         alphaEqn.relax();
