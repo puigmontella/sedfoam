@@ -8,12 +8,12 @@
 Build  : _76d719d1e6-20220624 OPENFOAM=2206 version=v2206
 Arch   : "LSB;label=32;scalar=64"
 Exec   : blockMesh
-Date   : Sep 08 2022
-Time   : 12:08:59
-Host   : cl7n016
-PID    : 751611
+Date   : Nov 02 2022
+Time   : 17:08:23
+Host   : cl2n012
+PID    : 482960
 I/O    : uncollated
-Case   : /.fsdyn_people/puigmont9e/project/19SERDP/forceStudy/DynamicObjects/DragPlateMesh1_Long_guillard/Case1D
+Case   : /.fsdyn_people/puigmont9e/calcul/home/OpenFOAM/puigmont9e-v1906/src/SedFoamDila_V4/tutorialsDyM/2DBulldozer/Case1D
 nProcs : 1
 trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
 fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
@@ -42,7 +42,6 @@ Check topology
 
 Creating block offsets
 Creating merge list (topological search)...
-Deleting polyMesh directory "constant/polyMesh"
 
 Creating polyMesh from blockMesh
 Creating patches

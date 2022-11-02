@@ -1,0 +1,21 @@
+#!/bin/sh
+
+blockMesh
+
+# Select cellSets
+topoSet
+
+subsetMesh box -patch hole -overwrite
+
+# Select cellSets
+-s box topoSet
+
+
+# Use cellSets to write zoneID
+setFields
+cp -r 0_org     0
+
+decomposePar
+mpirun -np 6 overSedDymFoam_rbgh -parallel > log &
+
+#------------------------------------------------------------------------------

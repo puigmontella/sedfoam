@@ -163,7 +163,16 @@ int main(int argc, char *argv[])
 
         #include "gravityRamp.H"
 
-        bool changed = mesh.update();
+        
+
+//      Pressure-velocity PIMPLE corrector loop
+        while (pimple.loop())
+        {
+			
+			
+			
+			
+		bool changed = mesh.update();
 
         if (changed)
         {
@@ -204,9 +213,6 @@ int main(int argc, char *argv[])
             //phi = mesh.Sf() & Uf;
 
 
-
-
-
             // Zero phi on current H-I
             surfaceScalarField faceMask
             (
@@ -236,18 +242,16 @@ int main(int argc, char *argv[])
 			{
 				 #include "correctPhi.H"
 			}
-
-//      Pressure-velocity PIMPLE corrector loop
-        while (pimple.loop())
-        {
+			
+			
             #include "alphaEqn.H"
             #include "liftDragCoeffs.H"
-  MRF.makeAbsolute(phia);
+			MRF.makeAbsolute(phia);
 
 //          Compute the granular stress: pff, nuFra, nuEffa and lambdaUa
 //             from Kinetic Theory of granular flows or mu(I) rheology
             #include "callGranularStress.H"
-  MRF.makeRelative(phia);
+			MRF.makeRelative(phia);
 
 //          Assemble the momentum balance equations for both phases a and b
 //          And assemble and solve the pressure poisson equation
@@ -266,16 +270,16 @@ int main(int argc, char *argv[])
 
             #include "DDtU.H"
 
-            //if (pimple.turbCorr())
-            //{
-                //#include "updateTwoPhaseRASTurbulence.H"
-                //turbulenceb->correct();
-                //if (debugInfo)
-                //{
-                    //Info << " max(nutb) = "
-                         //<< max(turbulenceb->nut()).value() << endl;
-                //}
-            //}
+            if (pimple.turbCorr())
+            {
+                #include "updateTwoPhaseTurbulence.H"
+                turbulenceb->correct();
+                if (debugInfo)
+                {
+                    Info << " max(nutb) = "
+                         << max(turbulenceb->nut()).value() << endl;
+                }
+            }
         }
         if (debugInfo)
         {

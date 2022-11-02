@@ -2,7 +2,7 @@
 
 
 mkdir 1d_profil
-python3 -c "import fluidfoam; fluidfoam.create1dprofil('Case1D/', '.', '50', 'Y', ['U.a', 'U.b', 'alpha.a'])"
+python3 -c "import fluidfoam; fluidfoam.create1dprofil('Case1D/', '.', '100', 'Y', ['U.a', 'U.b', 'alpha.a'])"
 
 blockMesh
 
@@ -19,7 +19,7 @@ funkySetFields -time 0
 # Use cellSets to write zoneID
 setFields
 
-decomposePar
+#decomposePar
 
-
-mpirun -np 4 overSedDymFoam_rbgh -parallel > log&
+overSedDymFoam_rbgh > log&
+#mpirun -np 4 overSedDymFoam_rbgh -parallel > log&

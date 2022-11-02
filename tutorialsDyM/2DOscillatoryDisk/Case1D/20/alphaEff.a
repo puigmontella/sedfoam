@@ -1,0 +1,58 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2206                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      binary;
+    arch        "LSB;label=32;scalar=64";
+    class       volScalarField;
+    location    "20";
+    object      alphaEff.a;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 0 0 0 0];
+
+internalField   nonuniform List<scalar> 
+150
+(d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?c;ﬂOçó‚?^;ﬂOçó‚?F;ﬂOçó‚?—:ﬂOçó‚?ä8ﬂOçó‚?H-ﬂOçó‚?ÅıﬁOçó‚?<·›Oçó‚?€àÿOçó‚?AæOçó‚?èÌ:Oçó‚? m±Lçó‚?Vp @çó‚?0ñ‚çó‚?SÀôÕãó‚?´⁄™÷Öó‚?Khó‚?U`Ë˛’ñ‚?æ]ñ·î‚?Z[˛Ü‚?l>ê—B‚?±\[^·?)·dØ≠Ÿ?ëY|$«?‹x≈ª6©?‚rN©iá?æﬂûmx≤i?”ˆ¨d*yW?«ß¿Ô–Q?*KJ±U¨P?™≥;@qP?”Ã—]ReP?ñ<ÃÈbP?Ú≈áPmbP?Iﬂå.TbP?ÌRçObP?INbP?ªV‡MbP?Ë˙•’MbP?Åp}”MbP?w‚”MbP?Ø\˜“MbP?†–Ú“MbP?πÂÒ“MbP?*∂Ò“MbP?N¨Ò“MbP?ê™Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?);
+
+boundaryField
+{
+    outlet
+    {
+        type            calculated;
+        value           nonuniform List<scalar> 
+150
+(d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?c;ﬂOçó‚?^;ﬂOçó‚?F;ﬂOçó‚?—:ﬂOçó‚?ä8ﬂOçó‚?H-ﬂOçó‚?ÅıﬁOçó‚?<·›Oçó‚?€àÿOçó‚?AæOçó‚?èÌ:Oçó‚? m±Lçó‚?Vp @çó‚?0ñ‚çó‚?SÀôÕãó‚?´⁄™÷Öó‚?Khó‚?U`Ë˛’ñ‚?æ]ñ·î‚?Z[˛Ü‚?l>ê—B‚?±\[^·?)·dØ≠Ÿ?ëY|$«?‹x≈ª6©?‚rN©iá?æﬂûmx≤i?”ˆ¨d*yW?«ß¿Ô–Q?*KJ±U¨P?™≥;@qP?”Ã—]ReP?ñ<ÃÈbP?Ú≈áPmbP?Iﬂå.TbP?ÌRçObP?INbP?ªV‡MbP?Ë˙•’MbP?Åp}”MbP?w‚”MbP?Ø\˜“MbP?†–Ú“MbP?πÂÒ“MbP?*∂Ò“MbP?N¨Ò“MbP?ê™Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?);
+    }
+    inlet
+    {
+        type            calculated;
+        value           nonuniform List<scalar> 
+150
+(d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?d;ﬂOçó‚?c;ﬂOçó‚?^;ﬂOçó‚?F;ﬂOçó‚?—:ﬂOçó‚?ä8ﬂOçó‚?H-ﬂOçó‚?ÅıﬁOçó‚?<·›Oçó‚?€àÿOçó‚?AæOçó‚?èÌ:Oçó‚? m±Lçó‚?Vp @çó‚?0ñ‚çó‚?SÀôÕãó‚?´⁄™÷Öó‚?Khó‚?U`Ë˛’ñ‚?æ]ñ·î‚?Z[˛Ü‚?l>ê—B‚?±\[^·?)·dØ≠Ÿ?ëY|$«?‹x≈ª6©?‚rN©iá?æﬂûmx≤i?”ˆ¨d*yW?«ß¿Ô–Q?*KJ±U¨P?™≥;@qP?”Ã—]ReP?ñ<ÃÈbP?Ú≈áPmbP?Iﬂå.TbP?ÌRçObP?INbP?ªV‡MbP?Ë˙•’MbP?Åp}”MbP?w‚”MbP?Ø\˜“MbP?†–Ú“MbP?πÂÒ“MbP?*∂Ò“MbP?N¨Ò“MbP?ê™Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?¸©Ò“MbP?);
+    }
+    top
+    {
+        type            calculated;
+        value           uniform 0.001;
+    }
+    bottom
+    {
+        type            calculated;
+        value           uniform 0.581;
+    }
+    frontAndBack
+    {
+        type            empty;
+    }
+}
+
+
+// ************************************************************************* //
