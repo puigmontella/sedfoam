@@ -96,10 +96,19 @@ int main(int argc, char *argv[])
     #include "readGravity.H"
     #include "createFields.H"
     #include "createTurbulence.H"
+    
+
+
+
+
     #include "createUf.H"
     #include "createMRF.H"
     #include "createFvOptions.H"
     #include "createControls.H"
+    if (correctPhi)
+    {
+        #include "correctPhi.H"
+    }
     #include "CourantNo.H"
     #include "setInitialDeltaT.H"
     #include "createFavreAveraging.H"
@@ -194,6 +203,10 @@ int main(int argc, char *argv[])
             phib = mesh.Sf() & Ufb;
             //phi = mesh.Sf() & Uf;
 
+
+
+
+
             // Zero phi on current H-I
             surfaceScalarField faceMask
             (
@@ -218,17 +231,11 @@ int main(int argc, char *argv[])
                   //  fvc::makeRelative(phi, U);
         }
 
-
-/*        if (mesh.changing() && correctPhi)
-        {
-            // Calculate absolute flux from the mapped surface velocity
-            #include "correctPhi.H"
-        }
-        if (mesh.changing() && checkMeshCourantNo)
-        {
-            #include "meshCourantNo.H"
-        }
-*/
+			// Correct phi on individual regions
+			if (correctPhi)
+			{
+				 #include "correctPhi.H"
+			}
 
 //      Pressure-velocity PIMPLE corrector loop
         while (pimple.loop())

@@ -29,8 +29,6 @@ forcesSedFoam/Allwmake $targetType $*
 sixDoFRigidBodyMotionSedFoam/Allwmake $targetType $*
 TurbulenceModels/Allwmake $targetType $*
 solver/Allwmake $targetType $*
-solverDriftSed/Allwmake $targetType $*
-solverDriftDyMSed/Allwmake $targetType $*
 solverMULES/Allwmake $targetType $*
 
 

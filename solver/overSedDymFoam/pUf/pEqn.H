@@ -218,6 +218,8 @@ License
         surfaceScalarField rAUKdb(fvc::interpolate(alpha/rhob*K*rUbA));
         // Compute predicted velocity fluxes at cell faces including
         //       including semi-implicit drag contribution
+        MRF.makeRelative(phiaHbyA);
+        MRF.makeRelative(phibHbyA);
         surfaceScalarField phiHbyA
         (
             alphaf*(phiaHbyA + rAUKda*phib)
@@ -225,7 +227,7 @@ License
         );
 
         // adjustPhi(phiHbyA, U, p_rbgh);
-
+		MRF.makeRelative(phiHbyA);
         // Assemble Poisson operator for the pressure
         surfaceScalarField Dp
         (
@@ -242,10 +244,11 @@ License
               - alphaf.boundaryField()
                *((mesh.Sf().boundaryField() & Ua.boundaryField())
               + betaf.boundaryField()
-               *(mesh.Sf().boundaryField() & Ub.boundaryField())
-             ))
+               *(mesh.Sf().boundaryField() & Ub.boundaryField()))
+             )
             /(mesh.magSf().boundaryField()*Dp.boundaryField())
         );
+    constrainPressure(p_rbgh, U, phiHbyA, Dp, MRF);
 
         while (pimple.correctNonOrthogonal())
         {
@@ -333,6 +336,7 @@ License
                 // Apply velocity limiters and correct boundary conditions
               //  #include "UaUbLimiter.H"
                 Ua.correctBoundaryConditions();
+                Ub.correctBoundaryConditions();
                 // Update mixture velocity
                 U = alpha*Ua + beta*Ub;
                 U.correctBoundaryConditions();

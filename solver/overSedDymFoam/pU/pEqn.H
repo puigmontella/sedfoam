@@ -213,7 +213,7 @@ License
           + betaf*(phibHbyA + faceMask*rAUKdb*phia)
         );
 
-    //MRF.makeRelative(phiHbyA);
+		MRF.makeRelative(phiHbyA);
     //adjustPhi(phiHbyA, U, p_rbgh);
     //surfaceScalarField phiHbyA = alphaf*phiaHbyA + betaf*phibHbyA;
 
@@ -232,15 +232,15 @@ License
             p_rbgh.boundaryFieldRef(),
             (
                 phiHbyA.boundaryField()
-              - (alphaf.boundaryField()
-               *(mesh.Sf().boundaryField() & Ua.boundaryField())
+              - alphaf.boundaryField()
+               *((mesh.Sf().boundaryField() & Ua.boundaryField())
               + betaf.boundaryField()
                *(mesh.Sf().boundaryField() & Ub.boundaryField()))
              )
             /(mesh.magSf().boundaryField()*Dp.boundaryField())
         );
 
-//    constrainPressure(p_rbgh, U, phiHbyA, Dp, MRF);
+    constrainPressure(p_rbgh, U, phiHbyA, Dp, MRF);
 
 
         while (pimple.correctNonOrthogonal())
@@ -329,6 +329,7 @@ License
                 // Apply velocity limiters and correct boundary conditions
                 #include "UaUbLimiter.H"
                 Ua.correctBoundaryConditions();
+                Ub.correctBoundaryConditions();
                 // Update mixture velocity
                 U = alpha*Ua + beta*Ub;
                 U.correctBoundaryConditions();

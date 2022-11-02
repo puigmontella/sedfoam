@@ -29,13 +29,14 @@ License
     surfaceScalarField phic("phic", MRF.absolute(phi));
     surfaceScalarField phir("phir", MRF.absolute(phia - phib));
 
+
     for (int acorr=0; acorr<nAlphaCorr; acorr++)
     {
         fvScalarMatrix alphaEqn
         (
              fvm::ddt(alpha)
-           + fvm::div(phic, alpha, scheme)
-           + fvm::div(-fvc::flux(-phir, (1.0-alpha), schemer), alpha, schemer)
+           //+ fvm::div(phic, alpha, scheme)
+           //+ fvm::div(-fvc::flux(-phir, (1.0-alpha), schemer), alpha, schemer)
         );
 
         alphaEqn.relax();
@@ -52,11 +53,13 @@ License
         alpha.min(alphaMax);
         alpha.max(0);
 
-        //alpha *= cellMask;
-      //  alpha.correctBoundaryConditions();
+        alpha *= cellMask;
+        alpha.correctBoundaryConditions();
+      
 
      //   beta = cellMask*(scalar(1.0) - alpha);
        beta = (scalar(1.0) - alpha);
+        beta.correctBoundaryConditions();
 
         if (debugInfo)
         {

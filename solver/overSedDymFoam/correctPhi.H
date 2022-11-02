@@ -76,7 +76,7 @@ if (mesh.changing())
     );
 
 {
-    dimensionedScalar rAUf("rAUf", dimTime, 1.0);
+    dimensionedScalar rAUf("rAUf", dimTime/rho.dimensions(), 1.0);
 
     const cellCellStencilObject& overlap = Stencil::New(mesh);
     const labelList& cellTypes = overlap.cellTypes();
