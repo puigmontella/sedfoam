@@ -214,6 +214,7 @@ License
         );
 
 		MRF.makeRelative(phiHbyA);
+		
     //adjustPhi(phiHbyA, U, p_rbgh);
     //surfaceScalarField phiHbyA = alphaf*phiaHbyA + betaf*phibHbyA;
 

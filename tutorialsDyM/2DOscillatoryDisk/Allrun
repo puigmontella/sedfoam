@@ -4,23 +4,22 @@ cd "${0%/*}" || exit                                # Run from this directory
 #------------------------------------------------------------------------------
 
 mkdir 1d_profil
-python3 -c "import fluidfoam; fluidfoam.create1dprofil('Case1D', '.', '100', 'Y', ['U.a', 'U.b', 'alpha.a'])"
+python3 -c "import fluidfoam; fluidfoam.create1dprofil('./Case1D', '.', '100', 'Y', ['U.a', 'U.b', 'alpha.a'])"
 
-blockMesh
 
-topoSet
+runApplication blockMesh
 
-subsetMesh box -patch hole -overwrite
+# Select cellSets
+runApplication -s 1 topoSet
 
+runApplication subsetMesh box -patch hole -overwrite
 
 cp -r 0_org 0
 
-funkySetFields -time 0
-
-
 # Use cellSets to write zoneID
-setFields
+runApplication setFields
 
+
+funkySetFields -time 0
 decomposePar
-
-mpirun -np 3 overSedDymFoam_rbgh -parallel > log&
+mpirun -np 3 overSedDymFoam_rbgh -parallel > log &

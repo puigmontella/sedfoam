@@ -33,7 +33,7 @@ solvers
         preconditioner  DIC;
         tolerance       1e-8;
         relTol          0.0;
-        maxIter         1500;
+        maxIter         500;
     }
 
     p_rbghFinal
@@ -74,14 +74,14 @@ solvers
     {
         solver          PBiCG;
         preconditioner  DILU;
-        tolerance       1e-8;
+        tolerance       1e-10;
         relTol          0;
     }
     alpha.aFinal
     {
         solver          PBiCG;
         preconditioner  DILU;
-        tolerance       1e-8;
+        tolerance       1e-10;
         relTol          0;
     }
     Theta

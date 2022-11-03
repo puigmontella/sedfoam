@@ -14,17 +14,16 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-libs            (overset fvMotionSolvers);
 
 application     overSedDymFoam_rbgh;
 
 startFrom       latestTime;
 
-startTime       0.;
+startTime       0.38;
 
 stopAt          endTime;
 
-endTime         2.0;
+endTime         4.2;
 
 deltaT          0.0000025;
 
