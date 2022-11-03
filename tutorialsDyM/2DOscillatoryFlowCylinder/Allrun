@@ -12,4 +12,4 @@ topoSet
 setFields
 decomposePar
 
-#mpirun -np 12 overSedDymFoam_rbgh -parallel > log&
+mpirun -np 6 overSedDymFoam_rbgh -parallel > log&

@@ -212,7 +212,7 @@ addLayersControls
   //  expansionRatio 1.225832448;
     expansionRatio 1.1;
     //finalLayerThickness 0.0007;
-    firstLayerThickness 0.003;
+    firstLayerThickness 0.002;
     minThickness 0.00000001;
 
     nGrow 0;

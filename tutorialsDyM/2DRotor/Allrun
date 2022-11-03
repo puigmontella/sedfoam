@@ -1,22 +1,22 @@
 #!/bin/sh
+cd "${0%/*}" || exit                                # Run from this directory
+. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions        # Tutorial run functions
+#------------------------------------------------------------------------------
 
-blockMesh
+
+runApplication blockMesh
 
 # Select cellSets
-topoSet
+runApplication -s 1 topoSet
 
-subsetMesh box -patch hole -overwrite
+runApplication subsetMesh box -patch hole -overwrite
 
-# Select cellSets
--s box topoSet
-
+cp -r 0_org 0
 
 # Use cellSets to write zoneID
-setFields
-cp -r 0_org     0
+runApplication setFields
 
-#decomposePar
-#mpirun -np 2 overSedDymFoam_rbgh -parallel > log &
-overSedDymFoam_rbgh  > log &
 
-#------------------------------------------------------------------------------
+#funkySetFields -time 0
+
+overSedDymFoam_rbgh > log &

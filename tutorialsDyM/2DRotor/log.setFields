@@ -9,11 +9,11 @@ Build  : _76d719d1e6-20220624 OPENFOAM=2206 version=v2206
 Arch   : "LSB;label=32;scalar=64"
 Exec   : setFields
 Date   : Nov 03 2022
-Time   : 18:23:29
+Time   : 18:42:21
 Host   : cl2n010
-PID    : 262318
+PID    : 263246
 I/O    : uncollated
-Case   : /.fsdyn_people/puigmont9e/calcul/home/OpenFOAM/puigmont9e-v1906/src/SedFoamDila_V4/tutorialsDyM/2DOscillatoryDisk
+Case   : /.fsdyn_people/puigmont9e/calcul/home/OpenFOAM/puigmont9e-v1906/src/SedFoamDila_V4/tutorialsDyM/2DRotor
 nProcs : 1
 trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
 fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
@@ -33,8 +33,6 @@ Setting field region values
     Adding all elements of cellSet (c0)
     Setting internal values of volScalarField zoneID
     Adding all elements of cellSet (c1)
-    Setting internal values of volScalarField zoneID
-    Adding all elements of cellSet (c2)
     Setting internal values of volScalarField zoneID
 
 End

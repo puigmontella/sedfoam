@@ -37,10 +37,10 @@ vertices
 
 blocks
 (
-    hex ( 0 1 2 9 10 11 12 19 ) ( 80 5 1 ) simpleGrading ( 1 1 1 ) // 1
-    hex ( 9 2 3 8 19 12 13 18 ) ( 80 5 1 ) simpleGrading ( 1 1 1 ) // 2
-    hex ( 8 3 4 7 18 13 14 17 ) ( 80 13 1 ) simpleGrading ( 1 1 1 ) // 3
-    hex ( 7 4 5 6 17 14 15 16 ) ( 80 8 1 ) simpleGrading ( 1 5 1 ) // 4 
+    hex ( 0 1 2 9 10 11 12 19 ) ( 112 7 1 ) simpleGrading ( 1 1 1 ) // 1
+    hex ( 9 2 3 8 19 12 13 18 ) ( 112 7 1 ) simpleGrading ( 1 1 1 ) // 2
+    hex ( 8 3 4 7 18 13 14 17 ) ( 112 18 1 ) simpleGrading ( 1 1 1 ) // 3
+    hex ( 7 4 5 6 17 14 15 16 ) ( 112 11 1 ) simpleGrading ( 1 5 1 ) // 4 
 );
  
 edges
