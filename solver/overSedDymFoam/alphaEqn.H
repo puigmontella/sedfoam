@@ -55,13 +55,13 @@ License
         alpha.min(alphaMax);
         alpha.max(0);
 
-        alpha *= cellMask;
-        alpha.correctBoundaryConditions();
+        //alpha *= cellMask;
+        //alpha.correctBoundaryConditions();
       
 
-     //   beta = cellMask*(scalar(1.0) - alpha);
+     ////   beta = cellMask*(scalar(1.0) - alpha);
         beta = (scalar(1.0) - alpha);
-        beta.correctBoundaryConditions();
+        //beta.correctBoundaryConditions();
 
         if (debugInfo)
         {

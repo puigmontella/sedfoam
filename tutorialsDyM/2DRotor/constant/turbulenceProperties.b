@@ -10,37 +10,10 @@ FoamFile
     version     2.0;
     format      ascii;
     class       dictionary;
-    object      dynamicMeshDict;
+    object      turbulenceProperties;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-dynamicFvMesh       dynamicOversetFvMesh;
-
-//motionSolverLibs (fvMotionSolvers);
-//
-//solver          displacementLaplacian;
-//
-//displacementLaplacianCoeffs
-//{
-//    diffusivity     uniform 1;
-//}
-
-solver          multiSolidBodyMotionSolver;
-
-multiSolidBodyMotionSolverCoeffs
-{
-    movingZone
-    {
-		
-       solidBodyMotionFunction oscillatingLinearMotion;
-       oscillatingLinearMotionCoeffs
-       {
-           amplitude       (0 0.014 0);
-           omega           12.54;
-       }
-		
-		
-    }
-}
+simulationType laminar; //RASModel;
 
 // ************************************************************************* //

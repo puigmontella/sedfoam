@@ -15,7 +15,8 @@ subsetMesh box -patch hole -overwrite
 setFields
 cp -r 0_org     0
 
-decomposePar
-mpirun -np 6 overSedDymFoam_rbgh -parallel > log &
+#decomposePar
+#mpirun -np 2 overSedDymFoam_rbgh -parallel > log &
+overSedDymFoam_rbgh  > log &
 
 #------------------------------------------------------------------------------

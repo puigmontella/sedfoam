@@ -65,7 +65,7 @@ solvers
 
     "(U.a|U.b|k|epsilon|pa_new_value|alphaPlastic|pa)Final"
     {
-        $U;
+        $k;
         tolerance       1e-7;
         relTol          0;
     }
