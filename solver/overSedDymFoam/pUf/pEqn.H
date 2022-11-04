@@ -319,9 +319,10 @@ License
                 //       at cell centers
                 volScalarField Da(beta/rhoa*K*rUaA);
                 volScalarField Db(alpha/rhob*K*rUbA);
-                volVectorField Ur(((1 - Db)*Uas - (1 - Da)*Ubs)/(1 - Da*Db));
+                volVectorField Ur(cellMask*((1 - Db)*Uas - (1 - Da)*Ubs)
+                    /(1 - Da*Db));
                 // Compute mixture velocity flux at cell centers
-                U = alpha*(Uas + Da*Ub) + beta*(Ubs + Db*Ua);
+                U = cellMask*(alpha*(Uas + Da*Ub) + beta*(Ubs + Db*Ua));
                 // Compute corrected phase velocity at cell centers
                 //       using updated semi-implicit drag
                 Ua = U + beta*Ur;
@@ -369,8 +370,12 @@ License
 
 
         // Make the fluxes relative to the mesh motion
-        fvc::makeRelative(phi, U);
+//        fvc::makeRelative(phi, U);
         fvc::makeRelative(phia, Ua);
         fvc::makeRelative(phib, Ub);
+
+		phia *= faceMask;
+		phib *= faceMask;
+		phi = alphaf*phia + betaf*phib;
     }
 }

@@ -162,6 +162,11 @@ int main(int argc, char *argv[])
         Info<< "Time = " << runTime.timeName() << nl << endl;
 
         #include "gravityRamp.H"
+
+
+//      Pressure-velocity PIMPLE corrector loop
+        while (pimple.loop())
+        {
 		bool changed = mesh.update();
 
         if (changed)
@@ -214,23 +219,19 @@ int main(int argc, char *argv[])
 
             Ua *= cellMask;
             Ub *= cellMask;
-        // Make the flux relative to the mesh motion
-        fvc::makeRelative(phia, Ua);
-        fvc::makeRelative(phib, Ub);
-        surfaceScalarField alphaf = fvc::interpolate(alpha);
-        surfaceScalarField betaf = scalar(1.0) - alphaf;
-        phi = alphaf*phia + betaf*phib;
+            
+			// Make the flux relative to the mesh motion
+			fvc::makeRelative(phia, Ua);
+			fvc::makeRelative(phib, Ub);
+			surfaceScalarField alphaf = fvc::interpolate(alpha);
+			surfaceScalarField betaf = scalar(1.0) - alphaf;
+			phi = alphaf*phia + betaf*phib;
                     phi *= faceMask;
                     U   *= cellMask;
                     alpha   *= cellMask;
                     // Make the flux relative to the mesh motion
                   //  fvc::makeRelative(phi, U);
         }
-
-//      Pressure-velocity PIMPLE corrector loop
-        while (pimple.loop())
-        {
-
 			// Correct phi on individual regions
 			if (correctPhi)
 			{

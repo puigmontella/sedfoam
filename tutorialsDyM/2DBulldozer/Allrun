@@ -1,25 +1,25 @@
 #!/bin/sh
-
+cd "${0%/*}" || exit                                # Run from this directory
+. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions        # Tutorial run functions
+#------------------------------------------------------------------------------
 
 mkdir 1d_profil
-python3 -c "import fluidfoam; fluidfoam.create1dprofil('Case1D/', '.', '100', 'Y', ['U.a', 'U.b', 'alpha.a'])"
+python3 -c "import fluidfoam; fluidfoam.create1dprofil('./Case1D', '.', '100', 'Y', ['U.a', 'U.b', 'alpha.a'])"
 
-blockMesh
 
-topoSet
+runApplication blockMesh
 
-subsetMesh box -patch hole -overwrite
+# Select cellSets
+runApplication -s 1 topoSet
 
+runApplication subsetMesh box -patch hole -overwrite
 
 cp -r 0_org 0
 
+# Use cellSets to write zoneID
+runApplication setFields
+
+
 funkySetFields -time 0
 
-
-# Use cellSets to write zoneID
-setFields
-
-#decomposePar
-
-overSedDymFoam_rbgh > log&
-#mpirun -np 4 overSedDymFoam_rbgh -parallel > log&
+overSedDymFoam_rbgh > log &

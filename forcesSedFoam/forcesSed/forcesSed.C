@@ -1063,7 +1063,6 @@ void Foam::functionObjects::forcesSed::calcForcesMoment()
         const volScalarField& p = lookupObject<volScalarField>(pName_);
         const volScalarField& p_hyd = lookupObject<volScalarField>(pHydName_);
         const volScalarField& p_rbgh = lookupObject<volScalarField>(prbghName_);
-       // const volScalarField& p_rbgh = lookupObject<volScalarField>(prghName_);
         const volScalarField& pS = lookupObject<volScalarField>(pSedName_);
         const volScalarField& alpha = lookupObject<volScalarField>(alphaName_);
 
