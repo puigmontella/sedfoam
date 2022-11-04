@@ -24,7 +24,7 @@ License
 \*---------------------------------------------------------------------------*/
 {
     word schemeA("div(alpha,nu)");
-
+    surfaceScalarField faceMask(localMin<scalar>(mesh).interpolate(cellMask));
     // Compute volume fraction of phase a and b at cell faces
     surfaceScalarField alphaf(fvc::interpolate(alpha));
     surfaceScalarField betaf(scalar(1.0) - alphaf);
@@ -80,7 +80,7 @@ License
 
         // Momentum flux at the cell faces for phase a
         surfaceScalarField phiDraga
-        (
+        ( faceMask*(
           // grad(pa)
           - (oneOverAlpha/rhoa*fvc::snGrad(pa))*rUaAf*mesh.magSf()
           // grad(Pf)
@@ -116,11 +116,11 @@ License
           
 	//	+ fvc::interpolate(alpha/alphaMax/rhoa)*(gradPhasea & mesh.Sf()) * rUaAf
 
-        );
+        ));
     if (not SUSaniso)
     {
         // turbulent suspension term
-        phiDraga += -(fvc::interpolate(SUS*(K/rhoa)*turbulenceb->nut()
+        phiDraga += -faceMask*(fvc::interpolate(SUS*(K/rhoa)*turbulenceb->nut()
                    *(beta/(alpha + alphaSmall)))
                    *fvc::snGrad(alpha))*rUaAf*mesh.magSf();
     }
@@ -149,9 +149,9 @@ License
     if (not SUSaniso)
     {
         // turbulent suspension term
-        phiDragb += fvc::interpolate(SUS*(K/rhob)
+        phiDragb += faceMask*(fvc::interpolate(SUS*(K/rhob)
                         *turbulenceb->nut())*fvc::snGrad(alpha)
-                        *rUbAf*mesh.magSf();
+                        *rUbAf*mesh.magSf());
     }
         //    fvOptions.makeRelative(phiHabyA);
         //    fvOptions.makeRelative(phiHbbyA);
@@ -199,15 +199,25 @@ License
         //}
         // Compute corrected velocity fluxes at cell faces
         //      (account for time evolution)
+        
+    surfaceScalarField faceMaskOld
+    (
+        localMin<scalar>(mesh).interpolate(cellMask.oldTime())
+    );
+
         surfaceScalarField phiUa
         (
-            (fvc::interpolate(HabyA) & mesh.Sf()) + rUaAf*fvc::ddtCorr(Ua, phia)
+            (fvc::interpolate(HabyA) & mesh.Sf())
+           + faceMaskOld*rUaAf*fvc::ddtCorr(Ua, phia)
         );
 
         surfaceScalarField phiUb
         (
-            (fvc::interpolate(HbbyA) & mesh.Sf()) + rUbAf*fvc::ddtCorr(Ub, phib)
+           (fvc::interpolate(HbbyA) & mesh.Sf())
+          + faceMaskOld*rUbAf*fvc::ddtCorr(Ub, phib)
         );
+
+
         // Compute predicted velocity fluxes at cell faces
         //      (account for momentum fluxes computed at cell faces)
         surfaceScalarField phiaHbyA(phiUa + phiDraga);
@@ -222,12 +232,12 @@ License
         MRF.makeRelative(phibHbyA);
         surfaceScalarField phiHbyA
         (
-            alphaf*(phiaHbyA + rAUKda*phib)
-          + betaf*(phibHbyA + rAUKdb*phia)
+            alphaf*(phiaHbyA + faceMask*rAUKda*phib)
+          + betaf*(phibHbyA + faceMask*rAUKdb*phia)
         );
 
         // adjustPhi(phiHbyA, U, p_rbgh);
-		MRF.makeRelative(phiHbyA);
+		//MRF.makeRelative(phiHbyA);
         // Assemble Poisson operator for the pressure
         surfaceScalarField Dp
         (
@@ -248,7 +258,9 @@ License
              )
             /(mesh.magSf().boundaryField()*Dp.boundaryField())
         );
-    constrainPressure(p_rbgh, U, phiHbyA, Dp, MRF);
+        
+        
+   // constrainPressure(p_rbgh, U, phiHbyA, Dp, MRF);
 
         while (pimple.correctNonOrthogonal())
         {
@@ -340,7 +352,25 @@ License
                 // Update mixture velocity
                 U = alpha*Ua + beta*Ub;
                 U.correctBoundaryConditions();
+                
             }
         }
+        
+        // Correct Uf if the mesh is moving
+        {
+            //Uf = fvc::interpolate(U);
+            Ufa = fvc::interpolate(Ua);
+            Ufb = fvc::interpolate(Ub);
+            surfaceVectorField n(mesh.Sf()/mesh.magSf());
+          //  Uf += n*(phi/mesh.magSf() - (n & Uf));
+            Ufa += n*(phia/mesh.magSf() - (n & Ufa));
+            Ufb += n*(phib/mesh.magSf() - (n & Ufb));
+        }
+
+
+        // Make the fluxes relative to the mesh motion
+        fvc::makeRelative(phi, U);
+        fvc::makeRelative(phia, Ua);
+        fvc::makeRelative(phib, Ub);
     }
 }

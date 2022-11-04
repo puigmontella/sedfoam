@@ -16,7 +16,7 @@ FoamFile
 
 libs            (overset fvMotionSolvers);
 
-application     sedFoam_DriftDyM;
+application     overSedDymFoam_rbgh;
 
 startFrom       latestTime;
 

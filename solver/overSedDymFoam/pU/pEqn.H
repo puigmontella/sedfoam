@@ -213,7 +213,7 @@ License
           + betaf*(phibHbyA + faceMask*rAUKdb*phia)
         );
 
-		MRF.makeRelative(phiHbyA);
+		//MRF.makeRelative(phiHbyA);
 		
     //adjustPhi(phiHbyA, U, p_rbgh);
     //surfaceScalarField phiHbyA = alphaf*phiaHbyA + betaf*phibHbyA;
@@ -241,7 +241,7 @@ License
             /(mesh.magSf().boundaryField()*Dp.boundaryField())
         );
 
-    constrainPressure(p_rbgh, U, phiHbyA, Dp, MRF);
+  //  constrainPressure(p_rbgh, U, phiHbyA, Dp, MRF);
 
 
         while (pimple.correctNonOrthogonal())
