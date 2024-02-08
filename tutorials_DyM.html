@@ -78,7 +78,7 @@
             <li>
               <a href="#FallingSphereOverset_testcase">FallingSphereOverset: Falling sphere in pure fluid using an overset  approach</a>
               <ul>
-                <li><a href="#MeshFallingSphereOverset">Mesh generation and set-up</a></li>
+                <li><a href="#MeshFallingSphereOverset">Mesh generation and setup</a></li>
                 <li><a href="#DyMesh_SphereFallOverset">Dynamic mesh</a></li>
                 <li><a href="#lauch_SphereFallOverset">Computation launching</a></li>
                 <li><a href="#postFallingSphereOverset">Post-processing using python</a></li>
@@ -87,7 +87,7 @@
             <li>
               <a href="#FallingSphereMorph_testcase">FallingSphereMorphing: Falling sphere in pure fluid using a morphing mesh</a>
               <ul>
-                <li><a href="#MeshFallingSphereMorph">Mesh generation and set-up</a></li>
+                <li><a href="#MeshFallingSphereMorph">Mesh generation and setup</a></li>
                 <li><a href="#DyMesh_SphereFallMorph">Dynamic mesh</a></li>
                 <li><a href="#lauch_SphereFallMorph">Computation launching</a></li>
                 <li><a href="#postFallingSphereMorph">Post-processing using python</a></li>
@@ -109,7 +109,12 @@
                 <li><a href="#postRestingSphere">Post-processing using python</a></li>
               </ul>
             </li>
-            <li><a href="#GuillardCylCase">2DCylinderUniformGranularFlow: Uniform granular flow around a cylinder</a></li>
+            <li>
+              <a href="#GuillardCylCase">2DCylinderUniformGranularFlow: Uniform granular flow around a cylinder</a>
+              <ul>
+                <li><a href="#CylPhydical">Physical properties</a></li>
+              </ul>
+            </li>
           </ul>
         </nav>
 <p>In this chapter we shall describe in detail the process of setup, simulation and post-processing for SedFoam test cases using dynamic meshes. All the tutorial cases are located in the <em>tutorialsDyM</em> directory.</p><section id="FallingSphereOverset_testcase"><h2><a href="#FallingSphereOverset_testcase">FallingSphereOverset: Falling sphere in pure fluid using an overset  approach</a></h2><p>In this tutorial, we study the free fall of a sphere with a diameter <svg class="m-math" style="width: 6.039em; height: 0.851em; vertical-align: -0.000em;" viewBox="0 -8.169366 57.9753 8.169366">
@@ -337,7 +342,7 @@ $D=0.015 m$
 <use x='46.601417' y='0' xlink:href='#eq8-g1-53'/>
 <use x='52.454408' y='0' xlink:href='#eq8-g0-109'/>
 </g>
-</svg></td></tr></tbody></table><section id="MeshFallingSphereOverset"><h3><a href="#MeshFallingSphereOverset">Mesh generation and set-up</a></h3><p>The numerical domain consists of two disconnected meshes. The background mesh, which remains static throughout the simulation, is a hexahedron with a side length of <svg class="m-math" style="width: 3.214em; height: 0.851em; vertical-align: -0.000em;" viewBox="0 -8.169366 30.855107 8.169366">
+</svg></td></tr></tbody></table><section id="MeshFallingSphereOverset"><h3><a href="#MeshFallingSphereOverset">Mesh generation and setup</a></h3><p>The numerical domain consists of two disconnected meshes. The background mesh, which remains static throughout the simulation, is a hexahedron with a side length of <svg class="m-math" style="width: 3.214em; height: 0.851em; vertical-align: -0.000em;" viewBox="0 -8.169366 30.855107 8.169366">
 <title>
 $6.66 D$
 </title>
@@ -377,7 +382,7 @@ topoSet -dict system/topoSetDictR2
 refineMesh -dict system/refineMeshDict2 -overwrite
 </pre><p>The mesh is generated, and <em>topoSet</em> and <em>refineMesh</em> are called to refine the mesh along the vertical direction of the sphere trajectory. The refinement in this vertical region is carried out to reduce the interpolation errors between the background mesh and the overset mesh around the sphere. Then,</p><pre>mergeMeshes . ../sphereMesh -overwrite
 topoSet
-</pre><p>The sphere is added into our set-up and <em>topoSet</em> is executed to select cellSets for the different zones.</p><p>In the last part of Allrun.pre script, we create the initial time folder and use cellSets to write zoneID. Each cell zone, indicated in the zoneID field, should have a different zone id. In our case, there are two zones: the zoneID cells of the background mesh are set to 0 while zoneID cells belonging to the overset mesh are set to 1:</p><p>In the last part of <em>Allrun.pre</em> script, we create the initial time folder and use cellSets to write zoneID. Each cell zone, indicated in the zoneID field, should have a different zone id. In our case, there are two zones: the zoneID cells of the background mesh are set to 0 while zoneID cells belonging to the overset mesh are set to 1:</p><pre>cp -r 0.orig 0
+</pre><p>The sphere is added into our setup and <em>topoSet</em> is executed to select cellSets for the different zones.</p><p>In the last part of Allrun.pre script, we create the initial time folder and use cellSets to write zoneID. Each cell zone, indicated in the zoneID field, should have a different zone id. In our case, there are two zones: the zoneID cells of the background mesh are set to 0 while zoneID cells belonging to the overset mesh are set to 1:</p><p>In the last part of <em>Allrun.pre</em> script, we create the initial time folder and use cellSets to write zoneID. Each cell zone, indicated in the zoneID field, should have a different zone id. In our case, there are two zones: the zoneID cells of the background mesh are set to 0 while zoneID cells belonging to the overset mesh are set to 1:</p><pre>cp -r 0.orig 0
 setFields
 </pre></section><section id="DyMesh_SphereFallOverset"><h3><a href="#DyMesh_SphereFallOverset">Dynamic mesh</a></h3><p>Mesh changes are only possible if we have a file called <em>dynamicMeshDict</em> in the constant folder. Several mesh options and controls can be adjusted in the <em>dynamicMeshDict</em> dictionary. In this file we need to specify that the motion solver (in our case <em>sixDoFRigidBodyMotionSedFoam</em>), the <em>patch</em> where the 6DoF is acting, and set the moment of inertia and the apparent mass of the object. The 6DoF solver integrates the viscous, frictional, granular and excess of fluid pressure forces over the <em>patch</em> to get the velocity and displacement of the sphere.</p><pre>/*--------------------------------*- C++ -*----------------------------------*\
 | =========                 |                                                 |
@@ -433,7 +438,7 @@ sixDoFRigidBodyMotionCoeffs
 </pre></section><section id="lauch_SphereFallOverset"><h3><a href="#lauch_SphereFallOverset">Computation launching</a></h3><p>The simulations will run in parallel on 4 cores by executing the following commands at <em>tutorialsDyM/FallingSphereOverset/sphereAndBackground</em> folder:</p><pre>decomposePar
 mpirun -np 4 overSedDymFoam_rbgh -parallel &gt; log.out&amp;
 </pre><p>One can skip all the previous steps and simply run the command *./Allrun* in the <em>tutorialsDyM/FallingSphereOverset</em> folder. It is worth mentioning that the output data will be stored in the <em>tutorialsDyM/FallingSphereOverset/sphereAndBackground</em> folder.</p></section><section id="postFallingSphereOverset"><h3><a href="#postFallingSphereOverset">Post-processing using python</a></h3><p>You just have to run the python script <em>plot3DFallingSphere.py</em> located in the folder <em>tutorialsDyM/Py</em>. Make sure that the chosen mesh in the script is set to DynamycMesh=&quot;Overset&quot;.</p><pre>python plot3DFallingSphere.py
-</pre><p>and you should see the following figure that shows the trajectory and velocity of the sphere falling in a pure fluid using the overset technique:</p><figure class="m-figure"><img src="FallingSphereSimpleOverset.png" alt="Image" style="width: 700px;" /><figcaption>Figure 2: Sphere a) trajectory and b) velocity evolution using an overset mesh.</figcaption></figure></section></section><section id="FallingSphereMorph_testcase"><h2><a href="#FallingSphereMorph_testcase">FallingSphereMorphing: Falling sphere in pure fluid using a morphing mesh</a></h2><p>This numerical test investigates the same falling sphere presented in the previous case using a morphing mesh instead of the overset technique. The numerical case is located at <em>tutorialsDyM/FallingSphereMorphing</em>.</p><section id="MeshFallingSphereMorph"><h3><a href="#MeshFallingSphereMorph">Mesh generation and set-up</a></h3><p>The numerical domain consists of a spherical mesh with a diameter of <svg class="m-math" style="width: 3.214em; height: 0.851em; vertical-align: -0.000em;" viewBox="0 -8.169366 30.855107 8.169366">
+</pre><p>and you should see the following figure that shows the trajectory and velocity of the sphere falling in a pure fluid using the overset technique:</p><figure class="m-figure"><img src="FallingSphereSimpleOverset.png" alt="Image" style="width: 700px;" /><figcaption>Figure 2: Sphere a) trajectory and b) velocity evolution using an overset mesh.</figcaption></figure></section></section><section id="FallingSphereMorph_testcase"><h2><a href="#FallingSphereMorph_testcase">FallingSphereMorphing: Falling sphere in pure fluid using a morphing mesh</a></h2><p>This numerical test investigates the same falling sphere presented in the previous case using a morphing mesh instead of the overset technique. The numerical case is located at <em>tutorialsDyM/FallingSphereMorphing</em>.</p><section id="MeshFallingSphereMorph"><h3><a href="#MeshFallingSphereMorph">Mesh generation and setup</a></h3><p>The numerical domain consists of a spherical mesh with a diameter of <svg class="m-math" style="width: 3.214em; height: 0.851em; vertical-align: -0.000em;" viewBox="0 -8.169366 30.855107 8.169366">
 <title>
 $13.3D$
 </title>
@@ -908,7 +913,7 @@ dragPhase       a;
 </pre></section><section id="lauch_SphereRest"><h3><a href="#lauch_SphereRest">Computation launching</a></h3><p>The simulations will run in parallel on 10 cores by executing the following commands at <em>tutorialsDyM/RestingSphereMorphing</em> folder:</p><pre>decomposePar
 mpirun -np 10 overSedDymFoam_rbgh -parallel &gt; log.out&amp;
 </pre><p>One can skip all the previous steps and simply run the command *./Allrun* in the <em>tutorialsDyM/RestingSphereMorphing</em> folder to launch the numerical case.</p></section><section id="postRestingSphere"><h3><a href="#postRestingSphere">Post-processing using python</a></h3><p>You just have to run the python script <em>plotRestingSphere.py</em> located in the folder <em>tutorialsDyM/Py</em>.</p><pre>python plotRestingSphere.py
-</pre><p>and you should see the following figure that show the trajectory and velocity of the sphere falling on a dense granular horizontal bed:</p><figure class="m-figure"><img src="RestingSphere.png" alt="Image" style="width: 700px;" /><figcaption>Figure 7: Sphere a) trajectory and b) velocity obtained with the morphing mesh approach. c) Plot of the total forces and each contribution exerted on the sphere from the morphing mesh approach. </figcaption></figure></section></section><section id="GuillardCylCase"><h2><a href="#GuillardCylCase">2DCylinderUniformGranularFlow: Uniform granular flow around a cylinder</a></h2><p>In this subsection we analyze the stresses and the trajectory of an intruder immersed in a uniform granular flow. To reduce the computational cost, we use a cylinder (a 2D object in OpenFOAM) instead of the spherical intruder employed in previous numerical cases. Our approach is inspired by the work of <a href="https://hal.science/hal-00997840/document">Guillard</a> , where lift and drag forces on a cylinder were measured under a granular flow. We adopt a similar set-up, as depicted in Figure 8. More specifically, a granular packing is considered, then, the bottom plate is set to a prescribed constant velocity that induces a uniform granular flow above the bottom plate. Placing a cylinder in the granular medium distorts the flow patterns. As illustrated in Figure 8, a constant horizontal velocity of <svg class="m-math" style="width: 7.231em; height: 1.245em; vertical-align: -0.312em;" viewBox="0 -8.966376 69.416826 11.955168">
+</pre><p>and you should see the following figure that show the trajectory and velocity of the sphere falling on a dense granular horizontal bed:</p><figure class="m-figure"><img src="RestingSphere.png" alt="Image" style="width: 700px;" /><figcaption>Figure 7: Sphere a) trajectory and b) velocity obtained with the morphing mesh approach. c) Plot of the total forces and each contribution exerted on the sphere from the morphing mesh approach. </figcaption></figure></section></section><section id="GuillardCylCase"><h2><a href="#GuillardCylCase">2DCylinderUniformGranularFlow: Uniform granular flow around a cylinder</a></h2><p>In this subsection we analyze the stresses and the trajectory of an intruder immersed in a uniform granular flow. To reduce the computational cost, we use a cylinder (a 2D object in OpenFOAM) instead of the spherical intruder employed in previous numerical cases. Our approach is inspired by the work of <a href="https://hal.science/hal-00997840/document">Guillard</a> , where lift and drag forces on a cylinder were measured under a granular flow. We adopt a similar setup, as depicted in Figure 8. More specifically, a granular packing is considered, then, the bottom plate is set to a prescribed constant velocity that induces a uniform granular flow above the bottom plate. Placing a cylinder in the granular medium distorts the flow patterns. As illustrated in Figure 8, a constant horizontal velocity of <svg class="m-math" style="width: 7.231em; height: 1.245em; vertical-align: -0.312em;" viewBox="0 -8.966376 69.416826 11.955168">
 <title>
 $u_o=0.01m/s$
 </title>
@@ -1186,7 +1191,7 @@ $h=5.8D$
 <use x='31.589517' y='0' xlink:href='#eq32-g1-56'/>
 <use x='37.442507' y='0' xlink:href='#eq32-g0-68'/>
 </g>
-</svg> m</td></tr></tbody></table><figure class="m-figure"><img src="2DCylScheme.png" alt="Image" style="width: 700px;" /><figcaption>Figure 8: a) Numerical set-up to model the segregation of a large intruder immersed in agranular flow. b) Morphing mesh at the initial time.</figcaption></figure></section>
+</svg> m</td></tr></tbody></table><figure class="m-figure"><img src="2DCylScheme.png" alt="Image" style="width: 700px;" /><figcaption>Figure 8: a) Numerical setup to model the segregation of a large intruder immersed in agranular flow. b) Morphing mesh at the initial time.</figcaption></figure><p>The rectangular mesh is generated by running the command <em>blockMesh</em> in the <em>tutorialsDyM/2DCylinderUniformGranularFlow</em> folder.</p><section id="CylPhydical"><h3><a href="#CylPhydical">Physical properties</a></h3><p>In the <em>constant/transportProperties</em> file, the physical properties of the solid and fluid phases are set, such as density, kinematic viscosity and particle diameter. It is worth noting that DEM simulations assume a dry granular material, however, the density ratio using sedFoam is slightly different to avoid numerical errors:</p></section></section>
       </div>
     </div>
   </div>
