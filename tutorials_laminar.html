@@ -41,16 +41,15 @@
                 <li><a href="tutorials_laminar.html" id="m-navbar-current">Laminar flow tutorials</a></li>
                 <li><a href="tutorials_RAS.html">Reynolds-averaged flow tutorials</a></li>
                 <li><a href="tutorials_LES.html">LES tutorials</a></li>
-                <li><a href="tutorials_DyM.html">Dynamic mesh tutorials</a></li>
                 <li><a href="inputs.html">Input Parameters</a></li>
               </ol>
             </li>
           </ol>
           <ol class="m-col-t-6 m-col-m-none" start="3">
             <li>
-              <a href="governing.html">Governing equations</a>
+              <a href="governingEq.html">Governing equations</a>
               <ol>
-                <li><a href="governing.html">Governing equations</a></li>
+                <li><a href="governingEq.html">Governing equations</a></li>
                 <li><a href="algoSedFoam.html">Algorithm</a></li>
               </ol>
             </li>
@@ -296,7 +295,7 @@ nu              nu [ 0 2 -1 0 0 0 0 ] 2.105e-05;
 
 nuMax           nuMax [0 2 -1 0 0 0 0] 1e0;      // viscosity limiter for the Frictional model (required for stability)
 
-alphaSmall      alphaSmall [ 0 0 0 0 0 0 0 ] 1e-6;  // minimum volume fraction (phase a) for division by alpha</pre><p>The hindrance function exponent of the Richardson-Zaki law can be tuned using the parameter hExp. This is important for this first test case which is in the laminar regime for the drag. The transportModel has to be prescribed when using turbulence model, it is present here for compatibility with the other test cases. The nuMax value is a viscosity limiter for the all the viscosities, it allows the user to control the numerical stability of the solver and will be discussed in the second test case. It is especially important as some shear stress terms are discretized explicitly and the frictional viscosity can reach huge values. The alphaSmall value is used to regularise the division by alpha.a in the source code, the default value is set to <svg class="m-math" style="width: 2.347em; height: 0.987em; vertical-align: -0.000em;" viewBox="0 -9.474739 22.52667 9.474739">
+alphaSmall      alphaSmall [ 0 0 0 0 0 0 0 ] 1e-6;  // minimum volume fraction (phase a) for division by alpha </pre><p>The hindrance function exponent of the Richardson-Zaki law can be tuned using the parameter hExp. This is important for this first test case which is in the laminar regime for the drag. The transportModel has to be prescribed when using turbulence model, it is present here for compatibility with the other test cases. The nuMax value is a viscosity limiter for the all the viscosities, it allows the user to control the numerical stability of the solver and will be discussed in the second test case. It is especially important as some shear stress terms are discretized explicitly and the frictional viscosity can reach huge values. The alphaSmall value is used to regularise the division by alpha.a in the source code, the default value is set to <svg class="m-math" style="width: 2.347em; height: 0.987em; vertical-align: -0.000em;" viewBox="0 -9.474739 22.52667 9.474739">
 <title>
 $ 10^{-6} $
 </title>
@@ -825,7 +824,7 @@ $\mu(I)$
 <use x='11.595296' y='0' xlink:href='#eq9-g0-73'/>
 <use x='17.698078' y='0' xlink:href='#eq9-g1-41'/>
 </g>
-</svg>. Numerical results are contrasted with the analytical solution (Bagnold&#x27;s solution).</p><figure class="m-figure"><img src="schemeAvalanche1DInertial.png" alt="Image" style="width: 500px;" /><figcaption>Figure 7: Schematic section of the dry avalanche flowing down on a uniform slope. The coordinate system and main lengths are defined.</figcaption></figure><section id="preprocAva"><h3><a href="#preprocAva">Pre-processing</a></h3><p>This tutorial is distributed with sedFoam3.2 under the folder <em>sedFoamDirectory/tutorials/laminar/1DAvalancheMuI</em>.</p><section id="meshgenAva"><h5><a href="#meshgenAva">Mesh generation</a></h5><p>Because the avalanche is assumed to be in a stationary state, the simulation can be easily reduced to a one-dimensional problem. The numerical domain consists of a rectangle of side length L = 0.01 made dimensionless by the domain size in the x-y plane and of height h=1 in the vertical direction z.</p><p>A uniform mesh of 1 by 1 by 100 cells will be used (see <svg class="m-math" style="width: 1.224em; height: 0.723em; vertical-align: -0.187em;" viewBox="0 -5.147373 11.754505 6.940636">
+</svg>. Numerical results are contrasted with the analytical solution (Bagnold&#x27;s solution).</p><figure class="m-figure"><img src="schemeAvalanche1DInertial.png" alt="Image" style="width: 500px;" /><figcaption>Figure 7: Schematic section of the dry avalanche flowing down on a uniform slope. The coordinate system and main lengths are defined.</figcaption></figure><section id="preprocAva"><h3><a href="#preprocAva">Pre-processing</a></h3><p>This tutorial is distributed with sedFoam3.3 under the folder <em>sedFoamDirectory/tutorials/laminar/1DAvalancheMuI</em>.</p><section id="meshgenAva"><h5><a href="#meshgenAva">Mesh generation</a></h5><p>Because the avalanche is assumed to be in a stationary state, the simulation can be easily reduced to a one-dimensional problem. The numerical domain consists of a rectangle of side length L = 0.01 made dimensionless by the domain size in the x-y plane and of height h=1 in the vertical direction z.</p><p>A uniform mesh of 1 by 1 by 100 cells will be used (see <svg class="m-math" style="width: 1.224em; height: 0.723em; vertical-align: -0.187em;" viewBox="0 -5.147373 11.754505 6.940636">
 <title>
 $ n_{x}$
 </title>
@@ -1181,7 +1180,7 @@ $(\phi_0=0.592)$
 <use x='52.769685' y='0' xlink:href='#eq25-g2-50'/>
 <use x='58.622675' y='0' xlink:href='#eq25-g2-41'/>
 </g>
-</svg> in 1D. In order to reach an initial equilibrium state, 200 seconds are required to let the granular layer deposit by gravity.</p><figure class="m-figure"><img src="schemeAvalanche1DVisc.png" alt="Image" style="width: 500px;" /><figcaption>Figure 9: Schematic section of the immersed avalanche in a viscous fluid flowing down on a uniform slope. The coordinate system and main lengths are defined.</figcaption></figure><section id="preprocWetAva"><h3><a href="#preprocWetAva">Pre-processing</a></h3><p>This tutorial is distributed with sedFoam3.2 under the folder <em>sedFoamDirectory/tutorials/laminar/1DWetAvalanche</em>.</p><section id="PhysPropWetAva"><h5><a href="#PhysPropWetAva">Physical properties</a></h5><p>The following variables are considered to reproduce the experimental results of Pailha et al. (2008):</p><table class="m-table"><caption>Main physical parameters.</caption><thead><tr><th>Properties</th><th>Value</th></tr></thead><tbody><tr><td>Solid density</td><td><svg class="m-math" style="width: 6.541em; height: 1.553em; vertical-align: -0.431em;" viewBox="0 -10.79062 62.793991 14.913253">
+</svg> in 1D. In order to reach an initial equilibrium state, 200 seconds are required to let the granular layer deposit by gravity.</p><figure class="m-figure"><img src="schemeAvalanche1DVisc.png" alt="Image" style="width: 500px;" /><figcaption>Figure 9: Schematic section of the immersed avalanche in a viscous fluid flowing down on a uniform slope. The coordinate system and main lengths are defined.</figcaption></figure><section id="preprocWetAva"><h3><a href="#preprocWetAva">Pre-processing</a></h3><p>This tutorial is distributed with sedFoam3.3 under the folder <em>sedFoamDirectory/tutorials/laminar/1DWetAvalanche</em>.</p><section id="PhysPropWetAva"><h5><a href="#PhysPropWetAva">Physical properties</a></h5><p>The following variables are considered to reproduce the experimental results of Pailha et al. (2008):</p><table class="m-table"><caption>Main physical parameters.</caption><thead><tr><th>Properties</th><th>Value</th></tr></thead><tbody><tr><td>Solid density</td><td><svg class="m-math" style="width: 6.541em; height: 1.553em; vertical-align: -0.431em;" viewBox="0 -10.79062 62.793991 14.913253">
 <title>
 $\rho_p=2500 \frac{kg}{m^3}$
 </title>
@@ -1531,7 +1530,7 @@ $K_1 = 4$
 <use x='30.437738' y='0' xlink:href='#eq37-g2-52'/>
 </g>
 </svg>:</p><pre>K_dila          K_dila [ 0 0 0 0 0 0 0 ] 4.0;</pre></section><section id="postWetAvalanche"><h3><a href="#postWetAvalanche">Post-processing using python</a></h3><p>The SedFoam and Pailha et al. (2008) experimental results are obtained running the python script <em>plot_tuto1DWetAvalanche.py</em> located in the folder <em>tutorials/Py</em>:</p><pre>python plot_tuto1DWetAvalanche.py
-</pre><p>and you should see the following figure:</p><figure class="m-figure"><img src="velocityPlot1D_phi0592.png" alt="Image" style="width: 400px;" /><figcaption>Figure 10: Evolution of surface particle velocity. Experimental curves are extracted from Pailha et al.(2008).</figcaption></figure><figure class="m-figure"><img src="pressurePlot1D_phi0592.png" alt="Image" style="width: 400px;" /><figcaption>Figure 11 Evolution of excess of pore pressure with time. Experimental curves are extracted from Pailha et al.(2008).</figcaption></figure><p>In order to illustrate the dilatant effects and the pore pressure feedback mechanism of the avalanche we run the python script <em>plot_tuto1DWetAvalancheVerticalProfiles.py</em>. The resulting figure is depicted below. We observe the evolution of the volume fraction, particle velocity and excess of pore pressure along the vertical axis.</p><figure class="m-figure"><img src="1DWetAvalancheVerticalProfiles.png" alt="Image" style="width: 1000px;" /><figcaption>Figure 12: a) Evolution of volume fraction profile, b) particle velocity profile and c) excess of pore pressure along the vertical.</figcaption></figure></section></section><section id="wetvalanche2D"><h2><a href="#wetvalanche2D">2DWetAvalancheMuIv: Immersed granular avalanche</a></h2><p>We consider a layer of granular material fully immersed in a viscous liquid. The granular layer is inclined so it starts moving down a planar slope as illustrated in figure 13. The geometrical parameters and boundary conditions are set to reproduce precisely the experimental setup of Pailha et al.(2008). In this example, the dense granular flow rheology <svg class="m-math" style="width: 2.731em; height: 1.245em; vertical-align: -0.312em;" viewBox="0 -8.966376 26.2181 11.955168">
+</pre><p>and you should see the following figure:</p><figure class="m-figure"><img src="velocityPlot1D_phi0592.png" alt="Image" style="width: 400px;" /><figcaption>Figure 10: Evolution of surface particle velocity. Experimental curves are extracted from Pailha et al.(2008).</figcaption></figure><figure class="m-figure"><img src="pressurePlot1D_phi0592.png" alt="Image" style="width: 400px;" /><figcaption>Figure 11 Evolution of excess of pore pressure with time. Experimental curves are extracted from Pailha et al.(2008).</figcaption></figure><p>In order to illustrate the dilatant effects and the pore pressure feedback mechanism of the avalanche we run the python script <em>plot_tuto1DWetAvalancheVerticalProfiles.py</em>. The resulting figure is depicted below. We observe the evolution of the volume fraction, particle velocity and excess of pore pressure along the vertical axis.</p><figure class="m-figure"><img src="1DWetAvalancheVerticalProfiles.png" alt="Image" style="width: 1000px;" /><figcaption>Figure 12: a) Evolution of volume fraction profile, b) particle velocity profile and c) excess of pore pressure along the vertical.</figcaption></figure></section></section><section id="wetvalanche2D"><h2><a href="#wetvalanche2D">2DWetAvalancheMuIv: Immersed granular avalanche</a></h2><p>We consider a layer of granular material fully immersed in a viscous liquid. The granular layer is inclined so it starts moving down a planar slope as illustrated in figure 13.<br />The geometrical parameters and boundary conditions are set to reproduce precisely the experimental setup of Pailha et al.(2008). In this example, the dense granular flow rheology <svg class="m-math" style="width: 2.731em; height: 1.245em; vertical-align: -0.312em;" viewBox="0 -8.966376 26.2181 11.955168">
 <title>
 $\mu(I_v)$
 </title>
@@ -1717,7 +1716,7 @@ cp -r 0_org 200
 
 # Initialize fields
 mapFields -sourceTime 200 Reference1D
-</pre><p>In order to reproduce the experimental setup of Pailha et al. (2008), all the x-y plane boundaries are set as wall boundaries. The velocities of both phases are set to zero at all boundaries (lateral, top and bottom) while a <em>fixedFluxPressure</em> condition is imposed for the excess pore pressure on all boundaries. An homogeneous Neumann boundary condition (zero gradient) is imposed for all the other quantities.</p></section><section id="PhysProp2DAvalanche"><h3><a href="#PhysProp2DAvalanche">Physical properties</a></h3><p>The following variables are considered to reproduce the experimental results of Pailha et al. (2008):</p><table class="m-table"><caption>Main physical parameters.</caption><thead><tr><th>Properties</th><th>Value</th></tr></thead><tbody><tr><td>Solid density</td><td><svg class="m-math" style="width: 6.541em; height: 1.553em; vertical-align: -0.431em;" viewBox="0 -10.79062 62.793991 14.913253">
+</pre><p>In order to reproduce the experimental setup of Pailha et al. (2008), all the x-y plane boundaries are set as wall boundaries. The velocities of both phases are set to zero at all boundaries (lateral, top and bottom) while a <em>fixedFluxPressure</em> condition is imposed for the excess pore pressure on all boundaries. An homogeneous Neumann boundary condition (zero gradient) is imposed for all the other quantities.</p></section><section id="PhysProp2DAvalanche"><h3><a href="#PhysProp2DAvalanche">Physical properties</a></h3><p>The following variables are considered to reproduce the experimental results of Pailha et al. (2008):</p><table class="m-table"><caption>Main physical parameters.</caption><thead><tr><th>Properties</th><th>Value<br /></th></tr></thead><tbody><tr><td>Solid density</td><td><svg class="m-math" style="width: 6.541em; height: 1.553em; vertical-align: -0.431em;" viewBox="0 -10.79062 62.793991 14.913253">
 <title>
 $\rho_p=2500 \frac{kg}{m^3}$
 </title>
@@ -1747,7 +1746,7 @@ $\rho_p=2500 \frac{kg}{m^3}$
 <use x='51.152421' y='4.122632' xlink:href='#eq46-g0-109'/>
 <use x='58.642947' y='1.853371' xlink:href='#eq46-g2-51'/>
 </g>
-</svg></td></tr><tr><td>Fluid density</td><td><svg class="m-math" style="width: 6.612em; height: 1.553em; vertical-align: -0.431em;" viewBox="0 -10.79062 63.47798 14.913253">
+</svg><br /></td></tr><tr><td>Fluid density</td><td><svg class="m-math" style="width: 6.612em; height: 1.553em; vertical-align: -0.431em;" viewBox="0 -10.79062 63.47798 14.913253">
 <title>
 $\rho_f=1041 \frac{kg}{m^3}$
 </title>
@@ -1777,7 +1776,7 @@ $\rho_f=1041 \frac{kg}{m^3}$
 <use x='51.83641' y='4.122632' xlink:href='#eq47-g0-109'/>
 <use x='59.326936' y='1.853371' xlink:href='#eq47-g2-51'/>
 </g>
-</svg></td></tr><tr><td>Fluid viscosity</td><td><svg class="m-math" style="width: 9.082em; height: 1.614em; vertical-align: -0.431em;" viewBox="0 -11.372132 87.182887 15.494764">
+</svg><br /></td></tr><tr><td>Fluid viscosity</td><td><svg class="m-math" style="width: 9.082em; height: 1.614em; vertical-align: -0.431em;" viewBox="0 -11.372132 87.182887 15.494764">
 <title>
 $\nu^f=9.2 \cdot 10^{-5} \frac{m^2}{s}$
 </title>
@@ -1814,7 +1813,7 @@ $\nu^f=9.2 \cdot 10^{-5} \frac{m^2}{s}$
 <rect x='75.541316' y='-3.227886' height='.478187' width='11.641571'/>
 <use x='79.40415' y='4.122632' xlink:href='#eq48-g2-115'/>
 </g>
-</svg></td></tr><tr><td>Mean particle diameter</td><td><svg class="m-math" style="width: 8.467em; height: 0.987em; vertical-align: -0.000em;" viewBox="0 -9.474739 81.28626 9.474739">
+</svg><br /></td></tr><tr><td>Mean particle diameter</td><td><svg class="m-math" style="width: 8.467em; height: 0.987em; vertical-align: -0.000em;" viewBox="0 -9.474739 81.28626 9.474739">
 <title>
 $d=160 \cdot 10^{-6} m$
 </title>
@@ -1842,7 +1841,7 @@ $d=160 \cdot 10^{-6} m$
 <use x='66.314678' y='-4.338437' xlink:href='#eq49-g3-54'/>
 <use x='71.046993' y='0' xlink:href='#eq49-g2-109'/>
 </g>
-</svg></td></tr><tr><td>Slope inclined at the angle</td><td><svg class="m-math" style="width: 3.888em; height: 0.865em; vertical-align: -0.000em;" viewBox="0 -8.302191 37.325681 8.302191">
+</svg><br /></td></tr><tr><td>Slope inclined at the angle</td><td><svg class="m-math" style="width: 3.888em; height: 0.865em; vertical-align: -0.000em;" viewBox="0 -8.302191 37.325681 8.302191">
 <title>
 $\theta=25^o $
 </title>
@@ -1860,7 +1859,7 @@ $\theta=25^o $
 <use x='27.379641' y='0' xlink:href='#eq50-g2-53'/>
 <use x='33.232632' y='-4.338437' xlink:href='#eq50-g0-111'/>
 </g>
-</svg></td></tr><tr><td>Solid phase thickness</td><td><svg class="m-math" style="width: 6.796em; height: 0.865em; vertical-align: -0.000em;" viewBox="0 -8.302191 65.240745 8.302191">
+</svg><br /></td></tr><tr><td>Solid phase thickness</td><td><svg class="m-math" style="width: 6.796em; height: 0.865em; vertical-align: -0.000em;" viewBox="0 -8.302191 65.240745 8.302191">
 <title>
 $h=0.0049 m$
 </title>
@@ -1943,7 +1942,7 @@ $\phi=0.592$
 <use x='37.632054' y='0' xlink:href='#eq54-g1-57'/>
 <use x='43.485044' y='0' xlink:href='#eq54-g1-50'/>
 </g>
-</svg></td></tr></tbody></table><p>Dense granular flow rheology <svg class="m-math" style="width: 2.731em; height: 1.245em; vertical-align: -0.312em;" viewBox="0 -8.966376 26.2181 11.955168">
+</svg><br /></td></tr></tbody></table><p>Dense granular flow rheology <svg class="m-math" style="width: 2.731em; height: 1.245em; vertical-align: -0.312em;" viewBox="0 -8.966376 26.2181 11.955168">
 <title>
 $\mu(I_v)$
 </title>
@@ -1993,7 +1992,7 @@ FrictionModel   MuIv;
 PPressureModel  MuIv;
 
 FluidViscosityModel  BoyerEtAl;
-</pre></section><section id="lauch_2DwetAvalanche"><h3><a href="#lauch_2DwetAvalanche">Computation launching</a></h3><p>Like in previous case, you can launch the computation by executing <em>Allrun</em>. The simulations will run in parallel on 18 cores.</p><pre># Decompose the case and run in parallel
+</pre></section><section id="lauch_2DwetAvalanche"><h3><a href="#lauch_2DwetAvalanche">Computation launching</a></h3><p>Like in previous case, you can launch the computation by executing <em>Allrun</em>. The simulations will run in parallel on 18 cores.</p><pre># Decompose the case and run in parallel 
 decomposePar
 mpirun -np 18 sedFoam_rbgh -parallel &gt; log&amp;
 </pre></section><section id="postAvalanche2D"><h3><a href="#postAvalanche2D">Post-processing using python</a></h3><p>You just have to run the python script <em>plot_tuto2DWetAvalanche.py</em> located in the folder <em>tutorials/Py</em>:</p><pre>python plot_tuto2DWetAvalanche.py
