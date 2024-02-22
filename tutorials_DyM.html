@@ -76,7 +76,6 @@
           <h3>Contents</h3>
           <ul>
             <li><a href="#PrerequisitesInst">Installation Prerequisites</a></li>
-            <li><a href="#FallingSphereOverset_testcase">FallingSphereOverset: Falling sphere in pure fluid using an overset  approach</a></li>
             <li>
               <a href="#FallingSphereOverset_testcase">FallingSphereOverset: Falling sphere in pure fluid using an overset  approach</a>
               <ul>
@@ -123,11 +122,12 @@
             </li>
           </ul>
         </nav>
-<p>In this chapter we shall describe in detail the process of setup, simulation and post-processing for SedFoam test cases using dynamic meshes. All the tutorial cases are located in the <em>tutorialsDyM</em> directory.</p><section id="PrerequisitesInst"><h2><a href="#PrerequisitesInst">Installation Prerequisites</a></h2><p>Before launching any numerical simulation, make sure OVER is correctly installed and compiled. In case you are only interested in running dynamic mesh cases, the compilation is done by performing the following steps:</p><ol><li><p>First, download the overSedDymFoam_rbgh branch:</p><pre>git clone -b overSedDyMFoam https://github.com/puigmontella/sedfoam.git
+<p>In this chapter we shall describe in detail the process of setup, simulation and post-processing for SedFoam test cases using dynamic meshes. All the tutorial cases are located in the <em>tutorialsDyM</em> directory.</p><section id="PrerequisitesInst"><h2><a href="#PrerequisitesInst">Installation Prerequisites</a></h2><p>Before launching any numerical simulation, make sure overSedDymFoam_rbgh is correctly installed and compiled. In case you are only interested in running dynamic mesh cases, the compilation is done by performing the following steps:</p><ol><li><p>First, download the overSedDyMFoam branch:</p><pre>git clone -b overSedDyMFoam https://github.com/puigmontella/sedfoam.git
 </pre></li><li><p>Compile the program by running Allwmake:</p><pre>cd sedfoam
 source $FOAM_ETC/bashrc # load the openfoam environment
 ./Allwmake
-</pre><p>The program should compile without problems and the binary <code>overSedDymFoam_rbgh</code> and associated libraries should be available in the $FOAM_USER_APPBIN and $FOAM_USER_LIBBIN directories.</p></li></ol><p>To take full advantage of SedFoam and be able to run the postprocessing scripts make sure Python is installed. Python usually comes pre-installed in Linux. However, if not installed or if you need a specific version, you can install Python with the following command: sudo apt install python3</p><p>Further details can be found in section <a href="install.html" class="m-doc">Installation</a> .</p></section><section id="FallingSphereOverset_testcase"><h2><a href="#FallingSphereOverset_testcase">FallingSphereOverset: Falling sphere in pure fluid using an overset  approach</a></h2></section><section id="FallingSphereOverset_testcase"><h2><a href="#FallingSphereOverset_testcase">FallingSphereOverset: Falling sphere in pure fluid using an overset  approach</a></h2><p>In this tutorial, we study the free fall of a sphere with a diameter <svg class="m-math" style="width: 6.039em; height: 0.851em; vertical-align: -0.000em;" viewBox="0 -8.169366 57.9753 8.169366">
+</pre><p>The program should compile without problems and the binary <code>overSedDymFoam_rbgh</code> and associated libraries should be available in the $FOAM_USER_APPBIN and $FOAM_USER_LIBBIN directories.</p></li></ol><p>To take full advantage of SedFoam and be able to run the postprocessing scripts make sure Python is installed. Python usually comes pre-installed in Linux. However, if not installed or if you need a specific version, you can install Python with the following command:</p><pre>    sudo apt install python3
+</pre><p>Further details can be found in section <a href="install.html" class="m-doc">Installation</a> .</p></section><section id="FallingSphereOverset_testcase"><h2><a href="#FallingSphereOverset_testcase">FallingSphereOverset: Falling sphere in pure fluid using an overset  approach</a></h2><p>In this tutorial, we study the free fall of a sphere with a diameter <svg class="m-math" style="width: 6.039em; height: 0.851em; vertical-align: -0.000em;" viewBox="0 -8.169366 57.9753 8.169366">
 <title>
 $D=15mm$
 </title>
