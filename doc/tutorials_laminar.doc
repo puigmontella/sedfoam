@@ -1315,7 +1315,7 @@ and you should see the following figures:
 @image latex "2DWetAvalancheResults.png" "Figure 14: a) Evolution of surface particle velocity and b) excess of pore pressure with time. Experimental curves are extracted from Pailha et al.(2008)."
 
 
-\section  collapse2D 2DCollapse: Granular column collapses
+\section  twoDCollapse 2DCollapse: Granular column collapses
 
 In this section,sedFoam is used to reproduce initially loose and dense granular column collapses. More specifically, this section consists of reproducing the experimental granular collapses of Rondon et al. (2011). The granular column collapse is used to extend the dilatancy model to a more complex and realistic configuration. Numerical results are published in the work of Montellà et al (2023).
 
@@ -1355,6 +1355,7 @@ The following variables are considered to reproduce the experimental results of 
 <tr><td>Fluid density    <td>\f$\rho_f=1010 \frac{kg}{m^3}\f$
 <tr><td>Fluid viscosity     <td>\f$\nu^f=1.2 \cdot 10^{-5} \frac{m^2}{s}\f$
 <tr><td>Mean particle diameter    <td>\f$d=225 \cdot 10^{-6} m\f$</table>
+</table>
 
 Dense granular flow rheology \f$\mu(I_v)\f$ and the dilatancy  model is used as shown in *granularRheologyProperties*:
 
