@@ -1,0 +1,9 @@
+#!/bin/sh
+# create the mesh
+blockMesh
+
+# create the intial time folder
+cp -r 0_org 0
+
+# Run sedFoam in parallel
+sedFoam_rbgh > log 2> err &

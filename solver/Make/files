@@ -1,0 +1,3 @@
+sedFoam.C
+
+EXE = $(FOAM_MODULE_APPBIN)/sedFoam_rbgh

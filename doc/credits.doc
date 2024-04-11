@@ -1,0 +1,46 @@
+/**
+ * \file        credits.doc
+ * \author      Cyrille Bonamy and Julien Chauchat
+ * \date        June 03, 2021
+ * \brief       People and organizations that contributed (doc)
+ *
+ * \details     Listing only people with code contributions or other significant work and the organisations with financial
+ *              contributions 
+ */
+/** @page credits-contributors Contributors
+@brief People and organizations that contributed to sedFoam
+
+Listing only people with code contributions or other significant work and the organisations with financial contributions, because
+otherwise there's too many :) 
+Big thanks to everyone involved!
+
+Are the below lists missing your name or something's wrong?
+<a href="mailto:cyrille.bonamy@univ-grenoble-alpes.fr">Let us know!</a>
+
+@section Authors
+
+-   **Cyrille Bonamy** ([\@CyrilleBonamy](http://www.legi.grenoble-inp.fr/people/Cyrille.Bonamy)) --- core developer and main maintainer
+-   **Julien Chauchat** ([\@jchauchat](http://www.legi.grenoble-inp.fr/people/Julien.Chauchat)) --- core developer and Project Investigator
+-   **Tian-Jian Hsu** ([\@tom](https://sites.udel.edu/thsu/group-members/)) --- Project Investigator
+-   **Zhen Cheng** ([\@charlie](https://scholar.google.com/citations?user=ytP18jcAAAAJ&hl=en)) --- Original developer
+-   **Tim Nagel** ([\@tim](https://www.researchgate.net/profile/Tim_Nagel3)) --- developer
+-   **Antoine Mathieu** ([\@antoine](https://www.researchgate.net/profile/Antoine-Mathieu-2)) --- core developer
+-   **Eduard Puig-Montella** ([\@ed](https://github.com/puigmontella)) --- core developer
+-   **Rémi Chassagne** ([\@remichassagne](http://www.legi.grenoble-inp.fr/people/Remi.Chassagne/index.html)) --- core developer
+-   **Pablo Higuera** ([\@phicau](https://github.com/phicau)) --- contributor
+-   **Benjamin Tsai** ([\@B-Tsai](https://github.com/B-Tsai)) --- contributor
+-   **Ali Salimi-Tarazouj** ([\@ali](https://coastal.udel.edu/people/graduate-students)) --- contributor
+-   Developers involved in OpenFOAM, which is the foundation of the new solver SedFoam
+
+@section Organisations
+-   **French National Research Agency**
+-   **Service hydrographique et océanographique de la Marine**
+-   **Direction Générale de l'Armement**
+-   **National Science Foundation**
+-   **Office of Naval Research**
+-   **Strategic Environmental Research and Development Program**
+-   the **Région Rhones-Alpes** (COOPERA project and Explora Pro grant) 
+-   the French national programme EC2CO-LEFE MODSED
+
+
+*/
