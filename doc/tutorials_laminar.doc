@@ -1348,7 +1348,7 @@ mapFields -sourceTime 400 initial_1D_profile/1DSedim/
 
 The following variables are considered to reproduce the experimental results of Rondon et al. (2023):
 
- <table>
+<table>
 <caption id="multi_row">Main physical parameters.</caption>
 <tr><th>Properties   <th>Value
 <tr><td>Solid density   <td>\f$\rho_p=2500 \frac{kg}{m^3}\f$
@@ -1396,7 +1396,7 @@ FluidViscosityModel BoyerEtAl;
 \endverbatim
 
 
-\subsection  lauch_2DCollapsee Computation launching
+\subsection  launch_2DCollapsee Computation launching
 You can launch the computation by executing *Allrun*. The simulations will run in parallel on 4 cores.
 
 \verbatim
