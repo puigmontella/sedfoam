@@ -172,4 +172,3 @@ WORKDIR /home/sudofoam
 ENV HOME /home/sudofoam
 ENTRYPOINT ["/bin/bash", "-c"]
 CMD ["source /openfoam/bash.rc && jupyter notebook"]
-
