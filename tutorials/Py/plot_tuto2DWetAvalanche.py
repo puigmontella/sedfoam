@@ -109,7 +109,7 @@ time_sim_dila_0 = []
 vel_sim_dila_0 = []
 p_sim_dila_0 = []
 tolAlpha = 0.55
-tolL = 8e-4
+tolL = 5e-4
 
 
 for i in range(200, int(final_tread)+10):
